@@ -37,6 +37,12 @@ android {
         checkReleaseBuilds false
         abortOnError false
     }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
