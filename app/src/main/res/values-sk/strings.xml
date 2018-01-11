@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Jednoduchá kalkulačka</string>
+    <string name="app_launcher_name">Kalkulačka</string>
+
+    <!-- Settings -->
+    <string name="vibrate_on_button_press">Vibrate on button press</string>
+
+    <!-- Strings displayed only on Google Playstore. Optional, but good to have -->
+    <string name="app_short_description">Kalkulačka so základnými funkciami a prispôsobiteľným widgetom.</string>
+    <string name="app_long_description">
+        Neobsahuje žiadny prevodník jednotiek, môžete skopírovať výsledok alebo vzorec do schránky dlhým stlačením.
+
+        Farbu textu widgetu možno prispôsobiť, rovnako ako farbu a priehľadnosť pozadia. Ak chcete aplikáciu otvoriť, stlačte výsledok alebo vzorec v miniaplikácii.
+
+        Neobsahuje žiadne reklamy a nepotrebné oprávnenia. Je opensource, poskytuje možnosť zmeny farieb.
+
+        Táto aplikácia je iba jednou zo skupiny aplikácií. Ostatné viete nájsť na http://www.simplemobiletools.com
+    </string>
+
+    <!--
+        Haven't found some strings? There's more at
+        https://github.com/SimpleMobileTools/Simple-Commons/tree/master/commons/src/main/res
+    -->
+</resources>

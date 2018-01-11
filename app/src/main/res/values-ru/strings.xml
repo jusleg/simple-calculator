@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Simple Calculator</string>
+    <string name="app_launcher_name">Калькулятор</string>
+
+    <!-- Settings -->
+    <string name="vibrate_on_button_press">Вибрация при нажатии кнопок</string>
+
+    <!-- Strings displayed only on Google Playstore. Optional, but good to have -->
+    <string name="app_short_description">Калькулятор с базовым функционалом и настраиваемым виджетом.</string>
+    <string name="app_long_description">
+        Нет конвертера величин, можно скопировать результат или формулу долгим нажатием.
+
+        Цвет виджета настраивается, так же как и цвет и прозрачность фона. Нажмите на результат или формулу в виджете, чтобы открыть приложение.
+
+        Без рекламы и излишних прав доступа. Полностью открытое ПО, а также со встроенной темной темой.
+
+        Это только одно приложение из множества других в серии. Вы можете найти остальные на http://www.simplemobiletools.com
+    </string>
+
+    <!--
+        Haven't found some strings? There's more at
+        https://github.com/SimpleMobileTools/Simple-Commons/tree/master/commons/src/main/res
+    -->
+</resources>

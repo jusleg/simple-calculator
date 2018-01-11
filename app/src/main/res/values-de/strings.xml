@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Schlichter Rechner</string>
+    <string name="app_launcher_name">Rechner</string>
+
+    <!-- Settings -->
+    <string name="vibrate_on_button_press">Bei Tastendruck vibrieren</string>
+
+    <!-- Strings displayed only on Google Playstore. Optional, but good to have -->
+    <string name="app_short_description">Ein Taschenrechner mit grundlegenden Funktionen und einem anpassbaren Widget.</string>
+    <string name="app_long_description">
+        Diese App beinhaltet keinen Einheitenumrechner! Du kannst das Ergebnis oder die Formel durch längeres Drücken in die Zwischenablage kopieren.
+
+        Die Textfarbe des Widgets kann angepasst werden sowie die Farbe und Transparenz des Hintergrunds. Tippe auf das Ergebnis oder die Formel im Widget, um die App zu öffnen.
+
+        Beinhaltet keine Werbung oder unnötige Berechtigungen. Sie ist komplett Open Source, alle verwendeten Farben sind anpassbar.
+
+        Diese App ist nur eine aus einer größeren Serie von schlichten Apps. Der Rest davon findet sich auf http://www.simplemobiletools.com
+    </string>
+
+    <!--
+        Haven't found some strings? There's more at
+        https://github.com/SimpleMobileTools/Simple-Commons/tree/master/commons/src/main/res
+    -->
+</resources>

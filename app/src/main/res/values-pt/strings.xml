@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Simple Calculator</string>
+    <string name="app_launcher_name">Calculadora</string>
+
+    <!-- Settings -->
+    <string name="vibrate_on_button_press">Vibrar ao tocar nos botões</string>
+
+    <!-- Strings displayed only on Google Playstore. Optional, but good to have -->
+    <string name="app_short_description">Uma calculadora com funções básicas e um widget personalizável.</string>
+    <string name="app_long_description">
+        Não existe conversor de unidades, mas pode copiar o resultado ou fórmula para a área de transferência com um clique longo.
+
+        Pode personalizar a cor do texto do widget, bem como a cor e o valor alfa do fundo. Prima no resultado ou fórmula do widget para abrir a aplicação.
+
+        Não contém anúncios nem permissões desnecessárias. Disponibiliza um tema escuro e é totalmente \'open source\'.
+
+        Esta aplicação é apenas parte de um conjunto mais vasto de aplicações. Saiba mais em http://www.simplemobiletools.com
+    </string>
+
+    <!--
+        Haven't found some strings? There's more at
+        https://github.com/SimpleMobileTools/Simple-Commons/tree/master/commons/src/main/res
+    -->
+</resources>

@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Simple Calculator</string>
+    <string name="app_launcher_name">Kalkylator</string>
+
+    <!-- Settings -->
+    <string name="vibrate_on_button_press">Vibrate on button press</string>
+
+    <!-- Strings displayed only on Google Playstore. Optional, but good to have -->
+    <string name="app_short_description">En kalkylator med grundläggande funktioner och en anpassningsbar widget.</string>
+    <string name="app_long_description">
+        Kalkylatorn har ingen enhetsomvandlare. Du kan kopiera resultatet eller formeln till urklipp genom att trycka länge.
+
+        Du kan anpassa widgetens textfärg, bakgrundens färg och bakgrundens genomskinlighet. Tryck på resultatet eller formeln i widgeten för att öppna appen.
+
+        Innehåller ingen reklam eller onödiga behörigheter. Den har helt öppen källkod och har även ett Mörkt tema.
+
+        Denna app är bara en del av en större serie appar. Du hittar resten av dem på http://www.simplemobiletools.com
+    </string>
+
+    <!--
+        Haven't found some strings? There's more at
+        https://github.com/SimpleMobileTools/Simple-Commons/tree/master/commons/src/main/res
+    -->
+</resources>

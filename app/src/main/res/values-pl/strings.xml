@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Prosty Kalkulator</string>
+    <string name="app_launcher_name">Kalkulator</string>
+
+    <!-- Settings -->
+    <string name="vibrate_on_button_press">Vibrate on button press</string>
+
+    <!-- Strings displayed only on Google Playstore. Optional, but good to have -->
+    <string name="app_short_description">Kalulator z podstawowymi funkcjami oraz konfiguralnym widżetem.</string>
+    <string name="app_long_description">
+        W tej aplikacji nie ma konwertora jednostek miar - możesz skopiować wynik lub formułę do schowka przez długie przytrzymanie.
+
+        Kolor tekstu widżetu może zostać skonfigurowany, jak również i kolor oraz przezroczystość tła. Naciśnij na wynik, aby otworzyć aplikację.
+
+        Nie zawiera natomiast żadnych reklam i nie potrzebuje całej masy uprawnień. Jest w pełni otwartoźródłowa i w pełni podatna na kolorowanie.
+
+        Niniejsza aplikacja jest tylko częścią naszej kolekcji prostych narzędzi. Ta, jak i pozostałe, dostępne są na stronie http://www.simplemobiletools.com
+    </string>
+
+    <!--
+        Haven't found some strings? There's more at
+        https://github.com/SimpleMobileTools/Simple-Commons/tree/master/commons/src/main/res
+    -->
+</resources>

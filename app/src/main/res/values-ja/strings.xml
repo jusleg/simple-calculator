@@ -1,0 +1,24 @@
+﻿<resources>
+    <string name="app_name">シンプル電卓</string>
+    <string name="app_launcher_name">電卓</string>
+
+    <!-- Settings -->
+    <string name="vibrate_on_button_press">Vibrate on button press</string>
+
+    <!-- Strings displayed only on Google Playstore. Optional, but good to have -->
+    <string name="app_short_description">基本機能とカスタマイズ可能なウィジェットを備えた電卓。</string>
+    <string name="app_long_description">
+        単位変換はありません。長押しして結果や数式をクリップボードにコピーすることができます。
+
+        ウィジェットの文字色や、背景の色やアルファをカスタマイズすることができます。 ウィジェットの結果や数式を押すとアプリを開きます。
+
+        広告や不要なアクセス許可は含まれていません。 完全にオープンソースで、ダークテーマも提供しています。
+
+        このアプリは、大きな一連のアプリの一つです。 他のアプリ http://www.simplemobiletools.com で見つけることができます
+    </string>
+
+    <!--
+        Haven't found some strings? There's more at
+        https://github.com/SimpleMobileTools/Simple-Commons/tree/master/commons/src/main/res
+    -->
+</resources>
