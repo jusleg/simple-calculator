@@ -145,7 +145,7 @@ class MainActivityTest {
         checkFormula("7%5")
 
         activity.calc.handleClear()
-        assertEquals("1", getDisplayedNumber())
+        assertEquals("0", getDisplayedNumber())
     }
 
     private fun setDouble(d: Double) {
