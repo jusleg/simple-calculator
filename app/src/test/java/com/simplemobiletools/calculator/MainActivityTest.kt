@@ -85,14 +85,6 @@ class MainActivityTest {
     }
 
     @Test
-    fun rootTest() {
-        setDouble(16.0)
-        handleOperation(ROOT)
-        assertEquals("4", getDisplayedNumber())
-        checkFormula("√16")
-    }
-
-    @Test
     fun clearBtnSimpleTest() {
         setDouble(156.0)
         activity.calc.handleClear()
@@ -151,11 +143,6 @@ class MainActivityTest {
         handleOperation(POWER)
         assertEquals("2", getDisplayedNumber())
         checkFormula("7%5")
-
-        setDouble(8.0)
-        handleOperation(ROOT)
-        assertEquals("16", getDisplayedNumber())
-        checkFormula("√256")
 
         activity.calc.handleClear()
         assertEquals("1", getDisplayedNumber())
