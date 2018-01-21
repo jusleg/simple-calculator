@@ -122,14 +122,6 @@ public class MainActivityTest {
     }
 
     @Test
-    public void rootTest() {
-        press(R.id.btn_9);
-        press(R.id.btn_root);
-        checkResult("3");
-        checkFormula("√9");
-    }
-
-    @Test
     public void clearTest() {
         press(R.id.btn_2);
         press(R.id.btn_5);
