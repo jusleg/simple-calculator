@@ -1,4 +1,4 @@
-# Simple Calculator
+# Simple Calculator 
 <img alt="Logo" src="app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="80">
 
 [![Build Status](https://travis-ci.org/jusleg/simple-calculator.svg?branch=master)](https://travis-ci.org/jusleg/simple-calculator) [![codebeat badge](https://codebeat.co/badges/9ce2c059-5bb7-46bd-b512-a746ce275690)](https://codebeat.co/projects/github-com-jusleg-simple-calculator-master)
