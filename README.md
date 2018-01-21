@@ -3,6 +3,8 @@
 
 [![Build Status](https://travis-ci.org/jusleg/simple-calculator.svg?branch=master)](https://travis-ci.org/jusleg/simple-calculator) [![codebeat badge](https://codebeat.co/badges/9ce2c059-5bb7-46bd-b512-a746ce275690)](https://codebeat.co/projects/github-com-jusleg-simple-calculator-master)
 
+Check out our project [wiki!](https://github.com/jusleg/simple-calculator/wiki) !
+
 A calculator with the basic functions and a customizable widget.
 
 You can copy the result or formula to clipboard by long pressing it.
