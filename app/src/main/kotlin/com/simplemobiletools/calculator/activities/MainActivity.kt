@@ -134,12 +134,6 @@ class MainActivity : SimpleActivity(), Calculator {
         result.text = value
     }
 
-    // used only by Robolectric
-    override fun setValueDouble(d: Double) {
-        calc.setValue(Formatter.doubleToString(d))
-        calc.lastKey = DIGIT
-    }
-
     override fun setFormula(value: String, context: Context) {
         formula.text = value
     }

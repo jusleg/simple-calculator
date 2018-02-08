@@ -17,6 +17,10 @@ class CalculatorImpl(calculator: Calculator, val context: Context) {
     private var secondNumberSet: Boolean = false
     private var digits = 0
 
+    // used for testing
+    var displayedNumber: String? = null
+    var displayedFormula: String? = null
+
     init {
         resetValues()
         setValue("0")
@@ -37,23 +41,15 @@ class CalculatorImpl(calculator: Calculator, val context: Context) {
 
     fun setValue(value: String) {
         mCallback!!.setValue(value, context)
+        displayedNumber = value
     }
 
     private fun setFormula(value: String) {
         mCallback!!.setFormula(value, context)
+        displayedFormula = value
     }
 
     fun numpadClicked(id: Int) {
-        if (id != R.id.btn_decimal){
-            if (decimalClicked) decimalCounter--
-            if (operator != "") {
-                secondNumberSet = true
-            } else if (digits == 0) {
-                resetValues()
-            }
-            digits++
-        }
-
         when (id) {
             R.id.btn_decimal -> decimalClicked()
             R.id.btn_0 -> addDigit(0)
@@ -69,14 +65,23 @@ class CalculatorImpl(calculator: Calculator, val context: Context) {
         }
     }
 
-    private fun decimalClicked() {
+    fun decimalClicked() {
         decimalClicked = true
     }
 
-    private fun addDigit(i: Int) {
+    fun addDigit(i: Int) {
+        if (decimalClicked) decimalCounter--
+        if (operator != "") {
+            secondNumberSet = true
+        } else if (digits == 0) {
+            resetValues()
+        }
+
         firstNumber = if (!decimalClicked) signumMultiply(firstNumber) * (Math.abs(firstNumber)  * 10 + i)
             else signumMultiply(firstNumber) * (Math.abs(firstNumber) + i * Math.pow(10.0, decimalCounter.toDouble()))
         setValue(Formatter.doubleToString(firstNumber))
+
+        digits++
     }
 
     fun handleOperation(operation: String) {
