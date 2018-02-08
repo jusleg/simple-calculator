@@ -1,5 +1,6 @@
 package com.simplemobiletools.calculator.activities
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -26,6 +27,7 @@ class MainActivity : SimpleActivity(), Calculator {
 
     lateinit var calc: CalculatorImpl
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -58,6 +60,7 @@ class MainActivity : SimpleActivity(), Calculator {
         updateViewColors(calculator_holder, config.textColor)
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onResume() {
         super.onResume()
         if (storedUseEnglish != config.useEnglish) {
