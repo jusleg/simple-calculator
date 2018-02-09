@@ -38,30 +38,39 @@ class MainActivityTest {
 
     @Test
     fun additionTest() {
-        activity.calc.numpadClicked(R.id.btn_5)
+        activity.calc.addDigit(5)
         activity.calc.handleOperation("plus")
-        activity.calc.numpadClicked(R.id.btn_4)
+        activity.calc.addDigit(4)
         activity.calc.handleEquals()
         var result  = activity.getResult()
-        println("result: "+result)
 
         assertEquals("9", result)
         //checkFormula("-1.2+3.4")
     }
 
-//    @Test
-//    fun subtractionTest() {
-//        val res = calcResult(7.8, MINUS, 2.5)
-//        assertEquals("5.3", res)
-//        checkFormula("7.8-2.5")
-//    }
+    @Test
+    fun subtractTest() {
+        activity.calc.addDigit(5)
+        activity.calc.handleOperation("minus")
+        activity.calc.addDigit(4)
+        activity.calc.handleEquals()
+        var result  = activity.getResult()
 
-//    @Test
-//    fun multiplyTest() {
-//        val res = calcResult(-3.2, MULTIPLY, 6.6)
-//        assertEquals("-21.12", res)
-//        checkFormula("-3.2*6.6")
-//    }
+        assertEquals("1", result)
+        //checkFormula("-1.2+3.4")
+    }
+
+    @Test
+    fun multiplyTest() {
+        activity.calc.addDigit(5)
+        activity.calc.handleOperation("multiply")
+        activity.calc.addDigit(4)
+        activity.calc.handleEquals()
+        var result  = activity.getResult()
+
+        assertEquals("20", result)
+        //checkFormula("-1.2+3.4")
+    }
 //
 //    @Test
 //    fun divisionTest() {
