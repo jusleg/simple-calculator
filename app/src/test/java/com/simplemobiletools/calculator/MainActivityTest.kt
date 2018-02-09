@@ -71,20 +71,29 @@ class MainActivityTest {
         assertEquals("20", result)
         //checkFormula("-1.2+3.4")
     }
-//
-//    @Test
-//    fun divisionTest() {
-//        val res = calcResult(18.25, DIVIDE, 5.0)
-//        assertEquals("3.65", res)
-//        checkFormula("18.25/5")
-//    }
-//
-//    @Test
-//    fun divisionByZero_returnsZero() {
-//        val res = calcResult(6.0, DIVIDE, 0.0)
-//        assertEquals("0", res)
-//        checkFormula("6/0")
-//    }
+
+    @Test
+    fun divisionTest() {
+        activity.calc.addDigit(6)
+        activity.calc.handleOperation("divide")
+        activity.calc.addDigit(2)
+        activity.calc.handleEquals()
+        var result  = activity.getResult()
+
+        assertEquals("3", result)
+    }
+
+    @Test
+    fun divisionByZero_returnsZero() {
+        activity.calc.addDigit(6)
+        activity.calc.handleOperation("divide")
+        activity.calc.addDigit(0)
+        activity.calc.handleEquals()
+        var result  = activity.getResult()
+
+        print("result: "+result)
+        assertEquals("0", result)
+    }
 //
 //    @Test
 //    fun moduloTest() {
@@ -93,12 +102,17 @@ class MainActivityTest {
 //        checkFormula("6.5%3")
 //    }
 
-//    @Test
-//    fun powerTest() {
-//        val res = calcResult(3.0, POWER, 6.0)
-//        assertEquals("729", res)
-//        checkFormula("3^6")
-//    }
+    @Test
+    fun powerTest() {
+        activity.calc.addDigit(3)
+        activity.calc.handleOperation("power")
+        activity.calc.addDigit(2)
+        activity.calc.handleEquals()
+        var result  = activity.getResult()
+
+        print("result: "+result)
+        assertEquals("9", result)
+    }
 
 //    @Test
 //    fun clearBtnSimpleTest() {
