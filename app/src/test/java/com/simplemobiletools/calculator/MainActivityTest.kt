@@ -84,7 +84,7 @@ class MainActivityTest {
     }
 
     @Test
-    fun divisionByZero_returnsZero() {
+    fun divisionByZero_returnsInfinity() {
         activity.calc.addDigit(6)
         activity.calc.handleOperation("divide")
         activity.calc.addDigit(0)
@@ -92,26 +92,18 @@ class MainActivityTest {
         var result  = activity.getResult()
 
         print("result: "+result)
-        assertEquals("0", result)
+        assertEquals("∞", result)
     }
-//
-//    @Test
-//    fun moduloTest() {
-//        val res = calcResult(6.5, MODULO, 3.0)
-//        assertEquals("0.5", res)
-//        checkFormula("6.5%3")
-//    }
 
     @Test
-    fun powerTest() {
+    fun percentageTest() {
         activity.calc.addDigit(3)
-        activity.calc.handleOperation("power")
-        activity.calc.addDigit(2)
+        activity.calc.handleOperation("percentage")
         activity.calc.handleEquals()
         var result  = activity.getResult()
 
         print("result: "+result)
-        assertEquals("9", result)
+        assertEquals("0.03", result)
     }
 
 //    @Test
@@ -168,11 +160,6 @@ class MainActivityTest {
 //        handleOperation(MODULO)
 //        assertEquals("7", getDisplayedNumber())
 //        checkFormula("28/4")
-//
-//        setDouble(5.0)
-//        handleOperation(POWER)
-//        assertEquals("2", getDisplayedNumber())
-//        checkFormula("7%5")
 //
 //        activity.calc.handleClear()
 //        assertEquals("0", getDisplayedNumber())

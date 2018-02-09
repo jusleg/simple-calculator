@@ -101,25 +101,13 @@ public class MainActivityTest {
         checkFormula("8/0");
     }
 
-    //TODO: redo this test into percentageTestF
-//    @Test
-//    public void moduloTest() {
-//        press(R.id.btn_7);
-//        press(R.id.btn_modulo);
-//        press(R.id.btn_2);
-//        press(R.id.btn_equals);
-//        checkResult("1");
-//        checkFormula("7%2");
-//    }
-
     @Test
-    public void powerTest() {
-        press(R.id.btn_2);
-        press(R.id.btn_power);
-        press(R.id.btn_3);
+    public void percentageTest() {
+        press(R.id.btn_7);
+        press(R.id.btn_percentage);
         press(R.id.btn_equals);
-        checkResult("8");
-        checkFormula("2^3");
+        checkResult("0.07");
+//        checkFormula("7%");
     }
 
     @Test
@@ -181,11 +169,6 @@ public class MainActivityTest {
 //        press(R.id.btn_modulo);
 //        checkResult("256");
 //        checkFormula("2^8");
-
-        press(R.id.btn_4);
-        press(R.id.btn_power);
-        checkResult("2");
-        checkFormula("10%4");
 
         press(R.id.btn_root);
         checkResult("16");
