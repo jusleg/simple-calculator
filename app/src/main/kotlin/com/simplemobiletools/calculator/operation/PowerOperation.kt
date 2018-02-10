@@ -1,5 +1,6 @@
 package com.simplemobiletools.calculator.operation
 
+import com.simplemobiletools.calculator.helpers.Formatter
 import com.simplemobiletools.calculator.operation.base.BinaryOperation
 import com.simplemobiletools.calculator.operation.base.Operation
 
@@ -10,5 +11,9 @@ class PowerOperation(baseValue: Double, secondValue: Double) : BinaryOperation(b
         if (java.lang.Double.isInfinite(result) || java.lang.Double.isNaN(result))
             result = 0.0
         return result
+    }
+
+    override fun getFormula(): String {
+        return Formatter.doubleToString(secondValue) + "^" + Formatter.doubleToString(baseValue)
     }
 }
