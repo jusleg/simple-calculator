@@ -46,7 +46,7 @@ android {
 }
 
 dependencies {
-    implementation 'com.simplemobiletools:commons:3.3.12'
+    implementation 'com.github.jusleg:Simple-Commons:3.3.12'
     implementation 'me.grantland:autofittextview:0.2.1'
 
     testImplementation 'junit:junit:4.12'
