@@ -1,5 +1,6 @@
 package com.simplemobiletools.calculator.activities
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -26,6 +27,7 @@ class MainActivity : SimpleActivity(), Calculator {
 
     lateinit var calc: CalculatorImpl
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -37,7 +39,7 @@ class MainActivity : SimpleActivity(), Calculator {
         btn_minus.setOnClickListener { calc.handleOperation(MINUS); checkHaptic(it) }
         btn_multiply.setOnClickListener { calc.handleOperation(MULTIPLY); checkHaptic(it) }
         btn_divide.setOnClickListener { calc.handleOperation(DIVIDE); checkHaptic(it) }
-        btn_modulo.setOnClickListener { calc.handleOperation(MODULO); checkHaptic(it) }
+        btn_percentage.setOnClickListener { calc.handleOperation(PERCENTAGE); checkHaptic(it) }
         btn_power.setOnClickListener { calc.handleOperation(POWER); checkHaptic(it) }
         btn_root.setOnClickListener { calc.handleOperation(ROOT); checkHaptic(it) }
 
@@ -58,6 +60,7 @@ class MainActivity : SimpleActivity(), Calculator {
         updateViewColors(calculator_holder, config.textColor)
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onResume() {
         super.onResume()
         if (storedUseEnglish != config.useEnglish) {
@@ -131,10 +134,9 @@ class MainActivity : SimpleActivity(), Calculator {
         result.text = value
     }
 
-    // used only by Robolectric
-    override fun setValueDouble(d: Double) {
-        calc.setValue(Formatter.doubleToString(d))
-        calc.lastKey = DIGIT
+    override fun getResult(): String {
+//         print(result.text)
+         return result.text.toString()
     }
 
     override fun setFormula(value: String, context: Context) {

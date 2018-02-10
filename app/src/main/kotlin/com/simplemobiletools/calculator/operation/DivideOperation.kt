@@ -8,7 +8,7 @@ class DivideOperation(baseValue: Double, secondValue: Double) : BinaryOperation(
     override fun getResult(): Double {
         var result = 0.0
         if (secondValue != 0.0) {
-            result = baseValue / secondValue
+            result = secondValue / baseValue
         }
         return result
     }
