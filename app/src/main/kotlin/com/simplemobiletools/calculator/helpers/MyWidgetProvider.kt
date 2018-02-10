@@ -15,6 +15,10 @@ import com.simplemobiletools.commons.extensions.setBackgroundColor
 import com.simplemobiletools.commons.extensions.setText
 
 class MyWidgetProvider : AppWidgetProvider(), Calculator {
+    override fun getResult(): String {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     companion object {
         private var calc: CalculatorImpl? = null
     }
@@ -127,9 +131,6 @@ class MyWidgetProvider : AppWidgetProvider(), Calculator {
             views.setText(R.id.result, value)
             appWidgetManager.partiallyUpdateAppWidget(it, views)
         }
-    }
-
-    override fun setValueDouble(d: Double) {
     }
 
     override fun setFormula(value: String, context: Context) {

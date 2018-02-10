@@ -3,18 +3,18 @@ package com.simplemobiletools.calculator.helpers
 import android.content.Context
 import com.simplemobiletools.calculator.R
 import com.simplemobiletools.calculator.operation.OperationFactory
+import com.simplemobiletools.calculator.operation.base.UnaryOperation
 
 class CalculatorImpl(calculator: Calculator, val context: Context) {
-    var displayedNumber: String? = null
-    var displayedFormula: String? = null
-    var lastKey: String? = null
-    private var mLastOperation: String? = null
     private var mCallback: Calculator? = calculator
 
-    private var mIsFirstOperation = false
-    private var mResetValue = false
-    private var mBaseValue = 0.0
-    private var mSecondValue = 0.0
+    private var firstNumber: Double = 0.0
+    private var secondNumber: Double = 0.0
+    private var operator: String? = ""
+    private var decimalClicked: Boolean = false
+    private var decimalCounter = 0
+    private var secondNumberSet: Boolean = false
+    private var digits = 0
 
     init {
         resetValues()
@@ -22,186 +22,10 @@ class CalculatorImpl(calculator: Calculator, val context: Context) {
         setFormula("")
     }
 
-    private fun resetValueIfNeeded() {
-        if (mResetValue)
-            displayedNumber = "0"
-
-        mResetValue = false
-    }
-
-    private fun resetValues() {
-        mBaseValue = 0.0
-        mSecondValue = 0.0
-        mResetValue = false
-        mLastOperation = ""
-        displayedNumber = ""
-        displayedFormula = ""
-        mIsFirstOperation = true
-        lastKey = ""
-    }
-
-    fun setValue(value: String) {
-        mCallback!!.setValue(value, context)
-        displayedNumber = value
-    }
-
-    private fun setFormula(value: String) {
-        mCallback!!.setFormula(value, context)
-        displayedFormula = value
-    }
-
-    private fun updateFormula() {
-        val first = Formatter.doubleToString(mBaseValue)
-        val second = Formatter.doubleToString(mSecondValue)
-        val sign = getSign(mLastOperation)
-
-        if (sign == "√") {
-            setFormula(sign + first)
-        } else if (!sign.isEmpty()) {
-            setFormula(first + sign + second)
-        }
-    }
-
-    fun addDigit(number: Int) {
-        val currentValue = displayedNumber
-        val newValue = formatString(currentValue!! + number)
-        setValue(newValue)
-    }
-
-    private fun formatString(str: String): String {
-        // if the number contains a decimal, do not try removing the leading zero anymore, nor add group separator
-        // it would prevent writing values like 1.02
-        if (str.contains(".")) {
-            return str
-        }
-
-        val doubleValue = Formatter.stringToDouble(str)
-        return Formatter.doubleToString(doubleValue)
-    }
-
-    private fun updateResult(value: Double) {
-        setValue(Formatter.doubleToString(value))
-        mBaseValue = value
-    }
-
-    private fun getDisplayedNumberAsDouble() = Formatter.stringToDouble(displayedNumber!!)
-
-    fun handleResult() {
-        mSecondValue = getDisplayedNumberAsDouble()
-        calculateResult()
-        mBaseValue = getDisplayedNumberAsDouble()
-    }
-
-    private fun handleRoot() {
-        mBaseValue = getDisplayedNumberAsDouble()
-        calculateResult()
-    }
-
-    private fun calculateResult() {
-        if (!mIsFirstOperation) {
-            updateFormula()
-        }
-
-        val operation = OperationFactory.forId(mLastOperation!!, mBaseValue, mSecondValue)
-
-        if (operation != null) {
-            updateResult(operation.getResult())
-        }
-
-        mIsFirstOperation = false
-    }
-
-    fun handleOperation(operation: String) {
-        if (lastKey == DIGIT && operation != ROOT)
-            handleResult()
-
-        mResetValue = true
-        lastKey = operation
-        mLastOperation = operation
-
-        if (operation == ROOT) {
-            handleRoot()
-            mResetValue = false
-        }
-
-    }
-
-    fun handleClear() {
-        if (displayedNumber.equals(NAN)) {
-            handleReset()
-        } else {
-            val oldValue = displayedNumber
-            var newValue = "0"
-            val len = oldValue!!.length
-            var minLen = 1
-            if (oldValue.contains("-"))
-                minLen++
-
-            if (len > minLen) {
-                newValue = oldValue.substring(0, len - 1)
-            }
-
-            newValue = newValue.replace("\\.$".toRegex(), "")
-            newValue = formatString(newValue)
-            setValue(newValue)
-            mBaseValue = Formatter.stringToDouble(newValue)
-        }
-    }
-
-    fun handleReset() {
-        resetValues()
-        setValue("0")
-        setFormula("")
-    }
-
-    fun handleEquals() {
-        if (lastKey == EQUALS)
-            calculateResult()
-
-        if (lastKey != DIGIT)
-            return
-
-        mSecondValue = getDisplayedNumberAsDouble()
-        calculateResult()
-        lastKey = EQUALS
-    }
-
-    private fun decimalClicked() {
-        var value = displayedNumber
-        if (!value!!.contains(".")) {
-            value += "."
-        }
-        setValue(value)
-    }
-
-    private fun zeroClicked() {
-        val value = displayedNumber
-        if (value != "0")
-            addDigit(0)
-    }
-
-    private fun getSign(lastOperation: String?) = when (lastOperation) {
-        PLUS -> "+"
-        MINUS -> "-"
-        MULTIPLY -> "*"
-        DIVIDE -> "/"
-        MODULO -> "%"
-        POWER -> "^"
-        ROOT -> "√"
-        else -> ""
-    }
-
     fun numpadClicked(id: Int) {
-        if (lastKey == EQUALS) {
-            mLastOperation = EQUALS
-        }
-
-        lastKey = DIGIT
-        resetValueIfNeeded()
-
         when (id) {
-            R.id.btn_decimal -> decimalClicked()
-            R.id.btn_0 -> zeroClicked()
+            R.id.btn_decimal -> decimalClicked = true
+            R.id.btn_0 -> addDigit(0)
             R.id.btn_1 -> addDigit(1)
             R.id.btn_2 -> addDigit(2)
             R.id.btn_3 -> addDigit(3)
@@ -212,5 +36,78 @@ class CalculatorImpl(calculator: Calculator, val context: Context) {
             R.id.btn_8 -> addDigit(8)
             R.id.btn_9 -> addDigit(9)
         }
+    }
+
+    fun handleOperation(operation: String) {
+        handleEquals()
+        operator = operation
+        if (OperationFactory.forId(operator!!, firstNumber, secondNumber) is UnaryOperation) {
+            handleEquals()
+        } else {
+            firstNumber += secondNumber
+            secondNumber = firstNumber - secondNumber
+            firstNumber -= secondNumber
+            decimalClicked = false
+            decimalCounter = 0
+            digits = 0
+        }
+    }
+
+    fun handleEquals() {
+        val operation = OperationFactory.forId(operator!!, firstNumber, secondNumber)
+
+        if (operation != null && (digits > 0 || operation is UnaryOperation)) {
+            resetValues()
+            firstNumber = operation.getResult()
+            setValue(Formatter.doubleToString(firstNumber))
+            setFormula(operation.getFormula())
+        }
+    }
+
+    fun handleReset() {
+        resetValues()
+    }
+
+    fun handleClear() {
+        handleReset()
+    }
+
+    private fun setValue(value: String) {
+        mCallback!!.setValue(value, context)
+    }
+
+    private fun setFormula(value: String) {
+        mCallback!!.setFormula(value, context)
+    }
+
+    private fun resetValues() {
+        firstNumber = 0.0
+        secondNumber = 0.0
+        decimalCounter = 0
+        decimalClicked = false
+        operator = ""
+        secondNumberSet = false
+        setValue("0")
+        setFormula("")
+        digits = 0
+    }
+
+    fun addDigit(i: Int) {
+        if (decimalClicked) decimalCounter--
+        if (operator != "") {
+            secondNumberSet = true
+        } else if (digits == 0) {
+            resetValues()
+        }
+
+        firstNumber = if (!decimalClicked) signumMultiply(firstNumber) * (Math.abs(firstNumber)  * 10 + i)
+        else signumMultiply(firstNumber) * (Math.abs(firstNumber) + i * Math.pow(10.0, decimalCounter.toDouble()))
+        setValue(Formatter.doubleToString(firstNumber))
+
+        digits++
+    }
+
+    private fun signumMultiply(i: Double): Double {
+        return if (Math.signum(i) == -1.0) -1.0 else 1.0 // slight modification of signum to use in multiplication
     }
 }

@@ -1,5 +1,6 @@
 package com.simplemobiletools.calculator.activities
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -131,10 +132,8 @@ class MainActivity : SimpleActivity(), Calculator {
         result.text = value
     }
 
-    // used only by Robolectric
-    override fun setValueDouble(d: Double) {
-        calc.setValue(Formatter.doubleToString(d))
-        calc.lastKey = DIGIT
+    override fun getResult(): String {
+         return result.text.toString()
     }
 
     override fun setFormula(value: String, context: Context) {
