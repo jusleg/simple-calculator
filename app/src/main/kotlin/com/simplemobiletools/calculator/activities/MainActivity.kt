@@ -138,6 +138,10 @@ class MainActivity : SimpleActivity(), Calculator {
          return result.text.toString()
     }
 
+    override fun getFormula(): String {
+        return formula.text.toString()
+    }
+
     override fun setFormula(value: String, context: Context) {
         formula.text = value
     }

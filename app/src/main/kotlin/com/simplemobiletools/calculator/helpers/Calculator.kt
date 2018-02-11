@@ -7,4 +7,5 @@ interface Calculator {
 
     fun setFormula(value: String, context: Context)
     fun getResult(): String
+    fun getFormula(): String
 }
