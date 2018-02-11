@@ -51,6 +51,10 @@ class CalculatorImpl(calculator: Calculator, val context: Context) {
         }
     }
 
+    fun decimalClick(){
+        decimalClicked = true
+    }
+
     fun handleEquals() {
         val operation = OperationFactory.forId(operator!!, firstNumber, secondNumber)
 
