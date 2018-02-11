@@ -3,6 +3,7 @@ package com.simplemobiletools.calculator.helpers
 import android.content.Context
 import com.simplemobiletools.calculator.R
 import com.simplemobiletools.calculator.operation.OperationFactory
+import com.simplemobiletools.calculator.operation.base.BinaryOperation
 import com.simplemobiletools.calculator.operation.base.UnaryOperation
 
 class CalculatorImpl(calculator: Calculator, val context: Context) {
@@ -15,6 +16,7 @@ class CalculatorImpl(calculator: Calculator, val context: Context) {
     private var decimalCounter = 0
     private var secondNumberSet: Boolean = false
     private var digits = 0
+    private var lastIsOperation: Boolean = false
 
     init {
         resetValues()
@@ -42,14 +44,10 @@ class CalculatorImpl(calculator: Calculator, val context: Context) {
         handleEquals()
         operator = operation
         if (OperationFactory.forId(operator!!, firstNumber, secondNumber) is UnaryOperation) {
+            if (lastIsOperation == true) swapRegisters()
             handleEquals()
-        } else {
-            firstNumber += secondNumber
-            secondNumber = firstNumber - secondNumber
-            firstNumber -= secondNumber
-            decimalClicked = false
-            decimalCounter = 0
-            digits = 0
+        } else if(OperationFactory.forId(operator!!, firstNumber, secondNumber) is BinaryOperation && lastIsOperation == false) {
+            swapRegisters()
         }
     }
 
@@ -61,6 +59,7 @@ class CalculatorImpl(calculator: Calculator, val context: Context) {
             firstNumber = operation.getResult()
             setValue(Formatter.doubleToString(firstNumber))
             setFormula(operation.getFormula())
+            lastIsOperation = false
         }
     }
 
@@ -109,5 +108,15 @@ class CalculatorImpl(calculator: Calculator, val context: Context) {
 
     private fun signumMultiply(i: Double): Double {
         return if (Math.signum(i) == -1.0) -1.0 else 1.0 // slight modification of signum to use in multiplication
+    }
+
+    private fun swapRegisters() {
+        firstNumber += secondNumber
+        secondNumber = firstNumber - secondNumber
+        firstNumber -= secondNumber
+        decimalClicked = false
+        decimalCounter = 0
+        digits = 0
+        lastIsOperation = true
     }
 }
