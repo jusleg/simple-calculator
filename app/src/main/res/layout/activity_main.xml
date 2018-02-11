@@ -41,12 +41,12 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btn_modulo"
+            android:id="@+id/btn_percentage"
             style="@style/MyButton"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="mod"
+            android:text="%"
             android:textAllCaps="false"
             android:textSize="@dimen/extra_big_text_size"/>
 
