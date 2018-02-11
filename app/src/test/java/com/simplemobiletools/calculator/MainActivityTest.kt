@@ -118,15 +118,13 @@ class MainActivityTest {
 //    }
 
     @Test
-    fun moduloTest() {
-        activity.calc.addDigit(6)
-        activity.calc.handleOperation("modulo")
-        activity.calc.addDigit(3)
-        activity.calc.handleEquals()
+    fun percentageTest() {
+        activity.calc.addDigit(8)
+        activity.calc.handleOperation("percentage")
         var result  = activity.getResult()
 
-        assertEquals("0", result)
-        checkFormula("6%3")
+        assertEquals("0.08", result)
+        checkFormula("8%")
     }
 
     @Test
@@ -175,17 +173,22 @@ class MainActivityTest {
         checkFormula("31.6×5")
 
         setDouble(4.0)
-        handleOperation(MODULO)
+        handleOperation(POWER)
         assertEquals("39.5", activity.getResult())
         checkFormula("158÷4")
 
-        setDouble(5.0)
-        handleOperation(POWER)
-        assertEquals("4.5", activity.getResult())
-        checkFormula("39.5%5")
+        setDouble(2.0)
+        activity.calc.handleEquals()
+        assertEquals("1,560.25", activity.getResult())
+        checkFormula("39.5^2")
 
         activity.calc.handleClear()
         assertEquals("0", activity.getResult())
+
+        setDouble(15.0)
+        handleOperation(PERCENTAGE)
+        assertEquals("0.15", activity.getResult())
+        checkFormula("15%")
     }
 
     private fun setDouble(d: Double) {

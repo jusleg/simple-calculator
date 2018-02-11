@@ -99,13 +99,11 @@ public class MainActivityTest {
     }
 
     @Test
-    public void moduloTest() {
+    public void percentageTest() {
         press(R.id.btn_7);
-        press(R.id.btn_modulo);
-        press(R.id.btn_2);
-        press(R.id.btn_equals);
-        checkResult("1");
-        checkFormula("7%2");
+        press(R.id.btn_percentage);
+        checkResult("0.07");
+        checkFormula("7%");
     }
 
     @Test
@@ -169,23 +167,23 @@ public class MainActivityTest {
         checkFormula("4×5");
 
         press(R.id.btn_2);
-        press(R.id.btn_modulo);
+        press(R.id.btn_power);
         checkResult("10");
         checkFormula("20÷2");
 
-        press(R.id.btn_4);
-        press(R.id.btn_power);
-        checkResult("2");
-        checkFormula("10%4");
-
-        press(R.id.btn_8);
-        press(R.id.btn_modulo);
-        checkResult("256");
-        checkFormula("2^8");
+        press(R.id.btn_2);
+        press(R.id.btn_equals);
+        checkResult("100");
+        checkFormula("10^2");
 
         press(R.id.btn_root);
-        checkResult("16");
-        checkFormula("√256");
+        checkResult("10");
+        checkFormula("√100");
+
+
+        press(R.id.btn_percentage);
+        checkResult("0.1");
+        checkFormula("10%");
 
         press(R.id.btn_clear);
         checkResult("0");
