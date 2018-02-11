@@ -15,6 +15,10 @@ import com.simplemobiletools.commons.extensions.setBackgroundColor
 import com.simplemobiletools.commons.extensions.setText
 
 class MyWidgetProvider : AppWidgetProvider(), Calculator {
+    override fun getResult(): String {
+       return R.id.result.toString()
+    }
+
     companion object {
         private var calc: CalculatorImpl? = null
     }
