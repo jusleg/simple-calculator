@@ -15,6 +15,7 @@ import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
@@ -117,21 +118,18 @@ public class MainActivityTest {
     }
 
     //TODO: fix when the smart clear is implemented
-//    @Test
-//    public void clearTest() {
-//        press(R.id.btn_2);
-//        press(R.id.btn_5);
-//        press(R.id.btn_decimal);
-//        press(R.id.btn_7);
-//        press(R.id.btn_clear);
-//        checkResult("25");
-//        press(R.id.btn_clear);
-//        checkResult("2");
-//        press(R.id.btn_clear);
-//        checkResult("0");
-//        press(R.id.btn_clear);
-//        checkResult("0");
-//    }
+    @Test
+    public void clearTest() {
+        press(R.id.btn_1);
+        press(R.id.btn_plus);
+        press(R.id.btn_2);
+        press(R.id.btn_clear);
+        onView(withId(R.id.btn_clear)).check(matches(withText("AC")));
+        press(R.id.btn_3);
+        onView(withId(R.id.btn_clear)).check(matches(withText("CE")));
+        press(R.id.btn_equals);
+        checkResult("4");
+    }
 
     @Test
     public void clearLongTest() {

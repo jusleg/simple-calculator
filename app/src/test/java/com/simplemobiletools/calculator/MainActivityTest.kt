@@ -3,6 +3,7 @@ package com.simplemobiletools.calculator
 import com.simplemobiletools.calculator.activities.MainActivity
 import com.simplemobiletools.calculator.helpers.*
 import junit.framework.Assert.assertEquals
+import kotlinx.android.synthetic.main.activity_main.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -86,7 +87,6 @@ class MainActivityTest {
         activity.calc.handleEquals()
         var result  = activity.getResult()
 
-        print("result: "+result)
         assertEquals("∞", result)
     }
 
@@ -139,16 +139,20 @@ class MainActivityTest {
         checkFormula("3^6")
     }
 
-//    @Test
-//    fun clearBtnLongClick_resetsEverything() {
-//        calcResult(-1.2, PLUS, 3.4)
-//        activity.calc.handleReset()
-//        handleOperation(PLUS)
-//        setDouble(3.0)
-//        activity.calc.handleResult()
-//        assertEquals("3", getDisplayedNumber())
-//        checkFormula("")
-//    }
+    @Test
+    fun clearTest() {
+        activity.calc.addDigit(1)
+        activity.calc.handleOperation("plus")
+        activity.calc.addDigit(2)
+        activity.calc.handleClear()
+        assertEquals(activity.btn_clear.text,"AC")
+        activity.calc.addDigit(3)
+        assertEquals(activity.btn_clear.text,"CE")
+        activity.calc.handleEquals()
+        var result  = activity.getResult().toString()
+
+        assertEquals("4", result)
+    }
 
     @Test
     fun complexTest() {

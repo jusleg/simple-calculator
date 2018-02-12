@@ -130,6 +130,10 @@ class MainActivity : SimpleActivity(), Calculator {
         }
     }
 
+    override fun setClear(text: String){
+        btn_clear.text = text
+    }
+
     override fun setValue(value: String, context: Context) {
         result.text = value
     }
