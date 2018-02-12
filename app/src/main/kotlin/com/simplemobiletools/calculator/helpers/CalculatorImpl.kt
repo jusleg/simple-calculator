@@ -2,6 +2,7 @@ package com.simplemobiletools.calculator.helpers
 
 import android.content.Context
 import com.simplemobiletools.calculator.R
+import com.simplemobiletools.calculator.operation.NegativeOperation
 import com.simplemobiletools.calculator.operation.OperationFactory
 import com.simplemobiletools.calculator.operation.base.BinaryOperation
 import com.simplemobiletools.calculator.operation.base.UnaryOperation
@@ -41,6 +42,8 @@ class CalculatorImpl(calculator: Calculator, val context: Context) {
     }
 
     fun handleOperation(operation: String) {
+        if (OperationFactory.forId(operation, firstNumber, secondNumber) is NegativeOperation) return negateNumber()
+
         handleEquals()
         operator = operation
         if (OperationFactory.forId(operator!!, firstNumber, secondNumber) is UnaryOperation) {
@@ -142,5 +145,10 @@ class CalculatorImpl(calculator: Calculator, val context: Context) {
 
     private fun setAllClear(){
         mCallback!!.setClear("AC")
+    }
+
+    private fun negateNumber(){
+        firstNumber *= -1
+        setValue(Formatter.doubleToString(firstNumber))
     }
 }

@@ -58,7 +58,7 @@ class MyWidgetProvider : AppWidgetProvider(), Calculator {
             setupIntent(context, views, MULTIPLY, R.id.btn_multiply)
             setupIntent(context, views, DIVIDE, R.id.btn_divide)
             setupIntent(context, views, PERCENTAGE, R.id.btn_percentage)
-            setupIntent(context, views, POWER, R.id.btn_power)
+            setupIntent(context, views, NEGATIVE, R.id.btn_negative)
             setupIntent(context, views, ROOT, R.id.btn_root)
             setupIntent(context, views, CLEAR, R.id.btn_clear)
             setupIntent(context, views, RESET, R.id.btn_reset)
@@ -92,7 +92,7 @@ class MyWidgetProvider : AppWidgetProvider(), Calculator {
 
     private fun updateTextColors(views: RemoteViews, color: Int) {
         val viewIds = intArrayOf(R.id.formula, R.id.result, R.id.btn_0, R.id.btn_1, R.id.btn_2, R.id.btn_3, R.id.btn_4, R.id.btn_5, R.id.btn_6,
-                R.id.btn_7, R.id.btn_8, R.id.btn_9, R.id.btn_percentage, R.id.btn_power, R.id.btn_root, R.id.btn_clear, R.id.btn_reset, R.id.btn_divide,
+                R.id.btn_7, R.id.btn_8, R.id.btn_9, R.id.btn_percentage, R.id.btn_root, R.id.btn_negative, R.id.btn_clear, R.id.btn_reset, R.id.btn_divide,
                 R.id.btn_multiply, R.id.btn_minus, R.id.btn_plus, R.id.btn_decimal, R.id.btn_equals)
 
         for (i in viewIds) {
@@ -103,7 +103,7 @@ class MyWidgetProvider : AppWidgetProvider(), Calculator {
     override fun onReceive(context: Context, intent: Intent) {
         val action = intent.action
         when (action) {
-            DECIMAL, ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, EQUALS, CLEAR, RESET, PLUS, MINUS, MULTIPLY, DIVIDE, PERCENTAGE, POWER, ROOT -> myAction(action, context)
+            DECIMAL, ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, EQUALS, CLEAR, RESET, PLUS, MINUS, MULTIPLY, DIVIDE, PERCENTAGE, NEGATIVE, ROOT -> myAction(action, context)
             else -> super.onReceive(context, intent)
         }
     }
@@ -128,7 +128,7 @@ class MyWidgetProvider : AppWidgetProvider(), Calculator {
             EQUALS -> calc!!.handleEquals()
             CLEAR -> calc!!.handleClear()
             RESET -> calc!!.handleReset()
-            PLUS, MINUS, MULTIPLY, DIVIDE, PERCENTAGE, POWER, ROOT -> calc!!.handleOperation(action)
+            PLUS, MINUS, MULTIPLY, DIVIDE, PERCENTAGE, NEGATIVE, ROOT -> calc!!.handleOperation(action)
         }
     }
 
