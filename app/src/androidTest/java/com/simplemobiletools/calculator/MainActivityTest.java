@@ -64,7 +64,7 @@ public class MainActivityTest {
         press(R.id.btn_3);
         press(R.id.btn_equals);
         checkResult("4.8");
-        checkFormula("7.8-3");
+        checkFormula("7.8−3");
     }
 
     @Test
@@ -107,13 +107,12 @@ public class MainActivityTest {
     }
 
     @Test
-    public void powerTest() {
-        press(R.id.btn_2);
-        press(R.id.btn_power);
-        press(R.id.btn_3);
-        press(R.id.btn_equals);
-        checkResult("8");
-        checkFormula("2^3");
+    public void rootTest() {
+        press(R.id.btn_8);
+        press(R.id.btn_1);
+        press(R.id.btn_root);
+        checkResult("9");
+        checkFormula("√81");
     }
 
     //TODO: fix when the smart clear is implemented
@@ -159,7 +158,7 @@ public class MainActivityTest {
         press(R.id.btn_3);
         press(R.id.btn_multiply);
         checkResult("4");
-        checkFormula("7-3");
+        checkFormula("7−3");
 
         press(R.id.btn_5);
         press(R.id.btn_divide);
@@ -167,14 +166,15 @@ public class MainActivityTest {
         checkFormula("4×5");
 
         press(R.id.btn_2);
-        press(R.id.btn_power);
+        press(R.id.btn_multiply);
         checkResult("10");
         checkFormula("20÷2");
 
-        press(R.id.btn_2);
+        press(R.id.btn_1);
+        press(R.id.btn_0);
         press(R.id.btn_equals);
         checkResult("100");
-        checkFormula("10^2");
+        checkFormula("10×10");
 
         press(R.id.btn_root);
         checkResult("10");
@@ -187,6 +187,21 @@ public class MainActivityTest {
 
         press(R.id.btn_clear);
         checkResult("0");
+    }
+
+    @Test
+    public void negationTest() {
+        press(R.id.btn_1);
+        press(R.id.btn_negative);
+        checkResult("-1");
+        press(R.id.btn_negative);
+        checkResult("1");
+        press(R.id.btn_multiply);
+        press(R.id.btn_2);
+        press(R.id.btn_negative);
+        press(R.id.btn_equals);
+        checkResult("-2");
+        checkFormula("1×-2");
     }
 
     private void press(int id) {
