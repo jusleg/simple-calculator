@@ -52,7 +52,7 @@ class MainActivityTest {
         var result  = activity.getResult()
 
         assertEquals("1", result)
-        checkFormula("5-4")
+        checkFormula("5−4")
     }
 
     @Test
@@ -161,9 +161,8 @@ class MainActivityTest {
 
         setDouble(1.6)
         activity.calc.handleEquals()
-        println(activity.getResult())
         assertEquals("31.6", activity.getResult())
-        checkFormula("33.2-1.6")
+        checkFormula("33.2−1.6")
         activity.calc.handleEquals()
 
         handleOperation(MULTIPLY)
@@ -189,6 +188,20 @@ class MainActivityTest {
         handleOperation(PERCENTAGE)
         assertEquals("0.15", activity.getResult())
         checkFormula("15%")
+    }
+
+    @Test
+    fun negationTest() {
+        setDouble(42.0)
+        handleOperation(MULTIPLY)
+        setDouble(2.0)
+        handleOperation(NEGATIVE)
+        handleOperation(MINUS)
+        setDouble(4.0)
+        handleOperation(NEGATIVE)
+        activity.calc.handleEquals()
+        assertEquals("-80", activity.getResult())
+        checkFormula("-84−-4")
     }
 
     private fun setDouble(d: Double) {

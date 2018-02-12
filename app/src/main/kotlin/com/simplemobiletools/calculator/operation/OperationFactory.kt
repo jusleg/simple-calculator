@@ -14,6 +14,7 @@ object OperationFactory {
             PERCENTAGE -> return PercentageOperation(baseValue)
             POWER -> return PowerOperation(baseValue, secondValue)
             ROOT -> return RootOperation(baseValue)
+            NEGATIVE -> return NegativeOperation(baseValue)
             else -> return null
         }
     }
