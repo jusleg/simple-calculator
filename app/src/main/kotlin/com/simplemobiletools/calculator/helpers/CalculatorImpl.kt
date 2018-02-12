@@ -62,6 +62,7 @@ class CalculatorImpl(calculator: Calculator, val context: Context) {
         val operation = OperationFactory.forId(operator!!, firstNumber, secondNumber)
 
         if (operation != null && (digits > 0 || operation is UnaryOperation)) {
+            setAllClear()
             resetValues()
             firstNumber = operation.getResult()
             setValue(Formatter.doubleToString(firstNumber))
@@ -71,11 +72,21 @@ class CalculatorImpl(calculator: Calculator, val context: Context) {
     }
 
     fun handleReset() {
+        setAllClear()
         resetValues()
     }
 
     fun handleClear() {
-        handleReset()
+        if(!secondNumberSet){
+            handleReset()
+            setAllClear()
+        }
+        else {
+            firstNumber = 0.0
+            setAllClear()
+            setValue("0")
+            secondNumberSet = false
+        }
     }
 
     private fun setValue(value: String) {
@@ -102,6 +113,7 @@ class CalculatorImpl(calculator: Calculator, val context: Context) {
         if (decimalClicked) decimalCounter--
         if (operator != "") {
             secondNumberSet = true
+            setClear()
         } else if (digits == 0) {
             resetValues()
         }
@@ -125,6 +137,14 @@ class CalculatorImpl(calculator: Calculator, val context: Context) {
         decimalCounter = 0
         digits = 0
         lastIsOperation = true
+    }
+
+    private fun setClear(){
+       mCallback!!.setClear("CE")
+    }
+
+    private fun setAllClear(){
+        mCallback!!.setClear("AC")
     }
 
     private fun negateNumber(){
