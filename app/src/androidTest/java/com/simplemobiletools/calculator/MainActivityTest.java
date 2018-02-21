@@ -115,7 +115,6 @@ public class MainActivityTest {
         checkFormula("√81");
     }
 
-    //TODO: fix when the smart clear is implemented
     @Test
     public void clearTest() {
         press(R.id.btn_1);

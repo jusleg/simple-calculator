@@ -90,33 +90,6 @@ class MainActivityTest {
         assertEquals("∞", result)
     }
 
-//    @Test
-//    fun clearBtnSimpleTest() {
-//        setDouble(156.0)
-//        activity.calc.handleClear()
-//        assertEquals("15", getDisplayedNumber())
-//    }
-//
-//    @Test
-//    fun clearBtnComplexTest() {
-//        setDouble(-26.0)
-//        activity.calc.handleClear()
-//        assertEquals("-2", getDisplayedNumber())
-//        activity.calc.handleClear()
-//        assertEquals("0", getDisplayedNumber())
-//    }
-//
-//    @Test
-//    fun clearBtnLongClick_resetsEverything() {
-//        calcResult(-1.2, PLUS, 3.4)
-//        activity.calc.handleReset()
-//        handleOperation(PLUS)
-//        setDouble(3.0)
-//        activity.calc.handleResult()
-//        assertEquals("3", getDisplayedNumber())
-//        checkFormula("")
-//    }
-
     @Test
     fun percentageTest() {
         activity.calc.addDigit(8)
