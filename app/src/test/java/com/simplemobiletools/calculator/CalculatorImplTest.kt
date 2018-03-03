@@ -2,7 +2,7 @@ package com.simplemobiletools.calculator
 
 import com.simplemobiletools.calculator.activities.MainActivity
 import com.simplemobiletools.calculator.helpers.*
-import junit.framework.Assert.assertEquals
+import org.junit.Assert.assertEquals
 import kotlinx.android.synthetic.main.activity_main.*
 import org.junit.Before
 import org.junit.Test
@@ -13,43 +13,45 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(constants = BuildConfig::class, sdk = intArrayOf(21))
-class MainActivityTest {
+class CalculatorImplTest {
     private lateinit var activity: MainActivity
+    private lateinit var calc: CalculatorImpl
 
     @Before
     fun setUp() {
         activity = Robolectric.setupActivity(MainActivity::class.java)
+        calc = CalculatorImpl(activity, activity.applicationContext)
     }
 
     @Test
     fun addSimpleDigit() {
-        activity.calc.addDigit(2)
+        calc.addDigit(2)
         assertEquals("2", activity.getResult())
     }
 
     @Test
     fun removeLeadingZero() {
-        activity.calc.addDigit(0)
-        activity.calc.addDigit(5)
+        calc.addDigit(0)
+        calc.addDigit(5)
         assertEquals("5", activity.getResult())
     }
 
     @Test
     fun additionTest() {
-        activity.calc.addDigit(5)
-        activity.calc.handleOperation("plus")
-        activity.calc.addDigit(4)
-        activity.calc.handleEquals()
+        calc.addDigit(5)
+        calc.handleOperation("plus")
+        calc.addDigit(4)
+        calc.handleEquals()
         assertEquals("9", activity.getResult())
         checkFormula("5+4")
     }
 
     @Test
     fun subtractTest() {
-        activity.calc.addDigit(5)
-        activity.calc.handleOperation("minus")
-        activity.calc.addDigit(4)
-        activity.calc.handleEquals()
+        calc.addDigit(5)
+        calc.handleOperation("minus")
+        calc.addDigit(4)
+        calc.handleEquals()
         var result  = activity.getResult()
 
         assertEquals("1", result)
@@ -58,10 +60,10 @@ class MainActivityTest {
 
     @Test
     fun multiplyTest() {
-        activity.calc.addDigit(5)
-        activity.calc.handleOperation("multiply")
-        activity.calc.addDigit(4)
-        activity.calc.handleEquals()
+        calc.addDigit(5)
+        calc.handleOperation("multiply")
+        calc.addDigit(4)
+        calc.handleEquals()
         var result  = activity.getResult()
 
         assertEquals("20", result)
@@ -70,10 +72,10 @@ class MainActivityTest {
 
     @Test
     fun divisionTest() {
-        activity.calc.addDigit(6)
-        activity.calc.handleOperation("divide")
-        activity.calc.addDigit(2)
-        activity.calc.handleEquals()
+        calc.addDigit(6)
+        calc.handleOperation("divide")
+        calc.addDigit(2)
+        calc.handleEquals()
         var result  = activity.getResult()
 
         assertEquals("3", result)
@@ -81,10 +83,10 @@ class MainActivityTest {
 
     @Test
     fun divisionByZero_returnsInfinity() {
-        activity.calc.addDigit(6)
-        activity.calc.handleOperation("divide")
-        activity.calc.addDigit(0)
-        activity.calc.handleEquals()
+        calc.addDigit(6)
+        calc.handleOperation("divide")
+        calc.addDigit(0)
+        calc.handleEquals()
         var result  = activity.getResult()
 
         assertEquals("∞", result)
@@ -92,8 +94,8 @@ class MainActivityTest {
 
     @Test
     fun percentageTest() {
-        activity.calc.addDigit(8)
-        activity.calc.handleOperation("percentage")
+        calc.addDigit(8)
+        calc.handleOperation("percentage")
         var result  = activity.getResult()
 
         assertEquals("0.08", result)
@@ -102,10 +104,10 @@ class MainActivityTest {
 
     @Test
     fun powerTest() {
-        activity.calc.addDigit(3)
-        activity.calc.handleOperation("power")
-        activity.calc.addDigit(6)
-        activity.calc.handleEquals()
+        calc.addDigit(3)
+        calc.handleOperation("power")
+        calc.addDigit(6)
+        calc.handleEquals()
         var result  = activity.getResult().toString()
 
         assertEquals("729", result)
@@ -114,14 +116,14 @@ class MainActivityTest {
 
     @Test
     fun clearTest() {
-        activity.calc.addDigit(1)
-        activity.calc.handleOperation("plus")
-        activity.calc.addDigit(2)
-        activity.calc.handleClear()
+        calc.addDigit(1)
+        calc.handleOperation("plus")
+        calc.addDigit(2)
+        calc.handleClear()
         assertEquals(activity.btn_clear.text,"AC")
-        activity.calc.addDigit(3)
+        calc.addDigit(3)
         assertEquals(activity.btn_clear.text,"CE")
-        activity.calc.handleEquals()
+        calc.handleEquals()
         var result  = activity.getResult().toString()
 
         assertEquals("4", result)
@@ -137,10 +139,10 @@ class MainActivityTest {
         checkFormula("12.2+21")
 
         setDouble(1.6)
-        activity.calc.handleEquals()
+        calc.handleEquals()
         assertEquals("31.6", activity.getResult())
         checkFormula("33.2−1.6")
-        activity.calc.handleEquals()
+        calc.handleEquals()
 
         handleOperation(MULTIPLY)
         setDouble(5.0)
@@ -154,11 +156,11 @@ class MainActivityTest {
         checkFormula("158÷4")
 
         setDouble(2.0)
-        activity.calc.handleEquals()
+        calc.handleEquals()
         assertEquals("1,560.25", activity.getResult())
         checkFormula("39.5^2")
 
-        activity.calc.handleClear()
+        calc.handleClear()
         assertEquals("0", activity.getResult())
 
         setDouble(15.0)
@@ -176,7 +178,7 @@ class MainActivityTest {
         handleOperation(MINUS)
         setDouble(4.0)
         handleOperation(NEGATIVE)
-        activity.calc.handleEquals()
+        calc.handleEquals()
         assertEquals("-80", activity.getResult())
         checkFormula("-84−-4")
     }
@@ -185,17 +187,17 @@ class MainActivityTest {
         var doubleString = d.toString()
         for (letter in doubleString.indices) {
            if(doubleString[letter].equals(".".single())){
-                activity.calc.decimalClick();
+                calc.decimalClick();
            }
             else{
-               activity.calc.addDigit(Integer.parseInt(doubleString[letter].toString()))
+               calc.addDigit(Integer.parseInt(doubleString[letter].toString()))
            }
         }
 
     }
 
     private fun handleOperation(operation: String) {
-        activity.calc.handleOperation(operation)
+        calc.handleOperation(operation)
     }
 
     private fun checkFormula(desired: String) {

@@ -31,7 +31,6 @@ class MainActivity : SimpleActivity(), Calculator {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        appLaunched()
 
         calc = CalculatorImpl(this, applicationContext)
 
@@ -88,6 +87,7 @@ class MainActivity : SimpleActivity(), Calculator {
         when (item.itemId) {
             R.id.settings -> launchSettings()
             R.id.about -> launchAbout()
+            R.id.money -> launchMoney()
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -108,6 +108,10 @@ class MainActivity : SimpleActivity(), Calculator {
 
     private fun launchSettings() {
         startActivity(Intent(applicationContext, SettingsActivity::class.java))
+    }
+
+    private fun launchMoney() {
+        startActivity(Intent(applicationContext, MoneyActivity::class.java))
     }
 
     private fun launchAbout() {
