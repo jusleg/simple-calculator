@@ -3,6 +3,7 @@ package com.simplemobiletools.calculator.extensions
 import android.content.Context
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import com.simplemobiletools.calculator.helpers.Config
 
@@ -17,6 +18,7 @@ fun Context.updateViewColors(viewGroup: ViewGroup, textColor: Int) {
                     is TextView -> it.setTextColor(textColor)
                     is Button -> it.setTextColor(textColor)
                     is ViewGroup -> updateViewColors(it, textColor)
+                    is ImageButton -> it.setColorFilter(textColor)
                 }
             }
 }

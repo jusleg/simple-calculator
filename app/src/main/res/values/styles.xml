@@ -8,4 +8,9 @@
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
 
+    <style name="MoneyButton" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:textColor">#ffffff</item>
+        <item name="colorButtonNormal">#FFF57C00</item>
+    </style>
+
 </resources>

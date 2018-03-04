@@ -46,6 +46,9 @@ android {
 }
 
 dependencies {
+    implementation "com.android.support:support-v4:27.0.2"
+    implementation "com.android.support:appcompat-v7:27.0.2"
+    implementation "com.android.support:support-core-utils:27.0.2"
     implementation 'com.github.jusleg:Simple-Commons:3.3.12'
     implementation 'me.grantland:autofittextview:0.2.1'
 

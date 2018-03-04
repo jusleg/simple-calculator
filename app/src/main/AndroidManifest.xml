@@ -46,6 +46,11 @@
             android:parentActivityName=".activities.MainActivity"/>
 
         <activity
+            android:name=".activities.MoneyActivity"
+            android:label="@string/money"
+            android:parentActivityName=".activities.MainActivity"/>
+
+        <activity
             android:name="com.simplemobiletools.commons.activities.AboutActivity"
             android:label="@string/about"
             android:parentActivityName=".activities.MainActivity"/>
