@@ -19,7 +19,7 @@ class MoneyCalculatorImplTest {
     @Before
     fun setUp() {
         activity = Robolectric.setupActivity(MoneyActivity::class.java)
-        calc = MoneyCalculatorImpl(activity, activity.applicationContext)
+        calc = MoneyCalculatorImpl(activity,activity, activity.applicationContext)
     }
 
     @Test
@@ -88,5 +88,19 @@ class MoneyCalculatorImplTest {
         calc.handleDelete()
         Assert.assertEquals("0.00", activity.getResult())
     }
+
+    @Test
+    fun calculateTax(){
+        calc.addDigit(2)
+        Assert.assertEquals("2.00", activity.getResult())
+        calc.addDigit(3)
+        Assert.assertEquals("23.00", activity.getResult())
+        calc.performTaxing("Quebec")
+        Assert.assertEquals("26.44", activity.getResult())
+        calc.handleDelete()
+        Assert.assertEquals("0.00", activity.getResult())
+    }
+
+
 }
 

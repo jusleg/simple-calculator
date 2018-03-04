@@ -1,27 +1,35 @@
 package com.simplemobiletools.calculator.activities
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.view.ViewCompat
+import android.util.Log
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ListView
 import com.simplemobiletools.calculator.R
 import com.simplemobiletools.calculator.extensions.config
 import com.simplemobiletools.calculator.extensions.updateViewColors
 import com.simplemobiletools.calculator.helpers.Calculator
 import com.simplemobiletools.calculator.helpers.MoneyCalculatorImpl
+import com.simplemobiletools.calculator.helpers.TaxCalculator
+import com.simplemobiletools.calculator.operation.TaxOperation
 import com.simplemobiletools.commons.extensions.*
 import kotlinx.android.synthetic.main.activity_money.*
+import kotlinx.android.synthetic.main.tax_modal.view.*
 import me.grantland.widget.AutofitHelper
-import android.content.res.ColorStateList
-import com.simplemobiletools.calculator.helpers.Formatter
 
 
-class MoneyActivity : SimpleActivity(), Calculator {
+class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator {
+
     private var storedTextColor = 0
     private var vibrateOnButtonPress = true
     private var storedUseEnglish = false
+    private var taxDialog:AlertDialog.Builder? = null
 
     lateinit var calc: MoneyCalculatorImpl
 
@@ -30,7 +38,7 @@ class MoneyActivity : SimpleActivity(), Calculator {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_money)
 
-        calc = MoneyCalculatorImpl(this, applicationContext)
+        calc = MoneyCalculatorImpl(this, this, applicationContext)
         updateViewColors(money_holder, config.textColor)
         updateButtonColor(config.customPrimaryColor)
 
@@ -41,11 +49,28 @@ class MoneyActivity : SimpleActivity(), Calculator {
         btn_currency.setOnClickListener{ true } // TODO : Implement feature and connect
         btn_delete.setOnClickListener { calc.handleDelete(); checkHaptic(it) }
         btn_delete.setOnLongClickListener { calc.handleClear(); true }
-        btn_taxes.setOnClickListener{ true } // TODO : Implement feature and connect
+        btn_taxes.setOnClickListener{ calc.calculateTax() } // TODO : Implement feature and connect
         btn_tip.setOnClickListener { true } // TODO : Implement feature and connect
         result.setOnLongClickListener { copyToClipboard(result.value); true }
 
         AutofitHelper.create(result)
+
+    }
+
+     override fun spawnTaxModal() {
+        taxDialog = AlertDialog.Builder(this)
+        val taxDialogView = layoutInflater.inflate(R.layout.tax_modal, null)
+        taxDialog!!.setView(taxDialogView)
+        taxDialog!!.setCancelable(true)
+        var custom_dialog = taxDialog!!.create()
+        custom_dialog.show()
+
+        custom_dialog.findViewById<ListView>(R.id.province_selector_tax).setOnItemClickListener {
+            adapterView: AdapterView<*>, view1: View, i: Int, l: Long ->
+            var location = custom_dialog.findViewById<ListView>(R.id.province_selector_tax).getItemAtPosition(i).toString()
+            custom_dialog.dismiss()
+            calc.performTaxing(location)
+        }
     }
 
     @SuppressLint("MissingSuperCall")
