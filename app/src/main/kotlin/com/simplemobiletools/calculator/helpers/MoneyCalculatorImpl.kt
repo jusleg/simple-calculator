@@ -3,6 +3,7 @@ package com.simplemobiletools.calculator.helpers
 import android.content.Context
 import com.simplemobiletools.calculator.R
 import com.simplemobiletools.calculator.operation.TaxOperation
+import com.simplemobiletools.calculator.operation.TipOperation
 
 class MoneyCalculatorImpl(calculator: Calculator,taxCalculator: TaxCalculator, val context: Context) {
     private var mCallback: Calculator? = calculator
@@ -96,8 +97,21 @@ class MoneyCalculatorImpl(calculator: Calculator,taxCalculator: TaxCalculator, v
     }
 
     fun performTaxing(location:String){
-        overwriteNumber(TaxOperation(Formatter.stringToDouble(getResult()),location).getResult())
+        overwriteNumber(TaxOperation(getResult(),location).getResult())
     }
 
-    private fun getResult() = mCallback!!.getResult()
+    private fun getResult() = Formatter.stringToDouble(mCallback!!.getResult())
+
+    fun calculateTip(tip: Double) {
+        if (isNumberEmpty()) {
+            overwriteNumber(TipOperation(getResult(), tip).getResult())
+        }
+    }
+
+    private fun isNumberEmpty(): Boolean {
+        if (Formatter.stringToDouble(mCallback!!.getResult()) > 0) {
+            return true
+        }
+        return false
+    }
 }

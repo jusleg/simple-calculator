@@ -22,6 +22,9 @@ import com.simplemobiletools.commons.extensions.*
 import kotlinx.android.synthetic.main.activity_money.*
 import kotlinx.android.synthetic.main.tax_modal.view.*
 import me.grantland.widget.AutofitHelper
+import com.simplemobiletools.calculator.helpers.Formatter
+import android.content.DialogInterface
+
 
 
 class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator {
@@ -32,6 +35,8 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator {
     private var taxDialog:AlertDialog.Builder? = null
 
     lateinit var calc: MoneyCalculatorImpl
+    private var tipValue = 15
+
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,14 +55,14 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator {
         btn_delete.setOnClickListener { calc.handleDelete(); checkHaptic(it) }
         btn_delete.setOnLongClickListener { calc.handleClear(); true }
         btn_taxes.setOnClickListener{ calc.calculateTax() } // TODO : Implement feature and connect
-        btn_tip.setOnClickListener { true } // TODO : Implement feature and connect
+        btn_tip.setOnClickListener { displayTipsDialog() } // TODO : Implement feature and connect
         result.setOnLongClickListener { copyToClipboard(result.value); true }
 
         AutofitHelper.create(result)
 
     }
 
-     override fun spawnTaxModal() {
+    override fun spawnTaxModal() {
         taxDialog = AlertDialog.Builder(this)
         val taxDialogView = layoutInflater.inflate(R.layout.tax_modal, null)
         taxDialog!!.setView(taxDialogView)
@@ -126,4 +131,22 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator {
 
     private fun getMoneyButtonIds() = arrayOf(btn_tip, btn_currency, btn_taxes)
     private fun getButtonIds() = arrayOf(btn_decimal, btn_0, btn_1, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9)
+
+
+    private fun displayTipsDialog() {
+        val numbers = arrayOf("10%", "12%", "15%", "18%", "20%", "25%")
+
+        val tipDialog = AlertDialog.Builder(this@MoneyActivity)
+        tipDialog.setTitle("Calculate Tip")
+
+        tipDialog.setItems(numbers, DialogInterface.OnClickListener { _, index ->
+            var tipPercentage = numbers[index].trimEnd('%').toDouble() / 100
+            calc.calculateTip(tipPercentage)
+        })
+
+        tipDialog.setNegativeButton("Cancel", DialogInterface.OnClickListener { _, _ ->
+            // User cancelled the dialog
+        })
+        tipDialog.show()
+    }
 }
