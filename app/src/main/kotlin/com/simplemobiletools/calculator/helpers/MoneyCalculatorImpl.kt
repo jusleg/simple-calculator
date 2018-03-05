@@ -96,6 +96,8 @@ class MoneyCalculatorImpl(calculator: Calculator,taxCalculator: TaxCalculator, v
     }
 
     fun performTaxing(location:String){
-        overwriteNumber(TaxOperation(Formatter.stringToDouble(mCallback!!.getResult()),location).getResult())
+        overwriteNumber(TaxOperation(Formatter.stringToDouble(getResult()),location).getResult())
     }
+
+    private fun getResult() = mCallback!!.getResult()
 }
