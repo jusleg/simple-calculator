@@ -3,10 +3,12 @@ package com.simplemobiletools.calculator.helpers
 import android.content.Context
 import com.simplemobiletools.calculator.R
 import com.simplemobiletools.calculator.operation.TaxOperation
+import com.simplemobiletools.calculator.operation.CurrencyConversionOperation
 
-class MoneyCalculatorImpl(calculator: Calculator,taxCalculator: TaxCalculator, val context: Context) {
+class MoneyCalculatorImpl(calculator: Calculator,taxCalculator: TaxCalculator, currencyConverter: CurrencyConverter, val context: Context) {
     private var mCallback: Calculator? = calculator
     private var tCallback: TaxCalculator? = taxCalculator
+    private var cCallback: CurrencyConverter? = currencyConverter
     private var number: String = ""
     private var decimalClicked: Boolean = false
     private var decimalCounter: Int = 0
@@ -95,8 +97,22 @@ class MoneyCalculatorImpl(calculator: Calculator,taxCalculator: TaxCalculator, v
         }
     }
 
-    fun performTaxing(location:String){
+    fun calculateCurrencyConversion() {
+        //Code to ping location here
+        if(false){
+
+        }else{
+            cCallback!!.spawnCurrencyModal()
+        }
+    }
+
+    fun performTaxing(location:String) {
         overwriteNumber(TaxOperation(Formatter.stringToDouble(getResult()),location).getResult())
+    }
+
+    fun performConversion(convert_from:String, convert_to:String) {
+        overwriteNumber(CurrencyConversionOperation(Formatter.stringToDouble(getResult()),
+                convert_from, convert_to).getResult())
     }
 
     private fun getResult() = mCallback!!.getResult()

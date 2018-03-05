@@ -30,7 +30,21 @@
         <item >Newfoundland and Labrador</item>
     </string-array>
     <string name="location">Please pick your location!</string>
-
+    <string name="convert_from">Convert from:</string>
+    <string-array name="conversions_from">item
+        <item>CAD</item>
+        <item>USD</item>
+        <item>EUR</item>
+        <item>GBP</item>
+    </string-array>
+    <string name="convert_to">Convert to:</string>
+    <string-array name="conversions_to">item
+        <item>CAD</item>
+        <item>USD</item>
+        <item>EUR</item>
+        <item>GBP</item>
+    </string-array>
+    <string name="convert">Convert</string>
 
     <!--
         Haven't found some strings? There's more at

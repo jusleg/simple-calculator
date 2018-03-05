@@ -11,25 +11,30 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ListView
+import android.widget.Spinner
+import android.widget.Button
 import com.simplemobiletools.calculator.R
 import com.simplemobiletools.calculator.extensions.config
 import com.simplemobiletools.calculator.extensions.updateViewColors
 import com.simplemobiletools.calculator.helpers.Calculator
+import com.simplemobiletools.calculator.helpers.CurrencyConverter
 import com.simplemobiletools.calculator.helpers.MoneyCalculatorImpl
 import com.simplemobiletools.calculator.helpers.TaxCalculator
 import com.simplemobiletools.calculator.operation.TaxOperation
 import com.simplemobiletools.commons.extensions.*
 import kotlinx.android.synthetic.main.activity_money.*
 import kotlinx.android.synthetic.main.tax_modal.view.*
+import kotlinx.android.synthetic.main.currency_modal.view.*
 import me.grantland.widget.AutofitHelper
 
 
-class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator {
+class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator, CurrencyConverter {
 
     private var storedTextColor = 0
     private var vibrateOnButtonPress = true
     private var storedUseEnglish = false
     private var taxDialog:AlertDialog.Builder? = null
+    private var currencyDialog:AlertDialog.Builder? = null
 
     lateinit var calc: MoneyCalculatorImpl
 
@@ -38,7 +43,7 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_money)
 
-        calc = MoneyCalculatorImpl(this, this, applicationContext)
+        calc = MoneyCalculatorImpl(this, this, this, applicationContext)
         updateViewColors(money_holder, config.textColor)
         updateButtonColor(config.customPrimaryColor)
 
@@ -46,7 +51,7 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator {
             it.setOnClickListener { calc.numpadClicked(it.id); checkHaptic(it) }
         }
 
-        btn_currency.setOnClickListener{ true } // TODO : Implement feature and connect
+        btn_currency.setOnClickListener{ calc.calculateCurrencyConversion() } // TODO : Implement feature and connect
         btn_delete.setOnClickListener { calc.handleDelete(); checkHaptic(it) }
         btn_delete.setOnLongClickListener { calc.handleClear(); true }
         btn_taxes.setOnClickListener{ calc.calculateTax() } // TODO : Implement feature and connect
@@ -70,6 +75,38 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator {
             var location = custom_dialog.findViewById<ListView>(R.id.province_selector_tax).getItemAtPosition(i).toString()
             custom_dialog.dismiss()
             calc.performTaxing(location)
+        }
+    }
+
+    override fun spawnCurrencyModal() {
+        currencyDialog = AlertDialog.Builder(this)
+        val currencyDialogView = layoutInflater.inflate(R.layout.currency_modal, null)
+        currencyDialog!!.setView(currencyDialogView)
+        currencyDialog!!.setCancelable(true)
+        var custom_dialog = currencyDialog!!.create()
+        custom_dialog.show()
+        var convert_from = "CAD"
+        var convert_to = "CAD"
+
+        custom_dialog.findViewById<Spinner>(R.id.convert_from).onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                convert_from = custom_dialog.findViewById<Spinner>(R.id.convert_from).getSelectedItem().toString()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
+
+        custom_dialog.findViewById<Spinner>(R.id.convert_to).onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                convert_to = custom_dialog.findViewById<Spinner>(R.id.convert_to).getSelectedItem().toString()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
+
+        custom_dialog.findViewById<Button>(R.id.convert).setOnClickListener {
+            custom_dialog.dismiss()
+            calc.performConversion(convert_from, convert_to)
         }
     }
 
