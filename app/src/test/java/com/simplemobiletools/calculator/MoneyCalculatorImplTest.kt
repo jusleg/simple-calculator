@@ -101,6 +101,19 @@ class MoneyCalculatorImplTest {
         Assert.assertEquals("0.00", activity.getResult())
     }
 
+    @Test
+    fun calculateTip() {
+        calc.handleDelete()
+        calc.calculateTip(0.15)
+        Assert.assertEquals("0.00", activity.getResult())
 
+        calc.addDigit(1)
+        calc.addDigit(0)
+        calc.addDigit(0)
+        calc.calculateTip(0.15)
+        Assert.assertEquals("115.00", activity.getResult())
+
+        calc.calculateTip(0.25)
+        Assert.assertEquals("143.75", activity.getResult())
+    }
 }
-
