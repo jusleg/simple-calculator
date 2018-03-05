@@ -17,6 +17,20 @@
         This app is just one piece of a bigger series of apps. You can find the rest of them at http://www.simplemobiletools.com
     </string>
     <string name="money">Money Operations</string>
+    <string-array name="provinces">item
+        <item>British Columbia</item>
+        <item>Alberta</item>
+        <item>Saskatchewan</item>
+        <item>Manitoba</item>
+        <item>Ontario</item>
+        <item>Quebec</item>
+        <item>New Brunswick</item>
+        <item>Nova Scotia</item>
+        <item>Prince Edward Island</item>
+        <item >Newfoundland and Labrador</item>
+    </string-array>
+    <string name="location">Please pick your location!</string>
+
 
     <!--
         Haven't found some strings? There's more at

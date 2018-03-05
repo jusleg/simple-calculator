@@ -73,6 +73,17 @@ public class MoneyActivityTest {
         checkResult("0.00");
     }
 
+
+    @Test
+    public void taxWithoutGeoLocTest(){
+        //TODO: Will need modification once geolocation is implemented
+        press(R.id.btn_2);
+        press(R.id.btn_3);
+        press(R.id.btn_taxes);
+        onView(withId(R.id.province_selector_tax)).perform(click());
+        checkResult("25.99");
+    }
+
     private void press(int id) {
         onView(withId(id)).perform(click());
     }
