@@ -103,13 +103,13 @@ class MoneyCalculatorImpl(calculator: Calculator,taxCalculator: TaxCalculator, v
     private fun getResult() = Formatter.stringToDouble(mCallback!!.getResult())
 
     fun calculateTip(tip: Double) {
-        if (isNumberEmpty()) {
+        if (isNumberValid()) {
             overwriteNumber(TipOperation(getResult(), tip).getResult())
         }
     }
 
-    private fun isNumberEmpty(): Boolean {
-        if (Formatter.stringToDouble(mCallback!!.getResult()) > 0) {
+    private fun isNumberValid(): Boolean {
+        if (getResult() > 0) {
             return true
         }
         return false

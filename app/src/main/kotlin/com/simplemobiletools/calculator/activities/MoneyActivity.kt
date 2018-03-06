@@ -35,7 +35,6 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator {
     private var taxDialog:AlertDialog.Builder? = null
 
     lateinit var calc: MoneyCalculatorImpl
-    private var tipValue = 15
 
 
     @SuppressLint("MissingSuperCall")
@@ -55,7 +54,7 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator {
         btn_delete.setOnClickListener { calc.handleDelete(); checkHaptic(it) }
         btn_delete.setOnLongClickListener { calc.handleClear(); true }
         btn_taxes.setOnClickListener{ calc.calculateTax() } // TODO : Implement feature and connect
-        btn_tip.setOnClickListener { displayTipsDialog() } // TODO : Implement feature and connect
+        btn_tip.setOnClickListener { displayTipsDialog() }
         result.setOnLongClickListener { copyToClipboard(result.value); true }
 
         AutofitHelper.create(result)
@@ -134,13 +133,13 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator {
 
 
     private fun displayTipsDialog() {
-        val numbers = arrayOf("10%", "12%", "15%", "18%", "20%", "25%")
+        val tipAmount = arrayOf("10%", "12%", "15%", "18%", "20%", "25%")
 
         val tipDialog = AlertDialog.Builder(this@MoneyActivity)
         tipDialog.setTitle("Calculate Tip")
 
-        tipDialog.setItems(numbers, DialogInterface.OnClickListener { _, index ->
-            var tipPercentage = numbers[index].trimEnd('%').toDouble() / 100
+        tipDialog.setItems(tipAmount, DialogInterface.OnClickListener { _, index ->
+            var tipPercentage = tipAmount[index].trimEnd('%').toDouble() / 100
             calc.calculateTip(tipPercentage)
         })
 

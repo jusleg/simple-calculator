@@ -81,13 +81,13 @@ public class MoneyActivityTest {
         press(R.id.btn_2);
         press(R.id.btn_3);
         press(R.id.btn_taxes);
-        onView(withId(R.id.province_selector_tax)).perform(click());
+        press(R.id.province_selector_tax);
         checkResult("25.99");
     }
 
     @Test
     public void testTipDialogDisplayed() {
-        onView(withId(R.id.btn_tip)).perform(click());
+        press(R.id.btn_tip);
         onView(withText("Calculate Tip")).check(matches(isDisplayed()));
     }
 
@@ -97,7 +97,7 @@ public class MoneyActivityTest {
         press(R.id.btn_1);
         press(R.id.btn_0);
         press(R.id.btn_0);
-        onView(withId(R.id.btn_tip)).perform(click());
+        press(R.id.btn_tip);
         onView(withText("15%")).perform(click());
         checkResult("115.00");
     }
