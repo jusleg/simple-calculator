@@ -86,14 +86,10 @@ class MoneyCalculatorImpl(calculator: Calculator,taxCalculator: TaxCalculator, v
         mCallback!!.setValue(value, context)
     }
 
-    fun calculateTax(){
-        //Code to ping location here
-        if(false){
-
-        }else{
-            tCallback!!.spawnTaxModal()
-        }
-    }
+    //TODO: Refactor this
+//    fun calculateTax(){
+//        tCallback!!.spawnTaxModal()
+//    }
 
     fun performTaxing(location:String){
         overwriteNumber(TaxOperation(Formatter.stringToDouble(getResult()),location).getResult())

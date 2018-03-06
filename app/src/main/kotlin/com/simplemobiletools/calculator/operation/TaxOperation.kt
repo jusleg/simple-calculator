@@ -15,6 +15,9 @@ class TaxOperation(var value: Double, var location: String)  {
         taxesMap.put("Nova Scotia", 0.15);
         taxesMap.put("Prince Edward Island", 0.15);
         taxesMap.put("Newfoundland and Labrador", 0.15);
+        taxesMap.put("Northwest Territories", 0.05);
+        taxesMap.put("Nunavut", 0.05);
+        taxesMap.put("Yukon", 0.05);
     }
 
     fun getResult(): Double {

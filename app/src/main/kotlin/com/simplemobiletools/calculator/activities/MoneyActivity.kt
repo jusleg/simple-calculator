@@ -3,33 +3,46 @@ package com.simplemobiletools.calculator.activities
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
+import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.location.*
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
 import android.support.v4.view.ViewCompat
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ListView
+import android.widget.Toast
 import com.simplemobiletools.calculator.R
 import com.simplemobiletools.calculator.extensions.config
 import com.simplemobiletools.calculator.extensions.updateViewColors
 import com.simplemobiletools.calculator.helpers.Calculator
 import com.simplemobiletools.calculator.helpers.MoneyCalculatorImpl
 import com.simplemobiletools.calculator.helpers.TaxCalculator
-import com.simplemobiletools.calculator.operation.TaxOperation
-import com.simplemobiletools.commons.extensions.*
+import com.simplemobiletools.commons.extensions.copyToClipboard
+import com.simplemobiletools.commons.extensions.performHapticFeedback
+import com.simplemobiletools.commons.extensions.restartActivity
+import com.simplemobiletools.commons.extensions.value
 import kotlinx.android.synthetic.main.activity_money.*
-import kotlinx.android.synthetic.main.tax_modal.view.*
 import me.grantland.widget.AutofitHelper
+import java.util.*
+import kotlin.collections.HashMap
 
 
-class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator {
+class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator, LocationListener {
 
     private var storedTextColor = 0
     private var vibrateOnButtonPress = true
     private var storedUseEnglish = false
     private var taxDialog:AlertDialog.Builder? = null
+    private var locationManager: LocationManager? = null
+    private var GPS_REQUEST_CODE = 101
+    private var MINIMUM_TIME_BETWEEN_UPDATES : Long = 300000L //in ms
+    private var MINIMUM_DISTANCE_CHANGE_FOR_UPDATES : Float = 100f //in meters
+    private var currentLongitude : Double = 0.0
+    private var currentLatitude : Double = 0.0
 
     lateinit var calc: MoneyCalculatorImpl
 
@@ -42,6 +55,19 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator {
         updateViewColors(money_holder, config.textColor)
         updateButtonColor(config.customPrimaryColor)
 
+        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+        //Checks for permission granted for location service
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED) {
+            //if not granted then request permission
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), GPS_REQUEST_CODE);
+        }
+        try {
+            locationManager!!.requestLocationUpdates(LocationManager.GPS_PROVIDER, MINIMUM_TIME_BETWEEN_UPDATES, MINIMUM_DISTANCE_CHANGE_FOR_UPDATES, this)
+        } catch (e: SecurityException) {
+            print("NO PERMISSION GRANTED!")
+        }
+
         getButtonIds().forEach {
             it.setOnClickListener { calc.numpadClicked(it.id); checkHaptic(it) }
         }
@@ -49,15 +75,114 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator {
         btn_currency.setOnClickListener{ true } // TODO : Implement feature and connect
         btn_delete.setOnClickListener { calc.handleDelete(); checkHaptic(it) }
         btn_delete.setOnLongClickListener { calc.handleClear(); true }
-        btn_taxes.setOnClickListener{ calc.calculateTax() } // TODO : Implement feature and connect
         btn_tip.setOnClickListener { true } // TODO : Implement feature and connect
         result.setOnLongClickListener { copyToClipboard(result.value); true }
+        btn_taxes.setOnClickListener({ view -> taxLocationStrat() })
 
         AutofitHelper.create(result)
 
     }
 
-     override fun spawnTaxModal() {
+    override fun onLocationChanged(location: Location) {
+        currentLatitude = location.latitude
+        currentLongitude = location.longitude
+        val message = String.format("New Location \n Longitude: %1\$s \n Latitude: %2\$s",
+                location.longitude, location.latitude
+        )
+        Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun onStatusChanged(s:String, i:Int, b:Bundle) {}
+
+    override fun onProviderDisabled(s:String) {
+        Toast.makeText(applicationContext,"Location service has been turned off", Toast.LENGTH_LONG).show()
+    }
+    override fun onProviderEnabled(s:String) {
+        Toast.makeText(applicationContext,"Locattion service has been turned on", Toast.LENGTH_LONG).show()
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(requestCode == GPS_REQUEST_CODE) {
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.e("PermissionTag","Permission Granted (if 0 then is granted): " + grantResults[0])
+            }
+        }
+    }
+
+    fun taxLocationStrat() {
+        var gps_enabled : Boolean = false;
+        try{
+            gps_enabled = locationManager!!.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        } catch(e: Exception) {}
+
+        //if location service is enabled then retrieve the latest location and performs tax rate with that location
+        if(gps_enabled) {
+            //Checks if location service has been granted again
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), GPS_REQUEST_CODE);
+            }
+            var lastLocation = locationManager!!.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+
+            if (lastLocation != null) {
+                currentLongitude = lastLocation.longitude
+                currentLatitude = lastLocation.latitude
+                var message: String = String.format("Current Location \n Longitude: " + lastLocation.longitude + " \n Latitude: " + lastLocation.latitude)
+                Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+            }
+
+            val geocoder = Geocoder(applicationContext, Locale.getDefault())
+            val addresses: List<Address> = geocoder.getFromLocation(currentLatitude, currentLatitude, 1)
+            var province : String = ""
+            try {
+                 province = addresses.get(0).adminArea
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(applicationContext, "Unable to recognize your location, please choose one of the following provinces", Toast.LENGTH_SHORT).show()
+                spawnTaxModal()
+                return
+            }
+
+//            //TODO: refactor this part to make it cleaner
+//            if(province == "") {
+//                Toast.makeText(applicationContext, "Unable to recognize your location, please choose one of the following provinces", Toast.LENGTH_SHORT).show()
+//                spawnTaxModal()
+//                return
+//            }
+//
+//            //if country is not Canada then prompt to choose a Canadian province
+//            if(addresses.get(0).countryName != "Canada"){
+//                Toast.makeText(applicationContext, "Please choose a Canadian province", Toast.LENGTH_SHORT).show()
+//                spawnTaxModal()
+//            }
+
+            //TODO: move this part into another file
+            var provinceAbbreviationMap = HashMap<String,String>()
+
+            provinceAbbreviationMap.put("BC", "British Columbia")
+            provinceAbbreviationMap.put("AB", "Alberta")
+            provinceAbbreviationMap.put("SK", "Saskatchewan")
+            provinceAbbreviationMap.put("MB", "Manitoba")
+            provinceAbbreviationMap.put("ON", "Ontario")
+            provinceAbbreviationMap.put("QC", "Quebec")
+            provinceAbbreviationMap.put("NB", "New Brunswick")
+            provinceAbbreviationMap.put("NS", "Nova Scotia")
+            provinceAbbreviationMap.put("PE", "Prince Edward Island")
+            provinceAbbreviationMap.put("NL", "Newfoundland and Labrador")
+            provinceAbbreviationMap.put("NT", "Northwest Territories")
+            provinceAbbreviationMap.put("NU", "Nunavut")
+            provinceAbbreviationMap.put("YT", "Yukon")
+
+            calc.performTaxing(provinceAbbreviationMap.get(province).toString())
+
+         //if location service is disabled then let the user select manually the province
+        } else {
+            Toast.makeText(applicationContext, "Location services not enabled", Toast.LENGTH_SHORT).show()
+            spawnTaxModal()
+        }
+    }
+
+    override fun spawnTaxModal() {
         taxDialog = AlertDialog.Builder(this)
         val taxDialogView = layoutInflater.inflate(R.layout.tax_modal, null)
         taxDialog!!.setView(taxDialogView)
