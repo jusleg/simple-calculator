@@ -30,6 +30,10 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
+import android.app.ProgressDialog
+import android.os.AsyncTask
+import java.io.IOException
+import java.net.MalformedURLException
 
 
 class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator, CurrencyConverter {
@@ -41,6 +45,9 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator, CurrencyConv
     private var currencyDialog:AlertDialog.Builder? = null
 
     lateinit var calc: MoneyCalculatorImpl
+
+    var pd: ProgressDialog? = null
+    var conversionRatesJsonString : String = ""
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,6 +71,9 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator, CurrencyConv
         result.setOnLongClickListener { copyToClipboard(result.value); true }
 
         AutofitHelper.create(result)
+
+        JsonTask().execute("https://api.fixer.io/latest?base=CAD")
+
     }
 
      override fun spawnTaxModal() {
@@ -167,4 +177,77 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator, CurrencyConv
 
     private fun getMoneyButtonIds() = arrayOf(btn_tip, btn_currency, btn_taxes)
     private fun getButtonIds() = arrayOf(btn_decimal, btn_0, btn_1, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9)
+
+
+    private inner class JsonTask : AsyncTask<String, String, String>() {
+
+        override fun onPreExecute() {
+            super.onPreExecute()
+
+            pd = ProgressDialog(this@MoneyActivity)
+            pd?.setMessage("Please wait")
+            pd?.setCancelable(false)
+            pd?.show()
+        }
+
+        override fun doInBackground(vararg params: String): String {
+
+
+            var connection: HttpURLConnection? = null
+            var reader: BufferedReader? = null
+
+            try {
+                val url = URL(params[0])
+                connection = url.openConnection() as HttpURLConnection
+                connection.connect()
+
+
+                val stream = connection.inputStream
+
+                reader = BufferedReader(InputStreamReader(stream))
+
+                val buffer = StringBuffer()
+                var line: String? = null
+
+                while (true) {
+                    line = reader.readLine()
+                    if (line == null) break
+                    buffer.append(line + "\n")
+                    Log.d("Response: ", "> $line")   //here u ll get whole response...... :-)
+
+                }
+
+                return buffer.toString()
+
+
+            } catch (e: MalformedURLException) {
+                e.printStackTrace()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            } finally {
+                if (connection != null) {
+                    connection.disconnect()
+                }
+                try {
+                    if (reader != null) {
+                        reader.close()
+                    }
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+
+            }
+            return ""
+        }
+
+        override fun onPostExecute(result: String) {
+            super.onPostExecute(result)
+            if (pd!!.isShowing()) {
+                pd!!.dismiss()
+            }
+            conversionRatesJsonString = result
+        }
+    }
 }
+
+
