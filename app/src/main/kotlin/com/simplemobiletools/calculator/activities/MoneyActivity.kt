@@ -120,7 +120,7 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator, CurrencyConv
 
         custom_dialog.findViewById<Button>(R.id.convert).setOnClickListener {
             custom_dialog.dismiss()
-            calc.performConversion(convert_from, convert_to)
+            calc.performConversion(convert_from, convert_to, conversionRatesJsonString)
         }
     }
 

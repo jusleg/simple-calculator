@@ -110,9 +110,9 @@ class MoneyCalculatorImpl(calculator: Calculator,taxCalculator: TaxCalculator, c
         overwriteNumber(TaxOperation(Formatter.stringToDouble(getResult()),location).getResult())
     }
 
-    fun performConversion(convert_from:String, convert_to:String) {
+    fun performConversion(convert_from:String, convert_to:String, conversionRatesJsonString:String) {
         overwriteNumber(CurrencyConversionOperation(Formatter.stringToDouble(getResult()),
-                convert_from, convert_to).getResult())
+                convert_from, convert_to, conversionRatesJsonString).getResult())
     }
 
     private fun getResult() = mCallback!!.getResult()
