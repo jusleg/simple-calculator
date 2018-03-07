@@ -5,6 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.simplemobiletools.calculator.activities.MoneyActivity;
 
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,10 +20,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.hasToString;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.core.StringStartsWith.startsWith;
 
 @RunWith(AndroidJUnit4.class)
 public class MoneyActivityTest {
@@ -93,11 +92,39 @@ public class MoneyActivityTest {
     }
 
     @Test
-    public void likeCurrencyConversionTest(){
+    public void testDefaultCurrencyConversion(){
         press(R.id.btn_1);
         press(R.id.btn_currency);
         press(R.id.convert);
         checkResult("1.00");
+    }
+
+    @Ignore
+    @Test
+    public void testConversionFromSelection() {
+        final String selectionText = "USD";
+
+        press(R.id.btn_1);
+        press(R.id.btn_currency);
+
+        onView(withId(R.id.convert_from)).perform(click());
+        // Bug: onData is not selecting a spinner item as expected
+        onData(allOf(is(instanceOf(String.class)), is(selectionText))).perform(click());
+        onView(withId(R.id.convert_from)).check(matches(withSpinnerText(containsString(selectionText))));
+    }
+
+    @Ignore
+    @Test
+    public void testConversionToSelection() {
+        final String selectionText = "USD";
+
+        press(R.id.btn_1);
+        press(R.id.btn_currency);
+
+        onView(withId(R.id.convert_to)).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is(selectionText))).perform(click());
+        // Bug: onData is not selecting a spinner item as expected
+        onView(withId(R.id.convert_to)).check(matches(withSpinnerText(containsString(selectionText))));
     }
 
     private void press(int id) {
