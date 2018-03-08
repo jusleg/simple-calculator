@@ -20,7 +20,6 @@ import com.simplemobiletools.calculator.extensions.config
 import com.simplemobiletools.calculator.extensions.updateViewColors
 import com.simplemobiletools.calculator.helpers.Calculator
 import com.simplemobiletools.calculator.helpers.MoneyCalculatorImpl
-import com.simplemobiletools.calculator.helpers.TaxCalculator
 import com.simplemobiletools.commons.extensions.copyToClipboard
 import com.simplemobiletools.commons.extensions.performHapticFeedback
 import com.simplemobiletools.commons.extensions.restartActivity
@@ -28,10 +27,9 @@ import com.simplemobiletools.commons.extensions.value
 import kotlinx.android.synthetic.main.activity_money.*
 import me.grantland.widget.AutofitHelper
 import java.util.*
-import kotlin.collections.HashMap
 
 
-class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator, LocationListener {
+class MoneyActivity : SimpleActivity(), Calculator , LocationListener {
 
     private var storedTextColor = 0
     private var vibrateOnButtonPress = true
@@ -51,7 +49,7 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator, LocationList
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_money)
 
-        calc = MoneyCalculatorImpl(this, this, applicationContext)
+        calc = MoneyCalculatorImpl(this, applicationContext)
         updateViewColors(money_holder, config.textColor)
         updateButtonColor(config.customPrimaryColor)
 
@@ -77,7 +75,7 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator, LocationList
         btn_delete.setOnLongClickListener { calc.handleClear(); true }
         btn_tip.setOnClickListener { true } // TODO : Implement feature and connect
         result.setOnLongClickListener { copyToClipboard(result.value); true }
-        btn_taxes.setOnClickListener({ view -> taxLocationStrat() })
+        btn_taxes.setOnClickListener({ view -> taxLocationStrat(currentLatitude, currentLongitude, false) })
 
         AutofitHelper.create(result)
     }
@@ -109,8 +107,12 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator, LocationList
         }
     }
 
-    private fun taxLocationStrat() {
-        var gpsEnabled : Boolean = false
+    //method signature here has been added for the sake of testing
+    private fun taxLocationStrat(latitude:Double, longitude:Double, gpsEnabled:Boolean) {
+        var gpsEnabled = gpsEnabled
+        currentLatitude = latitude
+        currentLongitude = longitude
+
         try{
             gpsEnabled = locationManager!!.isProviderEnabled(LocationManager.GPS_PROVIDER)
         } catch(e: Exception) {}
@@ -122,6 +124,7 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator, LocationList
                 ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), GPS_REQUEST_CODE);
             }
 
+            //get the last known location
             var lastLocation = locationManager!!.getLastKnownLocation(LocationManager.GPS_PROVIDER)
 
             if (lastLocation != null) {
@@ -129,10 +132,12 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator, LocationList
                 currentLatitude = lastLocation.latitude
             }
 
+            //uses Android's Geocoder to locate the address with a given latitude and longitude
             val geocoder = Geocoder(applicationContext, Locale.getDefault())
             val addresses: List<Address> = geocoder.getFromLocation(currentLatitude, currentLongitude, 1)
             var province : String = ""
             try {
+                //gets the province
                 province = addresses.get(0).adminArea
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -161,7 +166,7 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator, LocationList
         }
     }
 
-    override fun spawnTaxModal() {
+    private fun spawnTaxModal() {
         taxDialog = AlertDialog.Builder(this)
         val taxDialogView = layoutInflater.inflate(R.layout.tax_modal, null)
         taxDialog!!.setView(taxDialogView)

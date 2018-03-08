@@ -19,7 +19,7 @@ class MoneyCalculatorImplTest {
     @Before
     fun setUp() {
         activity = Robolectric.setupActivity(MoneyActivity::class.java)
-        calc = MoneyCalculatorImpl(activity,activity, activity.applicationContext)
+        calc = MoneyCalculatorImpl(activity, activity.applicationContext)
     }
 
     @Test
@@ -90,7 +90,68 @@ class MoneyCalculatorImplTest {
     }
 
     @Test
-    fun calculateTax(){
+    fun calculateTaxBritishColumbia(){
+        calc.addDigit(2)
+        Assert.assertEquals("2.00", activity.getResult())
+        calc.addDigit(3)
+        Assert.assertEquals("23.00", activity.getResult())
+        calc.performTaxing("British Columbia")
+        Assert.assertEquals("25.76", activity.getResult())
+        calc.handleDelete()
+        Assert.assertEquals("0.00", activity.getResult())
+    }
+
+    @Test
+    fun calculateTaxAlberta(){
+        calc.addDigit(2)
+        Assert.assertEquals("2.00", activity.getResult())
+        calc.addDigit(3)
+        Assert.assertEquals("23.00", activity.getResult())
+        calc.performTaxing("Alberta")
+        Assert.assertEquals("24.15", activity.getResult())
+        calc.handleDelete()
+        Assert.assertEquals("0.00", activity.getResult())
+    }
+
+    @Test
+    fun calculateTaxSaskatchewan(){
+        calc.addDigit(2)
+        Assert.assertEquals("2.00", activity.getResult())
+        calc.addDigit(3)
+        Assert.assertEquals("23.00", activity.getResult())
+        calc.performTaxing("Saskatchewan")
+        Assert.assertEquals("25.53", activity.getResult())
+        calc.handleDelete()
+        Assert.assertEquals("0.00", activity.getResult())
+    }
+
+
+    @Test
+    fun calculateTaxManitoba(){
+        calc.addDigit(2)
+        Assert.assertEquals("2.00", activity.getResult())
+        calc.addDigit(3)
+        Assert.assertEquals("23.00", activity.getResult())
+        calc.performTaxing("Manitoba")
+        Assert.assertEquals("25.99", activity.getResult())
+        calc.handleDelete()
+        Assert.assertEquals("0.00", activity.getResult())
+    }
+
+    @Test
+    fun calculateTaxOntario(){
+        calc.addDigit(2)
+        Assert.assertEquals("2.00", activity.getResult())
+        calc.addDigit(3)
+        Assert.assertEquals("23.00", activity.getResult())
+        calc.performTaxing("Ontario")
+        Assert.assertEquals("25.99", activity.getResult())
+        calc.handleDelete()
+        Assert.assertEquals("0.00", activity.getResult())
+    }
+
+    @Test
+    fun calculateTaxQuebec(){
         calc.addDigit(2)
         Assert.assertEquals("2.00", activity.getResult())
         calc.addDigit(3)
@@ -99,6 +160,95 @@ class MoneyCalculatorImplTest {
         Assert.assertEquals("26.44", activity.getResult())
         calc.handleDelete()
         Assert.assertEquals("0.00", activity.getResult())
+    }
+
+    @Test
+    fun calculateTaxNewBrunswick(){
+        calc.addDigit(2)
+        Assert.assertEquals("2.00", activity.getResult())
+        calc.addDigit(3)
+        Assert.assertEquals("23.00", activity.getResult())
+        calc.performTaxing("New Brunswick")
+        Assert.assertEquals("26.45", activity.getResult())
+        calc.handleDelete()
+        Assert.assertEquals("0.00", activity.getResult())
+    }
+
+    @Test
+    fun calculateTaxNovaScotia(){
+        calc.addDigit(2)
+        Assert.assertEquals("2.00", activity.getResult())
+        calc.addDigit(3)
+        Assert.assertEquals("23.00", activity.getResult())
+        calc.performTaxing("Nova Scotia")
+        Assert.assertEquals("26.45", activity.getResult())
+        calc.handleDelete()
+        Assert.assertEquals("0.00", activity.getResult())
+    }
+
+    @Test
+    fun calculateTaxPrinceEdwardIsland(){
+        calc.addDigit(2)
+        Assert.assertEquals("2.00", activity.getResult())
+        calc.addDigit(3)
+        Assert.assertEquals("23.00", activity.getResult())
+        calc.performTaxing("Prince Edward Island")
+        Assert.assertEquals("26.45", activity.getResult())
+        calc.handleDelete()
+        Assert.assertEquals("0.00", activity.getResult())
+    }
+
+    @Test
+    fun calculateTaxNewfoundlandandLabrador(){
+        calc.addDigit(2)
+        Assert.assertEquals("2.00", activity.getResult())
+        calc.addDigit(3)
+        Assert.assertEquals("23.00", activity.getResult())
+        calc.performTaxing("Newfoundland and Labrador")
+        Assert.assertEquals("26.45", activity.getResult())
+        calc.handleDelete()
+        Assert.assertEquals("0.00", activity.getResult())
+    }
+
+    @Test
+    fun calculateTaxNorthwestTerritories(){
+        calc.addDigit(2)
+        Assert.assertEquals("2.00", activity.getResult())
+        calc.addDigit(3)
+        Assert.assertEquals("23.00", activity.getResult())
+        calc.performTaxing("Northwest Territories")
+        Assert.assertEquals("24.15", activity.getResult())
+        calc.handleDelete()
+        Assert.assertEquals("0.00", activity.getResult())
+    }
+
+    @Test
+    fun calculateTaxYukon(){
+        calc.addDigit(2)
+        Assert.assertEquals("2.00", activity.getResult())
+        calc.addDigit(3)
+        Assert.assertEquals("23.00", activity.getResult())
+        calc.performTaxing("Yukon")
+        Assert.assertEquals("24.15", activity.getResult())
+        calc.handleDelete()
+        Assert.assertEquals("0.00", activity.getResult())
+    }
+
+    @Test
+    fun calculateTaxNunavut(){
+        calc.addDigit(1)
+        Assert.assertEquals("1.00", activity.getResult())
+        calc.addDigit(0)
+        Assert.assertEquals("10.00", activity.getResult())
+        calc.performTaxing("Nunavut")
+        Assert.assertEquals("10.50", activity.getResult())
+        calc.handleDelete()
+        Assert.assertEquals("0.00", activity.getResult())
+    }
+
+    @Test
+    fun calculateTaxAtGeolocationTest() {
+
     }
 
 

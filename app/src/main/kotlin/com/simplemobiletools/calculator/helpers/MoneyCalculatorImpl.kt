@@ -4,9 +4,8 @@ import android.content.Context
 import com.simplemobiletools.calculator.R
 import com.simplemobiletools.calculator.operation.TaxOperation
 
-class MoneyCalculatorImpl(calculator: Calculator,taxCalculator: TaxCalculator, val context: Context) {
+class MoneyCalculatorImpl(calculator: Calculator, val context: Context) {
     private var mCallback: Calculator? = calculator
-    private var tCallback: TaxCalculator? = taxCalculator
     private var number: String = ""
     private var decimalClicked: Boolean = false
     private var decimalCounter: Int = 0
@@ -85,11 +84,6 @@ class MoneyCalculatorImpl(calculator: Calculator,taxCalculator: TaxCalculator, v
     private fun setValue(value: String) {
         mCallback!!.setValue(value, context)
     }
-
-    //TODO: Refactor this
-//    fun calculateTax(){
-//        tCallback!!.spawnTaxModal()
-//    }
 
     fun performTaxing(location:String){
         overwriteNumber(TaxOperation(Formatter.stringToDouble(getResult()),location).getResult())

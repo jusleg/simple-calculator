@@ -40,6 +40,7 @@ android {
 
     testOptions {
         unitTests {
+            unitTests.returnDefaultValues = true
             includeAndroidResources = true
         }
     }
