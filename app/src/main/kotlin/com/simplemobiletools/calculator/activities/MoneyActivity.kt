@@ -40,7 +40,7 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator, LocationList
     private var locationManager: LocationManager? = null
     private var GPS_REQUEST_CODE = 101
     private var MINIMUM_TIME_BETWEEN_UPDATES : Long = 300000L //in ms
-    private var MINIMUM_DISTANCE_CHANGE_FOR_UPDATES : Float = 100f //in meters
+    private var MINIMUM_DISTANCE_CHANGE_FOR_UPDATES : Float = 1000f //in meters
     private var currentLongitude : Double = 0.0
     private var currentLatitude : Double = 0.0
 
@@ -80,7 +80,6 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator, LocationList
         btn_taxes.setOnClickListener({ view -> taxLocationStrat() })
 
         AutofitHelper.create(result)
-
     }
 
     override fun onLocationChanged(location: Location) {
@@ -110,32 +109,31 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator, LocationList
         }
     }
 
-    fun taxLocationStrat() {
-        var gps_enabled : Boolean = false;
+    private fun taxLocationStrat() {
+        var gpsEnabled : Boolean = false
         try{
-            gps_enabled = locationManager!!.isProviderEnabled(LocationManager.GPS_PROVIDER)
+            gpsEnabled = locationManager!!.isProviderEnabled(LocationManager.GPS_PROVIDER)
         } catch(e: Exception) {}
 
         //if location service is enabled then retrieve the latest location and performs tax rate with that location
-        if(gps_enabled) {
+        if(gpsEnabled) {
             //Checks if location service has been granted again
             if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), GPS_REQUEST_CODE);
             }
+
             var lastLocation = locationManager!!.getLastKnownLocation(LocationManager.GPS_PROVIDER)
 
             if (lastLocation != null) {
                 currentLongitude = lastLocation.longitude
                 currentLatitude = lastLocation.latitude
-                var message: String = String.format("Current Location \n Longitude: " + lastLocation.longitude + " \n Latitude: " + lastLocation.latitude)
-                Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
             }
 
             val geocoder = Geocoder(applicationContext, Locale.getDefault())
-            val addresses: List<Address> = geocoder.getFromLocation(currentLatitude, currentLatitude, 1)
+            val addresses: List<Address> = geocoder.getFromLocation(currentLatitude, currentLongitude, 1)
             var province : String = ""
             try {
-                 province = addresses.get(0).adminArea
+                province = addresses.get(0).adminArea
             } catch (e: Exception) {
                 e.printStackTrace()
                 Toast.makeText(applicationContext, "Unable to recognize your location, please choose one of the following provinces", Toast.LENGTH_SHORT).show()
@@ -143,42 +141,23 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator, LocationList
                 return
             }
 
-//            //TODO: refactor this part to make it cleaner
-//            if(province == "") {
-//                Toast.makeText(applicationContext, "Unable to recognize your location, please choose one of the following provinces", Toast.LENGTH_SHORT).show()
-//                spawnTaxModal()
-//                return
-//            }
-//
-//            //if country is not Canada then prompt to choose a Canadian province
-//            if(addresses.get(0).countryName != "Canada"){
-//                Toast.makeText(applicationContext, "Please choose a Canadian province", Toast.LENGTH_SHORT).show()
-//                spawnTaxModal()
-//            }
+            //if province is empty if country is not Canada then prompt to choose a Canadian province
+            if(province == "" || addresses.get(0).countryName != "Canada") {
+                Toast.makeText(applicationContext, "Unable to recognize your location, please choose one of the following provinces", Toast.LENGTH_SHORT).show()
+                spawnTaxModal()
+                return
+            }
 
-            //TODO: move this part into another file
-            var provinceAbbreviationMap = HashMap<String,String>()
+            var message: String = String.format("Current Location: "+province+" \n Longitude: " + lastLocation.longitude + " \n Latitude: " + lastLocation.latitude)
+            Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
 
-            provinceAbbreviationMap.put("BC", "British Columbia")
-            provinceAbbreviationMap.put("AB", "Alberta")
-            provinceAbbreviationMap.put("SK", "Saskatchewan")
-            provinceAbbreviationMap.put("MB", "Manitoba")
-            provinceAbbreviationMap.put("ON", "Ontario")
-            provinceAbbreviationMap.put("QC", "Quebec")
-            provinceAbbreviationMap.put("NB", "New Brunswick")
-            provinceAbbreviationMap.put("NS", "Nova Scotia")
-            provinceAbbreviationMap.put("PE", "Prince Edward Island")
-            provinceAbbreviationMap.put("NL", "Newfoundland and Labrador")
-            provinceAbbreviationMap.put("NT", "Northwest Territories")
-            provinceAbbreviationMap.put("NU", "Nunavut")
-            provinceAbbreviationMap.put("YT", "Yukon")
-
-            calc.performTaxing(provinceAbbreviationMap.get(province).toString())
+            calc.performTaxing(province)
 
          //if location service is disabled then let the user select manually the province
         } else {
             Toast.makeText(applicationContext, "Location services not enabled", Toast.LENGTH_SHORT).show()
             spawnTaxModal()
+            return
         }
     }
 
@@ -222,7 +201,9 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator, LocationList
     }
 
     override fun setClear(text: String){}
+
     override fun getFormula(): String { return "" }
+
     override fun setFormula(value: String, context: Context) {}
 
     private fun checkHaptic(view: View) {
@@ -250,5 +231,6 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator, LocationList
     }
 
     private fun getMoneyButtonIds() = arrayOf(btn_tip, btn_currency, btn_taxes)
+
     private fun getButtonIds() = arrayOf(btn_decimal, btn_0, btn_1, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9)
 }
