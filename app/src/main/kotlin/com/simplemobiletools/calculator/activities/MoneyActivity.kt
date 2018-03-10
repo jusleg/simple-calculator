@@ -2,29 +2,24 @@ package com.simplemobiletools.calculator.activities
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.view.ViewCompat
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ListView
 import com.simplemobiletools.calculator.R
-import com.simplemobiletools.calculator.extensions.config
-import com.simplemobiletools.calculator.extensions.updateViewColors
-import com.simplemobiletools.calculator.helpers.Calculator
+import com.simpletools.calculator.commons.extensions.config
+import com.simpletools.calculator.commons.extensions.updateViewColors
+import com.simpletools.calculator.commons.helpers.Calculator
 import com.simplemobiletools.calculator.helpers.MoneyCalculatorImpl
 import com.simplemobiletools.calculator.helpers.TaxCalculator
-import com.simplemobiletools.calculator.operation.TaxOperation
 import com.simplemobiletools.commons.extensions.*
 import kotlinx.android.synthetic.main.activity_money.*
-import kotlinx.android.synthetic.main.tax_modal.view.*
 import me.grantland.widget.AutofitHelper
-import com.simplemobiletools.calculator.helpers.Formatter
 import android.content.DialogInterface
-
+import com.simpletools.calculator.commons.activities.SimpleActivity
 
 
 class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator {
@@ -42,7 +37,7 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_money)
 
-        calc = MoneyCalculatorImpl(this, this, applicationContext)
+        calc = MoneyCalculatorImpl(this, this)
         updateViewColors(money_holder, config.textColor)
         updateButtonColor(config.customPrimaryColor)
 
@@ -51,8 +46,8 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator {
         }
 
         btn_currency.setOnClickListener{ true } // TODO : Implement feature and connect
-        btn_delete.setOnClickListener { calc.handleDelete(); checkHaptic(it) }
         btn_delete.setOnLongClickListener { calc.handleClear(); true }
+        btn_delete.setOnClickListener { calc.handleDelete(); checkHaptic(it) }
         btn_taxes.setOnClickListener{ calc.calculateTax() } // TODO : Implement feature and connect
         btn_tip.setOnClickListener { displayTipsDialog() }
         result.setOnLongClickListener { copyToClipboard(result.value); true }
@@ -70,7 +65,7 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator {
         custom_dialog.show()
 
         custom_dialog.findViewById<ListView>(R.id.province_selector_tax).setOnItemClickListener {
-            adapterView: AdapterView<*>, view1: View, i: Int, l: Long ->
+            _: AdapterView<*>, _: View, i: Int, _: Long ->
             var location = custom_dialog.findViewById<ListView>(R.id.province_selector_tax).getItemAtPosition(i).toString()
             custom_dialog.dismiss()
             calc.performTaxing(location)
@@ -92,7 +87,7 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator {
         vibrateOnButtonPress = config.vibrateOnButtonPress
     }
 
-    override fun setValue(value: String, context: Context) {
+    override fun setValue(value: String) {
         result.text = value
     }
 
@@ -102,7 +97,7 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator {
 
     override fun setClear(text: String){}
     override fun getFormula(): String { return "" }
-    override fun setFormula(value: String, context: Context) {}
+    override fun setFormula(value: String) {}
 
     private fun checkHaptic(view: View) {
         if (vibrateOnButtonPress) {
