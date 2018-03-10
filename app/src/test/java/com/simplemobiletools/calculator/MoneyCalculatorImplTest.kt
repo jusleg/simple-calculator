@@ -19,7 +19,7 @@ class MoneyCalculatorImplTest {
     @Before
     fun setUp() {
         activity = Robolectric.setupActivity(MoneyActivity::class.java)
-        calc = MoneyCalculatorImpl(activity,activity, activity.applicationContext)
+        calc = MoneyCalculatorImpl(activity, activity, activity.applicationContext)
     }
 
     @Test

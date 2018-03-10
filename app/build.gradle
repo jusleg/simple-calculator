@@ -23,7 +23,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
@@ -59,9 +59,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test:rules:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 
-    compile 'com.github.kittinunf.fuel:fuel-android:1.12.1' //for Android
     compile 'com.beust:klaxon:2.1.9'
 }
 

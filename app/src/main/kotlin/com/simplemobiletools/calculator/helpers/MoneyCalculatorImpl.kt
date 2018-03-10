@@ -5,10 +5,9 @@ import com.simplemobiletools.calculator.R
 import com.simplemobiletools.calculator.operation.TaxOperation
 import com.simplemobiletools.calculator.operation.CurrencyConversionOperation
 
-class MoneyCalculatorImpl(calculator: Calculator,taxCalculator: TaxCalculator, currencyConverter: CurrencyConverter, val context: Context) {
+class MoneyCalculatorImpl(calculator: Calculator, moneyCalculator: MoneyCalculator, val context: Context) {
     private var mCallback: Calculator? = calculator
-    private var tCallback: TaxCalculator? = taxCalculator
-    private var cCallback: CurrencyConverter? = currencyConverter
+    private var moneyCallback: MoneyCalculator? = moneyCalculator
     private var number: String = ""
     private var decimalClicked: Boolean = false
     private var decimalCounter: Int = 0
@@ -93,17 +92,12 @@ class MoneyCalculatorImpl(calculator: Calculator,taxCalculator: TaxCalculator, c
         if(false){
 
         }else{
-            tCallback!!.spawnTaxModal()
+            moneyCallback!!.spawnTaxModal()
         }
     }
 
     fun calculateCurrencyConversion() {
-        //Code to ping location here
-        if(false){
-
-        }else{
-            cCallback!!.spawnCurrencyModal()
-        }
+        moneyCallback!!.spawnCurrencyModal()
     }
 
     fun performTaxing(location:String) {

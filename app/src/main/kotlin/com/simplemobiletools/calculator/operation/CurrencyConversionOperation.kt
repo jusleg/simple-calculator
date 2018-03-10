@@ -4,15 +4,9 @@ import com.beust.klaxon.JsonObject
 import com.beust.klaxon.Parser
 
 class CurrencyConversionOperation(var value: Double, var conversion_from: String,
-                                           var conversion_to: String, var conversionRatesJsonString: String) {
+                                           var conversion_to: String, conversionRatesJsonString: String) {
 
-    var json: JsonObject = Parser().parse(conversionRatesJsonString!!.reader()) as JsonObject
-    var rates = json.obj("rates")!!
-
-    init {
-
-    }
-
+    var rates = (Parser().parse(conversionRatesJsonString!!.reader()) as JsonObject).obj("rates")!!
 
     internal fun getRate(): Double {
         if(conversion_from == conversion_to) {
@@ -28,7 +22,6 @@ class CurrencyConversionOperation(var value: Double, var conversion_from: String
     }
 
     fun getResult(): Double {
-
         return getRate() * value
     }
 

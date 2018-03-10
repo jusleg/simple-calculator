@@ -10,11 +10,15 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.support.test.espresso.Espresso.closeSoftKeyboard;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.RootMatchers.isDialog;
+import static android.support.test.espresso.matcher.RootMatchers.isPlatformPopup;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -82,7 +86,7 @@ public class MoneyActivityTest {
 
 
     @Test
-    public void taxWithoutGeoLocTest(){
+    public void taxWithoutGeoLocTest() {
         //TODO: Will need modification once geolocation is implemented
         press(R.id.btn_2);
         press(R.id.btn_3);
@@ -91,40 +95,23 @@ public class MoneyActivityTest {
         checkResult("25.99");
     }
 
-    @Test
-    public void testDefaultCurrencyConversion(){
-        press(R.id.btn_1);
-        press(R.id.btn_currency);
-        press(R.id.convert);
-        checkResult("1.00");
-    }
-
     @Ignore
     @Test
-    public void testConversionFromSelection() {
-        final String selectionText = "USD";
+    public void testConversionSelection() {
+        String fromSelection = "EUR";
+        String toSelection =  "USD";
 
         press(R.id.btn_1);
+        closeSoftKeyboard();
         press(R.id.btn_currency);
 
-        onView(withId(R.id.convert_from)).perform(click());
-        // Bug: onData is not selecting a spinner item as expected
-        onData(allOf(is(instanceOf(String.class)), is(selectionText))).perform(click());
-        onView(withId(R.id.convert_from)).check(matches(withSpinnerText(containsString(selectionText))));
-    }
+        onView(withId(R.id.convert_from)).inRoot(isDialog()).perform(click());
+        onView(withText(containsString(fromSelection))).inRoot(isPlatformPopup()).perform(click());
+        onView(withId(R.id.convert_from)).check(matches(withSpinnerText(containsString(fromSelection))));
 
-    @Ignore
-    @Test
-    public void testConversionToSelection() {
-        final String selectionText = "USD";
-
-        press(R.id.btn_1);
-        press(R.id.btn_currency);
-
-        onView(withId(R.id.convert_to)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is(selectionText))).perform(click());
-        // Bug: onData is not selecting a spinner item as expected
-        onView(withId(R.id.convert_to)).check(matches(withSpinnerText(containsString(selectionText))));
+        onView(withId(R.id.convert_to)).inRoot(isDialog()).perform(click());
+        onView(withText(containsString(toSelection))).inRoot(isPlatformPopup()).perform(click());
+        onView(withId(R.id.convert_to)).check(matches(withSpinnerText(containsString(toSelection))));
     }
 
     private void press(int id) {
