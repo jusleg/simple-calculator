@@ -1,13 +1,5 @@
 <resources>
 
-    <style name="AppTheme" parent="AppTheme.Base"/>
-
-    <style name="MyButton" parent="Widget.AppCompat.Button">
-        <item name="android:background">@drawable/button</item>
-        <item name="android:textSize">@dimen/button_text_size</item>
-        <item name="android:fontFamily">sans-serif-light</item>
-    </style>
-
     <style name="MoneyButton" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:textColor">#ffffff</item>
         <item name="colorButtonNormal">#FFF57C00</item>

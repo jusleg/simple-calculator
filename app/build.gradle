@@ -1,3 +1,9 @@
+ext {
+    PUBLISH_GROUP_ID = 'com.simplemobiletools'
+    PUBLISH_ARTIFACT_ID = 'calculator'
+    PUBLISH_VERSION = '3.0.1'
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
@@ -6,9 +12,14 @@ android {
     compileSdkVersion 27
     buildToolsVersion '27.0.2'
 
+    compileOptions {
+        kotlinOptions.freeCompilerArgs += ['-module-name', "$PUBLISH_GROUP_ID.$PUBLISH_ARTIFACT_ID"]
+    }
+
+
     defaultConfig {
         applicationId "com.simplemobiletools.calculator"
-        minSdkVersion 16
+        minSdkVersion 22
         targetSdkVersion 27
         versionCode 15
         versionName "3.0.1"
@@ -27,6 +38,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
     }
 
     sourceSets {
@@ -51,6 +73,8 @@ dependencies {
     implementation "com.android.support:support-core-utils:27.0.2"
     implementation 'com.github.jusleg:Simple-Commons:3.3.12'
     implementation 'me.grantland:autofittextview:0.2.1'
+    implementation project(':commons')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:3.5.1'
@@ -78,4 +102,7 @@ if (propFile.canRead()) {
 } else {
     println 'signing.properties not found'
     android.buildTypes.release.signingConfig = null
+}
+repositories {
+    mavenCentral()
 }
