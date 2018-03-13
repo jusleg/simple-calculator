@@ -26,6 +26,10 @@ import kotlinx.android.synthetic.main.activity_money.*
 import kotlinx.android.synthetic.main.tax_modal.view.*
 import kotlinx.android.synthetic.main.currency_modal.view.*
 import me.grantland.widget.AutofitHelper
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
 
 
 class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator, CurrencyConverter {
@@ -41,6 +45,7 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator, CurrencyConv
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_money)
 
         calc = MoneyCalculatorImpl(this, this, this, applicationContext)
@@ -59,7 +64,6 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator, CurrencyConv
         result.setOnLongClickListener { copyToClipboard(result.value); true }
 
         AutofitHelper.create(result)
-
     }
 
      override fun spawnTaxModal() {

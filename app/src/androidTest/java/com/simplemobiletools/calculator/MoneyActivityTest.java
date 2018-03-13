@@ -9,12 +9,20 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasToString;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.StringStartsWith.startsWith;
 
 @RunWith(AndroidJUnit4.class)
 public class MoneyActivityTest {
@@ -82,6 +90,14 @@ public class MoneyActivityTest {
         press(R.id.btn_taxes);
         onView(withId(R.id.province_selector_tax)).perform(click());
         checkResult("25.99");
+    }
+
+    @Test
+    public void likeCurrencyConversionTest(){
+        press(R.id.btn_1);
+        press(R.id.btn_currency);
+        press(R.id.convert);
+        checkResult("1.00");
     }
 
     private void press(int id) {
