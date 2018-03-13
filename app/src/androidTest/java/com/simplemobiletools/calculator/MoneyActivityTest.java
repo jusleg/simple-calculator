@@ -97,6 +97,7 @@ public class MoneyActivityTest {
 
     @Ignore
     @Test
+    // This test is failing on Travis CI for an undetermined reason
     public void testConversionSelection() {
         String fromSelection = "EUR";
         String toSelection =  "USD";

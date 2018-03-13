@@ -25,6 +25,8 @@ import java.net.HttpURLConnection
 import java.net.URL
 import android.app.ProgressDialog
 import android.os.AsyncTask
+import com.beust.klaxon.JsonObject
+import com.beust.klaxon.Parser
 import com.simplemobiletools.calculator.helpers.*
 import java.io.IOException
 import java.net.MalformedURLException
@@ -41,7 +43,7 @@ class MoneyActivity : SimpleActivity(), Calculator , MoneyCalculator {
     lateinit var calc: MoneyCalculatorImpl
 
     var pd: ProgressDialog? = null
-    var conversionRatesJsonString : String = ""
+    var conversionRates : JsonObject = JsonObject()
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,7 +69,6 @@ class MoneyActivity : SimpleActivity(), Calculator , MoneyCalculator {
         AutofitHelper.create(result)
 
         JsonTask().execute("https://api.fixer.io/latest?base=CAD")
-
     }
 
      override fun spawnTaxModal() {
@@ -114,7 +115,7 @@ class MoneyActivity : SimpleActivity(), Calculator , MoneyCalculator {
 
         custom_dialog.findViewById<Button>(R.id.convert).setOnClickListener {
             custom_dialog.dismiss()
-            calc.performConversion(convert_from, convert_to, conversionRatesJsonString)
+            calc.performConversion(convert_from, convert_to, conversionRates)
         }
     }
 
@@ -184,8 +185,7 @@ class MoneyActivity : SimpleActivity(), Calculator , MoneyCalculator {
             pd?.show()
         }
 
-        override fun doInBackground(vararg params: String): String {
-
+        override fun doInBackground(vararg params: String): String? {
 
             var connection: HttpURLConnection? = null
             var reader: BufferedReader? = null
@@ -195,9 +195,7 @@ class MoneyActivity : SimpleActivity(), Calculator , MoneyCalculator {
                 connection = url.openConnection() as HttpURLConnection
                 connection.connect()
 
-
                 val stream = connection.inputStream
-
                 reader = BufferedReader(InputStreamReader(stream))
 
                 val buffer = StringBuffer()
@@ -208,12 +206,9 @@ class MoneyActivity : SimpleActivity(), Calculator , MoneyCalculator {
                     if (line == null) break
                     buffer.append(line + "\n")
                     Log.d("Response: ", "> $line")   //here u ll get whole response...... :-)
-
                 }
 
                 return buffer.toString()
-
-
             } catch (e: MalformedURLException) {
                 e.printStackTrace()
             } catch (e: IOException) {
@@ -229,9 +224,8 @@ class MoneyActivity : SimpleActivity(), Calculator , MoneyCalculator {
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
-
             }
-            return ""
+            return null
         }
 
         override fun onPostExecute(result: String) {
@@ -239,7 +233,7 @@ class MoneyActivity : SimpleActivity(), Calculator , MoneyCalculator {
             if (pd!!.isShowing()) {
                 pd!!.dismiss()
             }
-            conversionRatesJsonString = result
+            conversionRates = (Parser().parse(result!!.reader()) as JsonObject).obj("rates")!!
         }
     }
 }

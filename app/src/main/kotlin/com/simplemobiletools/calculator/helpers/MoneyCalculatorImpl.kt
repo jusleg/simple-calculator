@@ -1,6 +1,7 @@
 package com.simplemobiletools.calculator.helpers
 
 import android.content.Context
+import com.beust.klaxon.JsonObject
 import com.simplemobiletools.calculator.R
 import com.simplemobiletools.calculator.operation.TaxOperation
 import com.simplemobiletools.calculator.operation.CurrencyConversionOperation
@@ -104,9 +105,9 @@ class MoneyCalculatorImpl(calculator: Calculator, moneyCalculator: MoneyCalculat
         overwriteNumber(TaxOperation(Formatter.stringToDouble(getResult()),location).getResult())
     }
 
-    fun performConversion(convert_from:String, convert_to:String, conversionRatesJsonString:String) {
+    fun performConversion(convert_from:String, convert_to:String, conversionRates:JsonObject) {
         overwriteNumber(CurrencyConversionOperation(Formatter.stringToDouble(getResult()),
-                convert_from, convert_to, conversionRatesJsonString).getResult())
+                convert_from, convert_to, conversionRates).getResult())
     }
 
     private fun getResult() = mCallback!!.getResult()
