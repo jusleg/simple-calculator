@@ -1,12 +1,15 @@
 package com.simplemobiletools.calculator.helpers
 
-import android.content.Context
 import com.beust.klaxon.JsonObject
-import com.simplemobiletools.calculator.R
-import com.simplemobiletools.calculator.operation.TaxOperation
 import com.simplemobiletools.calculator.operation.CurrencyConversionOperation
+import com.simpletools.calculator.commons.helpers.Calculator
+import com.simpletools.calculator.commons.R
+import com.simpletools.calculator.commons.operations.TaxOperation
+import com.simpletools.calculator.commons.operations.TipOperation
+import com.simpletools.calculator.commons.helpers.Formatter
 
-class MoneyCalculatorImpl(calculator: Calculator, moneyCalculator: MoneyCalculator, val context: Context) {
+class MoneyCalculatorImpl(calculator: Calculator, moneyCalculator: MoneyCalculator) {
+
     private var mCallback: Calculator? = calculator
     private var moneyCallback: MoneyCalculator? = moneyCalculator
     private var number: String = ""
@@ -85,7 +88,7 @@ class MoneyCalculatorImpl(calculator: Calculator, moneyCalculator: MoneyCalculat
     }
 
     private fun setValue(value: String) {
-        mCallback!!.setValue(value, context)
+        mCallback!!.setValue(value)
     }
 
     fun calculateTax(){
@@ -101,14 +104,27 @@ class MoneyCalculatorImpl(calculator: Calculator, moneyCalculator: MoneyCalculat
         moneyCallback!!.spawnCurrencyModal()
     }
 
-    fun performTaxing(location:String) {
-        overwriteNumber(TaxOperation(Formatter.stringToDouble(getResult()),location).getResult())
-    }
-
     fun performConversion(convert_from:String, convert_to:String, conversionRates:JsonObject) {
-        overwriteNumber(CurrencyConversionOperation(Formatter.stringToDouble(getResult()),
+        overwriteNumber(CurrencyConversionOperation(getResult(),
                 convert_from, convert_to, conversionRates).getResult())
     }
 
-    private fun getResult() = mCallback!!.getResult()
+    fun performTaxing(location:String){
+        overwriteNumber(TaxOperation(getResult(), location).getResult())
+    }
+
+    private fun getResult() = Formatter.stringToDouble(mCallback!!.getResult())
+
+    fun calculateTip(tip: Double) {
+        if (isNumberValid()) {
+            overwriteNumber(TipOperation(getResult(), tip).getResult())
+        }
+    }
+
+    private fun isNumberValid(): Boolean {
+        if (getResult() > 0) {
+            return true
+        }
+        return false
+    }
 }

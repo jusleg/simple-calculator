@@ -11,7 +11,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.closeSoftKeyboard;
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
@@ -22,10 +21,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
 
 @RunWith(AndroidJUnit4.class)
 public class MoneyActivityTest {
@@ -91,7 +87,7 @@ public class MoneyActivityTest {
         press(R.id.btn_2);
         press(R.id.btn_3);
         press(R.id.btn_taxes);
-        onView(withId(R.id.province_selector_tax)).perform(click());
+        press(R.id.province_selector_tax);
         checkResult("25.99");
     }
 
@@ -100,7 +96,7 @@ public class MoneyActivityTest {
     // This test is failing on Travis CI for an undetermined reason
     public void testConversionSelection() {
         String fromSelection = "EUR";
-        String toSelection =  "USD";
+        String toSelection = "USD";
 
         press(R.id.btn_1);
         closeSoftKeyboard();
@@ -113,6 +109,23 @@ public class MoneyActivityTest {
         onView(withId(R.id.convert_to)).inRoot(isDialog()).perform(click());
         onView(withText(containsString(toSelection))).inRoot(isPlatformPopup()).perform(click());
         onView(withId(R.id.convert_to)).check(matches(withSpinnerText(containsString(toSelection))));
+    }
+
+    @Test
+    public void testTipDialogDisplayed() {
+        press(R.id.btn_tip);
+        onView(withText("Calculate Tip")).check(matches(isDisplayed()));
+    }
+
+
+    @Test
+    public void tipOpenApplyTest() {
+        press(R.id.btn_1);
+        press(R.id.btn_0);
+        press(R.id.btn_0);
+        press(R.id.btn_tip);
+        onView(withText("15%")).perform(click());
+        checkResult("115.00");
     }
 
     private void press(int id) {

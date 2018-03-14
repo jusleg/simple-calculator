@@ -1,7 +1,6 @@
 package com.simplemobiletools.calculator.activities
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -9,14 +8,15 @@ import android.view.MenuItem
 import android.view.View
 import com.simplemobiletools.calculator.BuildConfig
 import com.simplemobiletools.calculator.R
-import com.simplemobiletools.calculator.extensions.config
-import com.simplemobiletools.calculator.extensions.updateViewColors
-import com.simplemobiletools.calculator.helpers.*
+import com.simpletools.calculator.commons.extensions.config
+import com.simpletools.calculator.commons.extensions.updateViewColors
 import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.LICENSE_AUTOFITTEXTVIEW
 import com.simplemobiletools.commons.helpers.LICENSE_ESPRESSO
 import com.simplemobiletools.commons.helpers.LICENSE_KOTLIN
 import com.simplemobiletools.commons.helpers.LICENSE_ROBOLECTRIC
+import com.simpletools.calculator.commons.activities.SimpleActivity
+import com.simpletools.calculator.commons.helpers.*
 import kotlinx.android.synthetic.main.activity_main.*
 import me.grantland.widget.AutofitHelper
 
@@ -32,7 +32,7 @@ class MainActivity : SimpleActivity(), Calculator {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        calc = CalculatorImpl(this, applicationContext)
+        calc = CalculatorImpl(this)
 
         btn_plus.setOnClickListener { calc.handleOperation(PLUS); checkHaptic(it) }
         btn_minus.setOnClickListener { calc.handleOperation(MINUS); checkHaptic(it) }
@@ -134,23 +134,23 @@ class MainActivity : SimpleActivity(), Calculator {
         }
     }
 
-    override fun setClear(text: String){
+    override fun setClear(text: String) {
         btn_clear.text = text
     }
 
-    override fun setValue(value: String, context: Context) {
+    override fun setValue(value: String) {
         result.text = value
     }
 
     override fun getResult(): String {
-         return result.text.toString()
+        return result.text.toString()
     }
 
     override fun getFormula(): String {
         return formula.text.toString()
     }
 
-    override fun setFormula(value: String, context: Context) {
+    override fun setFormula(value: String) {
         formula.text = value
     }
 }
