@@ -100,10 +100,6 @@ class MoneyCalculatorImpl(calculator: Calculator, moneyCalculator: MoneyCalculat
         }
     }
 
-    fun calculateCurrencyConversion() {
-        moneyCallback!!.spawnCurrencyModal()
-    }
-
     fun performConversion(convert_from:String, convert_to:String, conversionRates:JsonObject) {
         overwriteNumber(CurrencyConversionOperation(getResult(),
                 convert_from, convert_to, conversionRates).getResult())
