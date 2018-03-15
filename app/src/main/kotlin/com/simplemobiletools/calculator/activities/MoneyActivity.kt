@@ -41,7 +41,6 @@ class MoneyActivity : SimpleActivity(), Calculator , MoneyCalculator {
     private var vibrateOnButtonPress = true
     private var storedUseEnglish = false
     private var taxDialog:AlertDialog.Builder? = null
-    private var currencyDialog:AlertDialog.Builder? = null
 
     lateinit var calc: MoneyCalculatorImpl
 
@@ -62,7 +61,7 @@ class MoneyActivity : SimpleActivity(), Calculator , MoneyCalculator {
             it.setOnClickListener { calc.numpadClicked(it.id); checkHaptic(it) }
         }
 
-        btn_currency.setOnClickListener{ calc.calculateCurrencyConversion() }
+        btn_currency.setOnClickListener{ displayCurrencyModal() }
         btn_delete.setOnClickListener { calc.handleDelete(); checkHaptic(it) }
         btn_delete.setOnLongClickListener { calc.handleClear(); true }
         btn_delete.setOnClickListener { calc.handleDelete(); checkHaptic(it) }
@@ -72,7 +71,7 @@ class MoneyActivity : SimpleActivity(), Calculator , MoneyCalculator {
 
         AutofitHelper.create(result)
 
-        JsonTask().execute("https://api.fixer.io/latest?base=CAD")
+        CurrencyRates(applicationContext).updateCurrencyRates()
     }
 
     override fun spawnTaxModal() {
@@ -91,51 +90,36 @@ class MoneyActivity : SimpleActivity(), Calculator , MoneyCalculator {
         }
     }
 
-    override fun spawnCurrencyModal() {
-        currencyDialog = AlertDialog.Builder(this)
-        val currencyDialogView = layoutInflater.inflate(R.layout.currency_modal, null)
-        currencyDialog!!.setView(currencyDialogView)
-        currencyDialog!!.setCancelable(true)
-        var custom_dialog = currencyDialog!!.create()
-        custom_dialog.show()
+    private fun displayCurrencyModal() {
+        var currencyView = AlertDialog.Builder(this@MoneyActivity)
+        currencyView!!.setView(layoutInflater.inflate(R.layout.currency_modal, null))
+        currencyView!!.setCancelable(true)
+        var currencyModal = currencyView!!.create()
+        currencyModal.show()
+
         var convert_from = "CAD"
         var convert_to = "CAD"
 
-        custom_dialog.findViewById<Spinner>(R.id.convert_from).onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        currencyModal.findViewById<Spinner>(R.id.convert_from).onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                convert_from = custom_dialog.findViewById<Spinner>(R.id.convert_from).getSelectedItem().toString()
+                convert_from = currencyModal.findViewById<Spinner>(R.id.convert_from).getSelectedItem().toString()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
-        custom_dialog.findViewById<Spinner>(R.id.convert_to).onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        currencyModal.findViewById<Spinner>(R.id.convert_to).onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                convert_to = custom_dialog.findViewById<Spinner>(R.id.convert_to).getSelectedItem().toString()
+                convert_to = currencyModal.findViewById<Spinner>(R.id.convert_to).getSelectedItem().toString()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
-        custom_dialog.findViewById<Button>(R.id.convert).setOnClickListener {
-            custom_dialog.dismiss()
-            calc.performConversion(convert_from, convert_to, conversionRates)
+        currencyModal.findViewById<Button>(R.id.convert).setOnClickListener {
+            currencyModal.dismiss()
+            calc.performConversion(convert_from, convert_to, CurrencyRates(applicationContext).getCurrencyRates())
         }
-    }
-
-    @SuppressLint("MissingSuperCall")
-    override fun onResume() {
-        super.onResume()
-        if (storedUseEnglish != config.useEnglish) {
-            restartActivity()
-            return
-        }
-
-        if (storedTextColor != config.textColor) {
-            updateViewColors(money_holder, config.textColor)
-            updateButtonColor(config.customPrimaryColor)
-        }
-        vibrateOnButtonPress = config.vibrateOnButtonPress
     }
 
     override fun setValue(value: String) {
@@ -176,71 +160,6 @@ class MoneyActivity : SimpleActivity(), Calculator , MoneyCalculator {
 
     private fun getMoneyButtonIds() = arrayOf(btn_tip, btn_currency, btn_taxes)
     private fun getButtonIds() = arrayOf(btn_decimal, btn_0, btn_1, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9)
-
-
-    private inner class JsonTask : AsyncTask<String, String, String>() {
-
-        override fun onPreExecute() {
-            super.onPreExecute()
-
-            pd = ProgressDialog(this@MoneyActivity)
-            pd?.setMessage("Fetching currency conversion rates.")
-            pd?.setCancelable(false)
-            pd?.show()
-        }
-
-        override fun doInBackground(vararg params: String): String? {
-
-            var connection: HttpURLConnection? = null
-            var reader: BufferedReader? = null
-
-            try {
-                val url = URL(params[0])
-                connection = url.openConnection() as HttpURLConnection
-                connection.connect()
-
-                val stream = connection.inputStream
-                reader = BufferedReader(InputStreamReader(stream))
-
-                val buffer = StringBuffer()
-                var line: String? = null
-
-                while (true) {
-                    line = reader.readLine()
-                    if (line == null) break
-                    buffer.append(line + "\n")
-                    Log.d("Response: ", "> $line")
-                }
-
-                return buffer.toString()
-            } catch (e: MalformedURLException) {
-                e.printStackTrace()
-            } catch (e: IOException) {
-                e.printStackTrace()
-            } finally {
-                if (connection != null) {
-                    connection.disconnect()
-                }
-                try {
-                    if (reader != null) {
-                        reader.close()
-                    }
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-            }
-            return null
-        }
-
-        override fun onPostExecute(result: String?) {
-            super.onPostExecute(result)
-            if (pd!!.isShowing()) {
-                pd!!.dismiss()
-            }
-            conversionRates = (Parser().parse(result!!.reader()) as JsonObject).obj("rates")!!
-        }
-    }
-
 
     private fun displayTipsDialog() {
         val tipAmount = arrayOf("10%", "12%", "15%", "18%", "20%", "25%")
