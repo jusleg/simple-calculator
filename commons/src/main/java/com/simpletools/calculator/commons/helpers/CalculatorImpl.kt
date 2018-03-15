@@ -119,7 +119,7 @@ class CalculatorImpl(calculator: Calculator) {
 
         firstNumber = if (!decimalClicked) signumMultiply(firstNumber) * (Math.abs(firstNumber)  * 10 + i)
         else signumMultiply(firstNumber) * (Math.abs(firstNumber) + i * Math.pow(10.0, decimalCounter.toDouble()))
-        setValue(Formatter.doubleToString(firstNumber))
+        setValue(Formatter.doubleToStringWithGivenDigits(firstNumber, Math.abs(decimalCounter)))
 
         digits++
     }

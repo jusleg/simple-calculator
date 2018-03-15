@@ -21,7 +21,7 @@ public class MainActivityTest {
     @Rule public final ActivityTestRule<MainActivity> activity = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void addDigits() {
+    public void addDigitsTest() {
         press(R.id.btn_1);
         press(R.id.btn_2);
         press(R.id.btn_3);
@@ -36,10 +36,28 @@ public class MainActivityTest {
     }
 
     @Test
-    public void removeLeadingZero() {
+    public void removeLeadingZeroTest() {
         press(R.id.btn_0);
         press(R.id.btn_5);
         checkResult("5");
+    }
+
+    @Test
+    public void removeTrailingZero() {
+        press(R.id.btn_1);
+        press(R.id.btn_decimal);
+        press(R.id.btn_0);
+        press(R.id.btn_0);
+        press(R.id.btn_0);
+        checkResult("1.000");
+        press(R.id.btn_clear);
+        press(R.id.btn_1);
+        press(R.id.btn_0);
+        press(R.id.btn_0);
+        press(R.id.btn_0);
+        press(R.id.btn_decimal);
+        press(R.id.btn_0);
+        checkResult("1,000.0");
     }
 
     @Test
