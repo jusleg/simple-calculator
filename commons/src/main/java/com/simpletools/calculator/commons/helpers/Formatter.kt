@@ -17,5 +17,9 @@ object Formatter {
         return formatter.format(d)
     }
 
+    fun doubleToStringWithGivenDigits(number: Double, digits: Int): String {
+        return ("%,." + digits + "f").format(number)
+    }
+
     fun stringToDouble(str: String) = str.replace(",", "").toDouble()
 }
