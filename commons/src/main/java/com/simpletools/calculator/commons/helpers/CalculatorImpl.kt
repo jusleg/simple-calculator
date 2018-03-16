@@ -4,6 +4,7 @@ import com.simpletools.calculator.commons.R
 import com.simpletools.calculator.commons.operations.NegativeOperation
 import com.simpletools.calculator.commons.operations.OperationFactory
 import com.simpletools.calculator.commons.operations.base.BinaryOperation
+import com.simpletools.calculator.commons.operations.base.Operation
 import com.simpletools.calculator.commons.operations.base.UnaryOperation
 
 class CalculatorImpl(calculator: Calculator) {
@@ -12,6 +13,8 @@ class CalculatorImpl(calculator: Calculator) {
     private var firstNumber: Double = 0.0
     private var secondNumber: Double = 0.0
     private var operator: String? = ""
+    private var lastOperator: String? = ""
+    private var lastOperand: Double = 0.0
     private var decimalClicked: Boolean = false
     private var decimalCounter = 0
     private var secondNumberSet: Boolean = false
@@ -41,14 +44,20 @@ class CalculatorImpl(calculator: Calculator) {
     }
 
     fun handleOperation(operation: String) {
-        if (OperationFactory.forId(operation, firstNumber, secondNumber) is NegativeOperation) return negateNumber()
+        if (OperationFactory.forId(operation, firstNumber, secondNumber) is NegativeOperation) {
+            return negateNumber()
+        }
+        // Handle chained operations
+        if (secondNumberSet) {
+            handleEquals()
+        }
 
-        handleEquals()
         operator = operation
         if (OperationFactory.forId(operator!!, firstNumber, secondNumber) is UnaryOperation) {
             if (lastIsOperation == true) swapRegisters()
             handleEquals()
         } else if(OperationFactory.forId(operator!!, firstNumber, secondNumber) is BinaryOperation && lastIsOperation == false) {
+            lastOperator = operation
             swapRegisters()
         }
     }
@@ -58,21 +67,30 @@ class CalculatorImpl(calculator: Calculator) {
     }
 
     fun handleEquals() {
-        val operation = OperationFactory.forId(operator!!, firstNumber, secondNumber)
+        val operation : Operation?
+        if (operator != "") {   // Handle new operation
+            operation = OperationFactory.forId(operator!!, firstNumber, secondNumber)
 
-        if (operation != null && (digits > 0 || operation is UnaryOperation)) {
-            setAllClear()
-            resetValues()
-            firstNumber = operation.getResult()
-            setValue(Formatter.doubleToString(firstNumber))
-            setFormula(operation.getFormula())
-            lastIsOperation = false
+            if ((operation != null) && (digits > 0 || operation is UnaryOperation)) {
+                if (operation !is UnaryOperation) {
+                    lastOperand = firstNumber
+                }
+                executeCalculation(operation)
+            }
+        } else { // Handle chained equals
+            operation = OperationFactory.forId(lastOperator!!, lastOperand, firstNumber)
+
+            if (operation != null) {
+                executeCalculation(operation)
+            }
         }
     }
 
     fun handleReset() {
         setAllClear()
         resetValues()
+        lastOperator = ""
+        lastOperand = 0.0
     }
 
     fun handleClear() {
@@ -86,6 +104,15 @@ class CalculatorImpl(calculator: Calculator) {
             setValue("0")
             secondNumberSet = false
         }
+    }
+
+    private fun executeCalculation(operation: Operation) {
+        setAllClear()
+        resetValues()
+        firstNumber = operation.getResult()
+        setValue(Formatter.doubleToString(firstNumber))
+        setFormula(operation.getFormula())
+        lastIsOperation = false
     }
 
     private fun setValue(value: String) {
