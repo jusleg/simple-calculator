@@ -127,6 +127,72 @@ class CalculatorImplTest {
     }
 
     @Test
+    fun chainedEqualsUnaryOperationTest() {
+        calc.addDigit(256)
+        calc.handleOperation("root")
+        calc.handleEquals() // No effect expected
+        calc.handleEquals() // No effect expected
+        calc.handleEquals() // No effect expected
+        assertEquals("16", activity.getResult())
+        checkFormula("√256")
+    }
+
+    @Test
+    fun chainedEqualsBinaryOperationTest() {
+        calc.addDigit(10)
+        calc.handleOperation("plus")
+        calc.addDigit(1)
+        calc.handleEquals()     //11
+        calc.handleEquals()     //12
+        calc.handleEquals()     //13
+        assertEquals("13", activity.getResult().toString())
+        calc.handleOperation("minus")
+        calc.addDigit(1)
+        calc.handleEquals()     //12
+        calc.handleEquals()     //11
+        calc.handleEquals()     //10
+        assertEquals("10", activity.getResult().toString())
+        calc.handleOperation("multiply")
+        calc.addDigit(2)
+        calc.handleEquals()     //20
+        calc.handleEquals()     //40
+        calc.handleEquals()     //80
+        assertEquals("80", activity.getResult().toString())
+        calc.handleOperation("divide")
+        calc.addDigit(2)
+        calc.handleEquals()     //40
+        calc.handleEquals()     //20
+        calc.handleEquals()     //10
+        assertEquals("10", activity.getResult().toString())
+    }
+
+    @Test
+    fun chainedOperationRootTest() {
+        calc.addDigit(1000)
+        calc.handleOperation("plus")
+        calc.addDigit(9000)
+        calc.handleOperation("root")
+        assertEquals("100", activity.getResult())
+        checkFormula("√10,000")
+        calc.handleOperation("root")
+        assertEquals("10", activity.getResult())
+        checkFormula("√100")
+    }
+
+    @Test
+    fun chainedOperationPercentageTest() {
+        calc.addDigit(1000)
+        calc.handleOperation("plus")
+        calc.addDigit(9000)
+        calc.handleOperation("percentage")
+        assertEquals("100", activity.getResult())
+        checkFormula("10,000%")
+        calc.handleOperation("percentage")
+        assertEquals("1", activity.getResult())
+        checkFormula("100%")
+    }
+
+    @Test
     fun complexTest() {
         setDouble(12.2)
         handleOperation(PLUS)
@@ -139,23 +205,26 @@ class CalculatorImplTest {
         calc.handleEquals()
         assertEquals("31.6", activity.getResult())
         checkFormula("33.2−1.6")
-        calc.handleEquals()
+
+        calc.handleEquals() // Chained equals
+        assertEquals("30", activity.getResult())
+        checkFormula("31.6−1.6")
 
         handleOperation(MULTIPLY)
         setDouble(5.0)
         handleOperation(DIVIDE)
-        assertEquals("158", activity.getResult())
-        checkFormula("31.6×5")
+        assertEquals("150", activity.getResult())
+        checkFormula("30×5")
 
         setDouble(4.0)
         handleOperation(POWER)
-        assertEquals("39.5", activity.getResult())
-        checkFormula("158÷4")
+        assertEquals("37.5", activity.getResult())
+        checkFormula("150÷4")
 
         setDouble(2.0)
         calc.handleEquals()
-        assertEquals("1,560.25", activity.getResult())
-        checkFormula("39.5^2")
+        assertEquals("1,406.25", activity.getResult())
+        checkFormula("37.5^2")
 
         calc.handleClear()
         assertEquals("0", activity.getResult())
