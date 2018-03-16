@@ -93,23 +93,6 @@ public class MoneyActivityTest {
         checkResult("25.99");
     }
 
-    @Test
-    public void taxWithGeolocationTest() {
-//        //Set fake location to province of Nova Scotia
-        Location fakeLocation = new Location(LocationManager.NETWORK_PROVIDER);
-        fakeLocation.setLongitude(-62.792524);
-        fakeLocation.setLatitude(45.170932);
-
-        //Sends location of Nova Scotia to the Android Emulator
-        sendLocation(fakeLocation.getLatitude(), fakeLocation.getLongitude());
-
-        press(R.id.btn_1);
-        press(R.id.btn_0);
-        press(R.id.btn_taxes);
-        checkResult("11.50");
-    }
-
-
     private void press(int id) {
         onView(withId(id)).perform(click());
     }
@@ -122,21 +105,5 @@ public class MoneyActivityTest {
         onView(withId(R.id.result)).check(matches(withText(desired)));
     }
 
-    private void sendLocation(double latitude, double longitude) {
-        try {
-            Socket socket = new Socket("10.0.2.2", 5554);
-            socket.setKeepAlive(true);
-            String str = "geo fix " + longitude + " " + latitude ;
-            Writer w = new OutputStreamWriter(socket.getOutputStream());
-            w.write(str + "\r\n");
-            w.flush();
-        }
-        catch (UnknownHostException e) {
-            throw new RuntimeException(e);
-        }
-        catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
 }

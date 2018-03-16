@@ -1,25 +1,47 @@
 package com.simplemobiletools.calculator
 
+import android.content.Context
+import android.location.Geocoder
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
+import android.location.LocationManager.GPS_PROVIDER
+import android.os.Bundle
 import com.simplemobiletools.calculator.activities.MoneyActivity
 import com.simplemobiletools.calculator.helpers.MoneyCalculatorImpl
+import junit.framework.Assert.assertTrue
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
+import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
+import org.robolectric.shadows.ShadowLocationManager
+import java.util.*
+
 
 @RunWith(RobolectricTestRunner::class)
 @Config(constants = BuildConfig::class, sdk = intArrayOf(21))
 class MoneyCalculatorImplTest {
     private lateinit var activity: MoneyActivity
     private lateinit var calc: MoneyCalculatorImpl
+    private var locationManager: LocationManager? = null
+    private var shadowLocationManager: ShadowLocationManager? = null
+    private var geocoder : Geocoder? = null
+
+
 
     @Before
     fun setUp() {
         activity = Robolectric.setupActivity(MoneyActivity::class.java)
         calc = MoneyCalculatorImpl(activity, activity.applicationContext)
+        locationManager = RuntimeEnvironment.application.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        shadowLocationManager = shadowOf(locationManager)
+        geocoder = Geocoder(activity.applicationContext, Locale.getDefault())
+
     }
 
     @Test
@@ -247,10 +269,64 @@ class MoneyCalculatorImplTest {
     }
 
     @Test
-    fun calculateTaxAtGeolocationTest() {
+    fun spawnTaxModalIfNoLocationServiceTest() {
+        //test taxLocationStrat if location service is turned off
+        activity.taxLocationStrat(false, 0.0, 0.0, geocoder!!, true)
+        assertTrue(activity.getTaxDialog()!!.isShowing)
+    }
+
+    @Test
+    fun calculateTaxWithGeolocation() {
+        val listener = TestLocationListener
+        //turns location service on
+        shadowLocationManager?.setProviderEnabled(GPS_PROVIDER, true)
+
+        try {
+            locationManager!!.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 200000f, listener)
+        } catch (e: SecurityException) {
+            print("NO PERMISSION GRANTED!")
+        }
+
+        //Set fake location to province of Nova Scotia
+        var fakeLocation = Location(GPS_PROVIDER)
+        fakeLocation.latitude = 45.170932
+        fakeLocation.longitude = -62.792524
+        fakeLocation.time = 0
+        activity.supersedeProvince("Nova Scotia")
+
+        shadowLocationManager?.simulateLocation(fakeLocation)
+
+        calc.addDigit(1)
+        Assert.assertEquals("1.00", activity.getResult())
+        calc.addDigit(0)
+        Assert.assertEquals("10.00", activity.getResult())
+        activity.taxLocationStrat(true, fakeLocation.latitude, fakeLocation.longitude, geocoder!!, true)
+        Assert.assertEquals("11.50", activity.getResult())
 
     }
 
+
+    companion object TestLocationListener: LocationListener{
+        var providerEnabled: Boolean = false
+        var location: Location? = null
+        var updateCount: Int = 0
+
+        override fun onLocationChanged(location: Location) {
+            this.location = location
+            updateCount++
+        }
+
+        override fun onStatusChanged(s: String, i: Int, bundle: Bundle) {}
+
+        override fun onProviderEnabled(s: String) {
+            providerEnabled = true
+        }
+
+        override fun onProviderDisabled(s: String) {
+            providerEnabled = false
+        }
+
+    }
 
 }
 

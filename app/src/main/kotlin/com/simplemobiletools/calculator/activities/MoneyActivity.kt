@@ -35,12 +35,17 @@ class MoneyActivity : SimpleActivity(), Calculator , LocationListener {
     private var vibrateOnButtonPress = true
     private var storedUseEnglish = false
     private var taxDialog:AlertDialog.Builder? = null
+    private var custom_dialog:AlertDialog? = null
     private var locationManager: LocationManager? = null
     private var GPS_REQUEST_CODE = 101
     private var MINIMUM_TIME_BETWEEN_UPDATES : Long = 300000L //in ms
     private var MINIMUM_DISTANCE_CHANGE_FOR_UPDATES : Float = 1000f //in meters
     private var currentLongitude : Double = 0.0
     private var currentLatitude : Double = 0.0
+    private var lastLocation : Location = Location(LocationManager.GPS_PROVIDER)
+    private var geocoder : Geocoder? = null
+    private var province : String = ""
+    private var testing : Boolean = false
 
     lateinit var calc: MoneyCalculatorImpl
 
@@ -75,7 +80,31 @@ class MoneyActivity : SimpleActivity(), Calculator , LocationListener {
         btn_delete.setOnLongClickListener { calc.handleClear(); true }
         btn_tip.setOnClickListener { true } // TODO : Implement feature and connect
         result.setOnLongClickListener { copyToClipboard(result.value); true }
-        btn_taxes.setOnClickListener({ view -> taxLocationStrat(currentLatitude, currentLongitude, false) })
+        btn_taxes.setOnClickListener({ view ->
+            var gpsStatus : Boolean = false
+            try{
+                //checks gps status
+                gpsStatus = locationManager!!.isProviderEnabled(LocationManager.GPS_PROVIDER)
+            } catch(e: Exception) {}
+
+            //if the gps status is enabled then get the location
+            if(gpsStatus) {
+                //Checks if location service has been granted again
+                if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), GPS_REQUEST_CODE);
+                }
+
+                //get the last known location
+                lastLocation = locationManager!!.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+
+                //sets the latitude and longitude to that of last location
+                if (lastLocation != null) {
+                    currentLatitude = lastLocation.latitude
+                    currentLongitude = lastLocation.longitude
+                }}
+            geocoder = Geocoder(applicationContext, Locale.getDefault())
+            taxLocationStrat(gpsStatus, currentLatitude, currentLongitude, geocoder!!, testing)
+        })
 
         AutofitHelper.create(result)
     }
@@ -108,57 +137,41 @@ class MoneyActivity : SimpleActivity(), Calculator , LocationListener {
     }
 
     //method signature here has been added for the sake of testing
-    private fun taxLocationStrat(latitude:Double, longitude:Double, gpsEnabled:Boolean) {
-        var gpsEnabled = gpsEnabled
-        currentLatitude = latitude
-        currentLongitude = longitude
-
-        try{
-            gpsEnabled = locationManager!!.isProviderEnabled(LocationManager.GPS_PROVIDER)
-        } catch(e: Exception) {}
-
+    fun taxLocationStrat(gpsEnabled:Boolean, latitude:Double, longitude:Double, geocoder: Geocoder, testing:Boolean) {
         //if location service is enabled then retrieve the latest location and performs tax rate with that location
         if(gpsEnabled) {
-            //Checks if location service has been granted again
-            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), GPS_REQUEST_CODE);
+            if(testing == true) {
+                calc.performTaxing(province)
+            } else {
+                //uses Android's Geocoder to locate the address with a given latitude and longitude
+                var addresses: List<Address>? = null
+                try {
+                    addresses = geocoder.getFromLocation(latitude, longitude, 1)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+                try {
+                    //gets the province
+                    province = addresses!!.get(0).adminArea
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Toast.makeText(applicationContext, "Unable to recognize your location, please choose one of the following provinces", Toast.LENGTH_SHORT).show()
+                    spawnTaxModal()
+                    return
+                }
+
+                //if province is empty if country is not Canada then prompt to choose a Canadian province
+                if (province == "" || addresses!!.get(0).countryName != "Canada") {
+                    Toast.makeText(applicationContext, "Unable to recognize your location, please choose one of the following provinces", Toast.LENGTH_SHORT).show()
+                    spawnTaxModal()
+                    return
+                }
+                var message: String = String.format("Current Location: " + province + " \n Longitude: " + lastLocation.longitude + " \n Latitude: " + lastLocation.latitude)
+                Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+
+                calc.performTaxing(province)
             }
-
-            //get the last known location
-            var lastLocation = locationManager!!.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-
-            if (lastLocation != null) {
-                currentLongitude = lastLocation.longitude
-                currentLatitude = lastLocation.latitude
-            }
-
-            //uses Android's Geocoder to locate the address with a given latitude and longitude
-            val geocoder = Geocoder(applicationContext, Locale.getDefault())
-            val addresses: List<Address> = geocoder.getFromLocation(currentLatitude, currentLongitude, 1)
-            var province : String = ""
-            try {
-                //gets the province
-                province = addresses.get(0).adminArea
-            } catch (e: Exception) {
-                e.printStackTrace()
-                Toast.makeText(applicationContext, "Unable to recognize your location, please choose one of the following provinces", Toast.LENGTH_SHORT).show()
-                spawnTaxModal()
-                return
-            }
-
-            //if province is empty if country is not Canada then prompt to choose a Canadian province
-            if(province == "" || addresses.get(0).countryName != "Canada") {
-                Toast.makeText(applicationContext, "Unable to recognize your location, please choose one of the following provinces", Toast.LENGTH_SHORT).show()
-                spawnTaxModal()
-                return
-            }
-
-            var message: String = String.format("Current Location: "+province+" \n Longitude: " + lastLocation.longitude + " \n Latitude: " + lastLocation.latitude)
-            Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
-
-            calc.performTaxing(province)
-
-         //if location service is disabled then let the user select manually the province
+            //if location service is disabled then let the user select manually the province
         } else {
             Toast.makeText(applicationContext, "Location services not enabled", Toast.LENGTH_SHORT).show()
             spawnTaxModal()
@@ -166,20 +179,29 @@ class MoneyActivity : SimpleActivity(), Calculator , LocationListener {
         }
     }
 
+    //this method is only used for testing purpose. NEVER CALL THIS METHOD UNLESS FOR TESTING
+    fun supersedeProvince(province:String) {
+        this.province = province
+    }
+
     private fun spawnTaxModal() {
         taxDialog = AlertDialog.Builder(this)
         val taxDialogView = layoutInflater.inflate(R.layout.tax_modal, null)
         taxDialog!!.setView(taxDialogView)
         taxDialog!!.setCancelable(true)
-        var custom_dialog = taxDialog!!.create()
-        custom_dialog.show()
+        custom_dialog = taxDialog!!.create()
+        custom_dialog?.show()
 
-        custom_dialog.findViewById<ListView>(R.id.province_selector_tax).setOnItemClickListener {
+        custom_dialog!!.findViewById<ListView>(R.id.province_selector_tax).setOnItemClickListener {
             adapterView: AdapterView<*>, view1: View, i: Int, l: Long ->
-            var location = custom_dialog.findViewById<ListView>(R.id.province_selector_tax).getItemAtPosition(i).toString()
-            custom_dialog.dismiss()
+            var location = custom_dialog!!.findViewById<ListView>(R.id.province_selector_tax).getItemAtPosition(i).toString()
+            custom_dialog?.dismiss()
             calc.performTaxing(location)
         }
+    }
+
+    fun getTaxDialog(): AlertDialog? {
+        return custom_dialog
     }
 
     @SuppressLint("MissingSuperCall")
