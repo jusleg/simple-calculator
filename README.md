@@ -23,6 +23,14 @@ To submit new changes to the codebase, a pull request must be opened. The pull r
   4. At least 2 independent reviews that follow the [pull request review template](https://github.com/jusleg/simple-calculator-FAMINGO/blob/master/.github/PULL_REQUEST_REVIEW_TEMPLATE.md)
   5. Code that follows the conventions outlined by the [Kotlin Foundation](https://kotlinlang.org/docs/reference/coding-conventions.html)
 
+## Submitting Issues
+
+User facing features are represented as user stories which are further broken down into tasks. Very large user stories may be broken down into multiple user stories and put into an epic. All issues submitted must follow one of the following templates.
+
+* **[User Story Template](https://github.com/jusleg/simple-calculator-FAMINGO/blob/master/.github/ISSUE_TEMPLATE.md)**
+* **[Task Template](https://github.com/jusleg/simple-calculator-FAMINGO/blob/master/.github/TASK_TEMPLATE.md)**
+* **[Epic Template](https://github.com/jusleg/simple-calculator-FAMINGO/blob/master/.github/EPIC_TEMPLATE.md)**
+
 ## Testing
 
 This app contains UI and unit tests that can be ran with the following instructions.
