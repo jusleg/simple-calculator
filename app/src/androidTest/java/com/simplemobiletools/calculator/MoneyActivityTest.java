@@ -3,12 +3,16 @@ package com.simplemobiletools.calculator;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.beust.klaxon.JsonObject;
 import com.simplemobiletools.calculator.activities.MoneyActivity;
+import com.simplemobiletools.calculator.helpers.CurrencyRates;
 
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.text.DecimalFormat;
 
 import static android.support.test.espresso.Espresso.closeSoftKeyboard;
 import static android.support.test.espresso.Espresso.onView;
@@ -91,12 +95,10 @@ public class MoneyActivityTest {
         checkResult("25.99");
     }
 
-    @Ignore
     @Test
-    // This test is failing on Travis CI for an undetermined reason
     public void testConversionSelection() {
-        String fromSelection = "EUR";
-        String toSelection = "USD";
+        String fromSelection = "CAD";
+        String toSelection = "AUD";
 
         press(R.id.btn_1);
         closeSoftKeyboard();
@@ -109,6 +111,34 @@ public class MoneyActivityTest {
         onView(withId(R.id.convert_to)).inRoot(isDialog()).perform(click());
         onView(withText(containsString(toSelection))).inRoot(isPlatformPopup()).perform(click());
         onView(withId(R.id.convert_to)).check(matches(withSpinnerText(containsString(toSelection))));
+    }
+
+    @Test
+    public void testConversion() {
+        String fromSelection = "CAD";
+        String toSelection = "AUD";
+
+        press(R.id.btn_1);
+        press(R.id.btn_0);
+        press(R.id.btn_0);
+        closeSoftKeyboard();
+        press(R.id.btn_currency);
+
+        onView(withId(R.id.convert_from)).inRoot(isDialog()).perform(click());
+        onView(withText(containsString(fromSelection))).inRoot(isPlatformPopup()).perform(click());
+        onView(withId(R.id.convert_from)).check(matches(withSpinnerText(containsString(fromSelection))));
+
+        onView(withId(R.id.convert_to)).inRoot(isDialog()).perform(click());
+        onView(withText(containsString(toSelection))).inRoot(isPlatformPopup()).perform(click());
+        onView(withId(R.id.convert_to)).check(matches(withSpinnerText(containsString(toSelection))));
+
+        onView(withId(R.id.convert)).inRoot(isDialog()).perform(click());
+
+        CurrencyRates currencyRates = new CurrencyRates(activity.getActivity().getApplicationContext());
+        JsonObject rates = currencyRates.getCurrencyRates();
+        String expectedResult = new DecimalFormat("##.##").format(
+                (double)(rates.get(toSelection))*100);
+        checkResult(expectedResult);
     }
 
     @Test
