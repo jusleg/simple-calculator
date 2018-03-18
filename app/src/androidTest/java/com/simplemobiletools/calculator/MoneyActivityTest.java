@@ -27,6 +27,7 @@ import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 
 @SdkSuppress(minSdkVersion = 18)
 @RunWith(AndroidJUnit4.class)
@@ -125,6 +126,23 @@ public class MoneyActivityTest {
             onView(withId(R.id.province_selector_tax)).perform(click());
             checkResult("25.99");
         }
+    }
+
+    @Test
+    public void testTipDialogDisplayed() {
+        press(R.id.btn_tip);
+        onView(withText("Calculate Tip")).check(matches(isDisplayed()));
+    }
+
+
+    @Test
+    public void tipOpenApplyTest() {
+        press(R.id.btn_1);
+        press(R.id.btn_0);
+        press(R.id.btn_0);
+        press(R.id.btn_tip);
+        onView(withText("15%")).perform(click());
+        checkResult("115.00");
     }
 
     private void press(int id) {

@@ -1,29 +1,39 @@
 # Simple Calculator
-<img alt="Logo" src="app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="80">
+<img alt="Logo" src="commons/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="80">
 
 [![Build Status](https://travis-ci.org/jusleg/simple-calculator-FAMINGO.svg?branch=master)](https://travis-ci.org/jusleg/simple-calculator-FAMINGO) [![codebeat badge](https://codebeat.co/badges/9ce2c059-5bb7-46bd-b512-a746ce275690)](https://codebeat.co/projects/github-com-jusleg-simple-calculator-master)
 
-Check out our project [wiki!](https://github.com/jusleg/simple-calculator/wiki) !
+Check out our project [wiki](https://github.com/jusleg/simple-calculator/wiki)!
 
-A calculator with the basic functions and a customizable widget.
+A calculator with the basic functions and money operations. A fork of [Simple Calculator by Simple Tools](https://github.com/SimpleMobileTools/Simple-Calculator) used for our SOEN 390 class.
 
 You can copy the result or formula to clipboard by long pressing it.
 
-
-The text color of the widget can be customized, as well as the color and the alpha of the background. Press the result or formula in the widget to open the app.
-
 Contains no ads or unnecessary permissions. It is fully opensource, provides customizable colors.
-
-This app is just one piece of a bigger series of apps. You can find the rest of them at http://www.simplemobiletools.com
-
-<a href='https://play.google.com/store/apps/details?id=com.simplemobiletools.calculator'><img src='http://simplemobiletools.github.io/assets/public/google-play.png' alt='Get it on Google Play' height=45/></a>
-<a href='https://f-droid.org/app/com.simplemobiletools.calculator'><img src='http://simplemobiletools.github.io/assets/public/f-droid.png' alt='Get it on F-Droid' height=45 ></a>
 
 <img alt="App image" src="screenshots/app.png" width="250">
 <img alt="App image" src="screenshots/app_2.png" width="250">
-<img alt="App image" src="screenshots/widget.png" width="250">
 
-It contains a couple UI and unit tests, they can be ran with the following instructions.
+## Contributing
+
+To submit new changes to the codebase, a pull request must be opened. The pull request must have the following:
+  1. Name that describes the modification and includes reference(s) to issue(s)
+  2. Meaningful commit message that points to the issue number
+  3. Follow the [pull request template](https://github.com/jusleg/simple-calculator-FAMINGO/blob/master/.github/PULL_REQUEST_TEMPLATE.md)
+  4. At least 2 independent reviews that follow the [pull request review template](https://github.com/jusleg/simple-calculator-FAMINGO/blob/master/.github/PULL_REQUEST_REVIEW_TEMPLATE.md)
+  5. Code that follows the conventions outlined by the [Kotlin Foundation](https://kotlinlang.org/docs/reference/coding-conventions.html)
+
+## Submitting Issues
+
+User facing features are represented as user stories which are further broken down into tasks. Very large user stories may be broken down into multiple user stories and put into an epic. All issues submitted must follow one of the following templates.
+
+* **[User Story Template](https://github.com/jusleg/simple-calculator-FAMINGO/blob/master/.github/ISSUE_TEMPLATE.md)**
+* **[Task Template](https://github.com/jusleg/simple-calculator-FAMINGO/blob/master/.github/TASK_TEMPLATE.md)**
+* **[Epic Template](https://github.com/jusleg/simple-calculator-FAMINGO/blob/master/.github/EPIC_TEMPLATE.md)**
+
+## Testing
+
+This app contains UI and unit tests that can be ran with the following instructions.
 
 <h3>Running Espresso UI tests</h3>
 <p>1. Run -> Edit Configurations</p>
@@ -40,8 +50,8 @@ It contains a couple UI and unit tests, they can be ran with the following instr
 <p>4. OK</p>
 <p>5. Run</p>
 
-License
--------
+## License
+
     Copyright 2017 SimpleMobileTools
 
     Licensed under the Apache License, Version 2.0 (the "License");

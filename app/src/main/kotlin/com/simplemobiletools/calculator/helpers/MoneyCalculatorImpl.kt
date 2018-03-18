@@ -1,8 +1,12 @@
 package com.simplemobiletools.calculator.helpers
 
+import com.simpletools.calculator.commons.helpers.Calculator
+import com.simpletools.calculator.commons.R
+import com.simpletools.calculator.commons.operations.TaxOperation
+import com.simpletools.calculator.commons.operations.TipOperation
+import com.simpletools.calculator.commons.helpers.Formatter
 import android.content.Context
-import com.simplemobiletools.calculator.R
-import com.simplemobiletools.calculator.operation.TaxOperation
+
 
 class MoneyCalculatorImpl(calculator: Calculator, val context: Context) {
     private var mCallback: Calculator? = calculator
@@ -82,12 +86,25 @@ class MoneyCalculatorImpl(calculator: Calculator, val context: Context) {
     }
 
     private fun setValue(value: String) {
-        mCallback!!.setValue(value, context)
+        mCallback!!.setValue(value)
     }
 
     fun performTaxing(location:String){
-        overwriteNumber(TaxOperation(Formatter.stringToDouble(getResult()),location).getResult())
+        overwriteNumber(TaxOperation(getResult(), location).getResult())
     }
 
-    private fun getResult() = mCallback!!.getResult()
+    private fun getResult() = Formatter.stringToDouble(mCallback!!.getResult())
+
+    fun calculateTip(tip: Double) {
+        if (isNumberValid()) {
+            overwriteNumber(TipOperation(getResult(), tip).getResult())
+        }
+    }
+
+    private fun isNumberValid(): Boolean {
+        if (getResult() > 0) {
+            return true
+        }
+        return false
+    }
 }

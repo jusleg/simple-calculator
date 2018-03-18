@@ -41,7 +41,6 @@ class MoneyCalculatorImplTest {
         locationManager = RuntimeEnvironment.application.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         shadowLocationManager = shadowOf(locationManager)
         geocoder = Geocoder(activity.applicationContext, Locale.getDefault())
-
     }
 
     @Test
@@ -109,6 +108,23 @@ class MoneyCalculatorImplTest {
         Assert.assertEquals("10.40", activity.getResult())
         calc.handleDelete()
         Assert.assertEquals("0.00", activity.getResult())
+    }
+
+
+    @Test
+    fun calculateTip() {
+        calc.handleDelete()
+        calc.calculateTip(0.15)
+        Assert.assertEquals("0.00", activity.getResult())
+
+        calc.addDigit(1)
+        calc.addDigit(0)
+        calc.addDigit(0)
+        calc.calculateTip(0.15)
+        Assert.assertEquals("115.00", activity.getResult())
+
+        calc.calculateTip(0.25)
+        Assert.assertEquals("143.75", activity.getResult())
     }
 
     @Test
@@ -329,4 +345,3 @@ class MoneyCalculatorImplTest {
     }
 
 }
-

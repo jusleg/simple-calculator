@@ -3,6 +3,7 @@ package com.simplemobiletools.calculator.activities
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -16,14 +17,15 @@ import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.Toast
 import com.simplemobiletools.calculator.R
-import com.simplemobiletools.calculator.extensions.config
-import com.simplemobiletools.calculator.extensions.updateViewColors
-import com.simplemobiletools.calculator.helpers.Calculator
 import com.simplemobiletools.calculator.helpers.MoneyCalculatorImpl
 import com.simplemobiletools.commons.extensions.copyToClipboard
 import com.simplemobiletools.commons.extensions.performHapticFeedback
 import com.simplemobiletools.commons.extensions.restartActivity
 import com.simplemobiletools.commons.extensions.value
+import com.simpletools.calculator.commons.activities.SimpleActivity
+import com.simpletools.calculator.commons.extensions.config
+import com.simpletools.calculator.commons.extensions.updateViewColors
+import com.simpletools.calculator.commons.helpers.Calculator
 import kotlinx.android.synthetic.main.activity_money.*
 import me.grantland.widget.AutofitHelper
 import java.util.*
@@ -48,6 +50,7 @@ class MoneyActivity : SimpleActivity(), Calculator , LocationListener {
     private var testing : Boolean = false
 
     lateinit var calc: MoneyCalculatorImpl
+
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,9 +79,9 @@ class MoneyActivity : SimpleActivity(), Calculator , LocationListener {
         }
 
         btn_currency.setOnClickListener{ true } // TODO : Implement feature and connect
-        btn_delete.setOnClickListener { calc.handleDelete(); checkHaptic(it) }
         btn_delete.setOnLongClickListener { calc.handleClear(); true }
-        btn_tip.setOnClickListener { true } // TODO : Implement feature and connect
+        btn_delete.setOnClickListener { calc.handleDelete(); checkHaptic(it) }
+        btn_tip.setOnClickListener { displayTipsDialog() }
         result.setOnLongClickListener { copyToClipboard(result.value); true }
         btn_taxes.setOnClickListener({ view ->
             var gpsStatus : Boolean = false
@@ -218,7 +221,7 @@ class MoneyActivity : SimpleActivity(), Calculator , LocationListener {
         vibrateOnButtonPress = config.vibrateOnButtonPress
     }
 
-    override fun setValue(value: String, context: Context) {
+    override fun setValue(value: String) {
         result.text = value
     }
 
@@ -230,7 +233,7 @@ class MoneyActivity : SimpleActivity(), Calculator , LocationListener {
 
     override fun getFormula(): String { return "" }
 
-    override fun setFormula(value: String, context: Context) {}
+    override fun setFormula(value: String) {}
 
     private fun checkHaptic(view: View) {
         if (vibrateOnButtonPress) {
@@ -259,4 +262,22 @@ class MoneyActivity : SimpleActivity(), Calculator , LocationListener {
     private fun getMoneyButtonIds() = arrayOf(btn_tip, btn_currency, btn_taxes)
 
     private fun getButtonIds() = arrayOf(btn_decimal, btn_0, btn_1, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9)
+
+
+    private fun displayTipsDialog() {
+        val tipAmount = arrayOf("10%", "12%", "15%", "18%", "20%", "25%")
+
+        val tipDialog = AlertDialog.Builder(this@MoneyActivity)
+        tipDialog.setTitle("Calculate Tip")
+
+        tipDialog.setItems(tipAmount, DialogInterface.OnClickListener { _, index ->
+            var tipPercentage = tipAmount[index].trimEnd('%').toDouble() / 100
+            calc.calculateTip(tipPercentage)
+        })
+
+        tipDialog.setNegativeButton("Cancel", DialogInterface.OnClickListener { _, _ ->
+            // User cancelled the dialog
+        })
+        tipDialog.show()
+    }
 }
