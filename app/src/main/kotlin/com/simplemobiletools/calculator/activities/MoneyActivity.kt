@@ -86,14 +86,13 @@ class MoneyActivity : SimpleActivity(), Calculator , LocationListener {
                 //checks gps status
                 gpsStatus = locationManager!!.isProviderEnabled(LocationManager.GPS_PROVIDER)
             } catch(e: Exception) {}
+            //if permission not granted then set gpsStatus to false
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                gpsStatus = false
+            }
 
             //if the gps status is enabled then get the location
             if(gpsStatus) {
-                //Checks if location service has been granted again
-                if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), GPS_REQUEST_CODE);
-                }
-
                 //get the last known location
                 lastLocation = locationManager!!.getLastKnownLocation(LocationManager.GPS_PROVIDER)
 
@@ -184,7 +183,7 @@ class MoneyActivity : SimpleActivity(), Calculator , LocationListener {
         this.province = province
     }
 
-    private fun spawnTaxModal() {
+    fun spawnTaxModal() {
         taxDialog = AlertDialog.Builder(this)
         val taxDialogView = layoutInflater.inflate(R.layout.tax_modal, null)
         taxDialog!!.setView(taxDialogView)
