@@ -100,9 +100,9 @@ class MoneyCalculatorImpl(calculator: Calculator, moneyCalculator: MoneyCalculat
         }
     }
 
-    fun performConversion(convert_from:String, convert_to:String, conversionRates:JsonObject) {
+    fun performConversion(convert_from:String, convert_to:String, currencyRates:CurrencyRates) {
         overwriteNumber(CurrencyConversionOperation(getResult(),
-                convert_from, convert_to, conversionRates).getResult())
+                convert_from, convert_to, currencyRates).getResult())
     }
 
     fun performTaxing(location:String){

@@ -3,7 +3,6 @@ package com.simplemobiletools.calculator;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.beust.klaxon.JsonObject;
 import com.simplemobiletools.calculator.activities.MoneyActivity;
 import com.simplemobiletools.calculator.helpers.CurrencyRates;
 
@@ -11,8 +10,6 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.text.DecimalFormat;
 
 import static android.support.test.espresso.Espresso.closeSoftKeyboard;
 import static android.support.test.espresso.Espresso.onView;
@@ -26,6 +23,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class MoneyActivityTest {
@@ -95,24 +94,7 @@ public class MoneyActivityTest {
         checkResult("25.99");
     }
 
-    @Test
-    public void testConversionSelection() {
-        String fromSelection = "CAD";
-        String toSelection = "AUD";
-
-        press(R.id.btn_1);
-        closeSoftKeyboard();
-        press(R.id.btn_currency);
-
-        onView(withId(R.id.convert_from)).inRoot(isDialog()).perform(click());
-        onView(withText(containsString(fromSelection))).inRoot(isPlatformPopup()).perform(click());
-        onView(withId(R.id.convert_from)).check(matches(withSpinnerText(containsString(fromSelection))));
-
-        onView(withId(R.id.convert_to)).inRoot(isDialog()).perform(click());
-        onView(withText(containsString(toSelection))).inRoot(isPlatformPopup()).perform(click());
-        onView(withId(R.id.convert_to)).check(matches(withSpinnerText(containsString(toSelection))));
-    }
-
+    @Ignore
     @Test
     public void testConversion() {
         String fromSelection = "CAD";
@@ -132,13 +114,14 @@ public class MoneyActivityTest {
         onView(withText(containsString(toSelection))).inRoot(isPlatformPopup()).perform(click());
         onView(withId(R.id.convert_to)).check(matches(withSpinnerText(containsString(toSelection))));
 
+        CurrencyRates mockedCurrencyRates = mock(CurrencyRates.);
+        when(mockedCurrencyRates.get(toSelection)).thenReturn(1.5);
+
+        activity.getActivity().currencyRates = mockedCurrencyRates;
+
         onView(withId(R.id.convert)).inRoot(isDialog()).perform(click());
 
-        CurrencyRates currencyRates = new CurrencyRates(activity.getActivity().getApplicationContext());
-        JsonObject rates = currencyRates.getCurrencyRates();
-        String expectedResult = new DecimalFormat("##.##").format(
-                (double)(rates.get(toSelection))*100);
-        checkResult(expectedResult);
+        checkResult("150.00");
     }
 
     @Test
