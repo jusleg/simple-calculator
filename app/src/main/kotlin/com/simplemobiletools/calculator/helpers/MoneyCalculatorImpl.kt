@@ -1,14 +1,17 @@
 package com.simplemobiletools.calculator.helpers
 
+import com.beust.klaxon.JsonObject
+import com.simplemobiletools.calculator.operation.CurrencyConversionOperation
 import com.simpletools.calculator.commons.helpers.Calculator
 import com.simpletools.calculator.commons.R
 import com.simpletools.calculator.commons.operations.TaxOperation
 import com.simpletools.calculator.commons.operations.TipOperation
 import com.simpletools.calculator.commons.helpers.Formatter
 
-class MoneyCalculatorImpl(calculator: Calculator, taxCalculator: TaxCalculator) {
+class MoneyCalculatorImpl(calculator: Calculator, moneyCalculator: MoneyCalculator) {
+
     private var mCallback: Calculator? = calculator
-    private var tCallback: TaxCalculator? = taxCalculator
+    private var moneyCallback: MoneyCalculator? = moneyCalculator
     private var number: String = ""
     private var decimalClicked: Boolean = false
     private var decimalCounter: Int = 0
@@ -93,8 +96,13 @@ class MoneyCalculatorImpl(calculator: Calculator, taxCalculator: TaxCalculator) 
         if(false){
 
         }else{
-            tCallback!!.spawnTaxModal()
+            moneyCallback!!.spawnTaxModal()
         }
+    }
+
+    fun performConversion(convert_from:String, convert_to:String, currencyRates:CurrencyRates) {
+        overwriteNumber(CurrencyConversionOperation(getResult(),
+                convert_from, convert_to, currencyRates).getResult())
     }
 
     fun performTaxing(location:String){

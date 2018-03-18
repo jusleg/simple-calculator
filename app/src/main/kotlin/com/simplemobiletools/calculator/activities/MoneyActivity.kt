@@ -9,20 +9,24 @@ import android.support.v4.view.ViewCompat
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ListView
+import android.widget.Spinner
+import android.widget.Button
 import com.simplemobiletools.calculator.R
+import com.simplemobiletools.commons.extensions.*
+import kotlinx.android.synthetic.main.activity_money.*
+import me.grantland.widget.AutofitHelper
+import android.app.ProgressDialog
+import com.beust.klaxon.JsonObject
+import com.simplemobiletools.calculator.helpers.*
 import com.simpletools.calculator.commons.extensions.config
 import com.simpletools.calculator.commons.extensions.updateViewColors
 import com.simpletools.calculator.commons.helpers.Calculator
 import com.simplemobiletools.calculator.helpers.MoneyCalculatorImpl
-import com.simplemobiletools.calculator.helpers.TaxCalculator
-import com.simplemobiletools.commons.extensions.*
-import kotlinx.android.synthetic.main.activity_money.*
-import me.grantland.widget.AutofitHelper
 import android.content.DialogInterface
 import com.simpletools.calculator.commons.activities.SimpleActivity
 
 
-class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator {
+class MoneyActivity : SimpleActivity(), Calculator , MoneyCalculator {
 
     private var storedTextColor = 0
     private var vibrateOnButtonPress = true
@@ -30,11 +34,14 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator {
     private var taxDialog:AlertDialog.Builder? = null
 
     lateinit var calc: MoneyCalculatorImpl
+    lateinit var currencyRates: CurrencyRates
 
+    var pd: ProgressDialog? = null
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_money)
 
         calc = MoneyCalculatorImpl(this, this)
@@ -45,7 +52,8 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator {
             it.setOnClickListener { calc.numpadClicked(it.id); checkHaptic(it) }
         }
 
-        btn_currency.setOnClickListener{ true } // TODO : Implement feature and connect
+        btn_currency.setOnClickListener{ displayCurrencyModal() }
+        btn_delete.setOnClickListener { calc.handleDelete(); checkHaptic(it) }
         btn_delete.setOnLongClickListener { calc.handleClear(); true }
         btn_delete.setOnClickListener { calc.handleDelete(); checkHaptic(it) }
         btn_taxes.setOnClickListener{ calc.calculateTax() } // TODO : Implement feature and connect
@@ -54,6 +62,8 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator {
 
         AutofitHelper.create(result)
 
+        currencyRates = CurrencyRates(applicationContext)
+        currencyRates.updateCurrencyRates()
     }
 
     override fun spawnTaxModal() {
@@ -72,19 +82,36 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator {
         }
     }
 
-    @SuppressLint("MissingSuperCall")
-    override fun onResume() {
-        super.onResume()
-        if (storedUseEnglish != config.useEnglish) {
-            restartActivity()
-            return
+    private fun displayCurrencyModal() {
+        var currencyView = AlertDialog.Builder(this@MoneyActivity)
+        currencyView!!.setView(layoutInflater.inflate(R.layout.currency_modal, null))
+        currencyView!!.setCancelable(true)
+        var currencyModal = currencyView!!.create()
+        currencyModal.show()
+
+        var convert_from = "CAD"
+        var convert_to = "CAD"
+
+        currencyModal.findViewById<Spinner>(R.id.convert_from).onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                convert_from = currencyModal.findViewById<Spinner>(R.id.convert_from).getSelectedItem().toString()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
-        if (storedTextColor != config.textColor) {
-            updateViewColors(money_holder, config.textColor)
-            updateButtonColor(config.customPrimaryColor)
+        currencyModal.findViewById<Spinner>(R.id.convert_to).onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                convert_to = currencyModal.findViewById<Spinner>(R.id.convert_to).getSelectedItem().toString()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {}
         }
-        vibrateOnButtonPress = config.vibrateOnButtonPress
+
+        currencyModal.findViewById<Button>(R.id.convert).setOnClickListener {
+            currencyModal.dismiss()
+            calc.performConversion(convert_from, convert_to, currencyRates)
+        }
     }
 
     override fun setValue(value: String) {
@@ -125,7 +152,6 @@ class MoneyActivity : SimpleActivity(), Calculator , TaxCalculator {
 
     private fun getMoneyButtonIds() = arrayOf(btn_tip, btn_currency, btn_taxes)
     private fun getButtonIds() = arrayOf(btn_decimal, btn_0, btn_1, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9)
-
 
     private fun displayTipsDialog() {
         val tipAmount = arrayOf("10%", "12%", "15%", "18%", "20%", "25%")
