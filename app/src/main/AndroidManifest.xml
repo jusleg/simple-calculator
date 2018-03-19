@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.simplemobiletools.calculator"
     android:installLocation="auto">
 
+    <uses-sdk tools:overrideLibrary="android.support.test.uiautomator.v18" />
+
     <uses-permission
         android:name="android.permission.USE_FINGERPRINT"
-        tools:node="remove"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-
-    <uses-sdk tools:overrideLibrary="android.support.test.uiautomator.v18"/>
+        tools:node="remove" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:name=".App"
@@ -20,44 +20,38 @@
         android:label="@string/app_launcher_name"
         android:roundIcon="@mipmap/ic_launcher"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".activities.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activities.MainActivity"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/settings"
-            android:parentActivityName=".activities.MainActivity"/>
-
+            android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name=".activities.MoneyActivity"
             android:label="@string/money"
-            android:parentActivityName=".activities.MainActivity"/>
-
+            android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name="com.simplemobiletools.commons.activities.AboutActivity"
             android:label="@string/about"
-            android:parentActivityName=".activities.MainActivity"/>
-
+            android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name="com.simplemobiletools.commons.activities.LicenseActivity"
             android:label="@string/third_party_licences"
-            android:parentActivityName="com.simplemobiletools.commons.activities.AboutActivity"/>
-
+            android:parentActivityName="com.simplemobiletools.commons.activities.AboutActivity" />
         <activity
             android:name="com.simplemobiletools.commons.activities.CustomizationActivity"
             android:label="@string/customize_colors"
-            android:parentActivityName=".activities.SettingsActivity"/>
+            android:parentActivityName=".activities.SettingsActivity" />
     </application>
+
 </manifest>
