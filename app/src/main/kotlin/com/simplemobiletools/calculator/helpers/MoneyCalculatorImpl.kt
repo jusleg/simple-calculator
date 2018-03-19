@@ -5,10 +5,11 @@ import com.simpletools.calculator.commons.R
 import com.simpletools.calculator.commons.operations.TaxOperation
 import com.simpletools.calculator.commons.operations.TipOperation
 import com.simpletools.calculator.commons.helpers.Formatter
+import android.content.Context
 
-class MoneyCalculatorImpl(calculator: Calculator, taxCalculator: TaxCalculator) {
+
+class MoneyCalculatorImpl(calculator: Calculator, val context: Context) {
     private var mCallback: Calculator? = calculator
-    private var tCallback: TaxCalculator? = taxCalculator
     private var number: String = ""
     private var decimalClicked: Boolean = false
     private var decimalCounter: Int = 0
@@ -86,15 +87,6 @@ class MoneyCalculatorImpl(calculator: Calculator, taxCalculator: TaxCalculator) 
 
     private fun setValue(value: String) {
         mCallback!!.setValue(value)
-    }
-
-    fun calculateTax(){
-        //Code to ping location here
-        if(false){
-
-        }else{
-            tCallback!!.spawnTaxModal()
-        }
     }
 
     fun performTaxing(location:String){
