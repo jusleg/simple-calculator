@@ -37,7 +37,6 @@ class MainActivity : WearableActivity(), Calculator {
         return ""
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -55,11 +54,9 @@ class MainActivity : WearableActivity(), Calculator {
         btn_equals.setOnClickListener { calc.handleEquals(); }
 
         AutofitHelper.create(result)
-        updateButtonColor()
         // Enables Always-on
         setAmbientEnabled()
     }
-
 
     private fun getButtonIds() = arrayOf(btn_decimal, btn_0, btn_1, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9)
 
@@ -69,11 +66,4 @@ class MainActivity : WearableActivity(), Calculator {
         }
     }
 
-
-    private fun updateButtonColor() {
-        val states = arrayOf(intArrayOf(android.R.attr.state_enabled))
-        val colors = intArrayOf(Color.parseColor("#FFF57C00"))
-        val myList = ColorStateList(states, colors)
-        ViewCompat.setBackgroundTintList(btn_clear, myList)
-    }
 }
