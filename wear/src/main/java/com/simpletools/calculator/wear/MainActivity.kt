@@ -1,9 +1,6 @@
 package com.simpletools.calculator.wear
 
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
-import android.support.v4.view.ViewCompat
 import android.support.wearable.activity.WearableActivity
 import android.view.View
 import com.simplemobiletools.commons.extensions.performHapticFeedback
