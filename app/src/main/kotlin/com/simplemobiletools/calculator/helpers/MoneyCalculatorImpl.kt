@@ -91,15 +91,15 @@ class MoneyCalculatorImpl(calculator: Calculator, val context: Context) {
         mCallback!!.setValue(value)
     }
 
-    fun performTaxing(location: String) {
-        overwriteNumber(TaxOperation(getResult(), location).getResult())
+    fun performTaxing(location:String){
+        overwriteNumber(TaxOperation.setParams(getResult(), location)!!.getResult())
     }
 
     private fun getResult() = Formatter.stringToDouble(mCallback!!.getResult())
 
     fun calculateTip(tip: Double) {
         if (isNumberValid()) {
-            overwriteNumber(TipOperation(getResult(), tip).getResult())
+            overwriteNumber(TipOperation.setParams(getResult(), tip)!!.getResult())
         }
     }
 

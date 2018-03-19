@@ -2,7 +2,7 @@ package com.simpletools.calculator.commons.operations
 
 import com.simpletools.calculator.commons.operations.base.UnaryOperation
 
-class RootOperation(value: Double) : UnaryOperation(value) {
+object RootOperation : UnaryOperation() {
 
     override fun getResult() = Math.sqrt(value)
 

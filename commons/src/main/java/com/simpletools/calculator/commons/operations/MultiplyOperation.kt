@@ -2,7 +2,7 @@ package com.simpletools.calculator.commons.operations
 
 import com.simpletools.calculator.commons.operations.base.BinaryOperation
 
-class MultiplyOperation(baseValue: Double, secondValue: Double) : BinaryOperation(baseValue, secondValue) {
+object MultiplyOperation : BinaryOperation() {
 
     override fun getResult() = baseValue * secondValue
 

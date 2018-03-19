@@ -2,7 +2,7 @@ package com.simpletools.calculator.commons.operations
 
 import com.simpletools.calculator.commons.operations.base.UnaryOperation
 
-class PercentageOperation(baseValue: Double) : UnaryOperation(baseValue) {
+object PercentageOperation : UnaryOperation() {
 
     override fun getResult() = value * 0.01
 
