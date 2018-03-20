@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.RootMatchers.isPlatformPopup;
@@ -112,9 +113,13 @@ public class MoneyActivityTest {
         press(R.id.btn_1);
         press(R.id.btn_0);
         press(R.id.btn_0);
-        press(R.id.btn_currency);
+        onView(withId(R.id.btn_currency))
+                .perform(scrollTo())
+                .perform(click());
 
-        press(R.id.convert);
+        onView(withId(R.id.convert))
+                .perform(scrollTo())
+                .perform(click());
 
         checkResult("130.00");
     }
