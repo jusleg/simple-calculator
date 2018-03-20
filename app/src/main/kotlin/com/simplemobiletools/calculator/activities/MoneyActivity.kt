@@ -62,7 +62,6 @@ class MoneyActivity : SimpleActivity(), Calculator , MoneyCalculator {
         AutofitHelper.create(result)
 
         currencyRates = CurrencyRatesImpl(applicationContext)
-        currencyRates.updateCurrencyRates()
     }
 
     override fun spawnTaxModal() {
@@ -111,6 +110,7 @@ class MoneyActivity : SimpleActivity(), Calculator , MoneyCalculator {
             currencyModal.dismiss()
             calc.performConversion(convert_from, convert_to, currencyRates)
         }
+        currencyRates.updateCurrencyRates()
     }
 
     override fun setValue(value: String) {
