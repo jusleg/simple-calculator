@@ -1,10 +1,10 @@
 ext {
-    PUBLISH_GROUP_ID = 'com.simplemobiletools'
-    PUBLISH_ARTIFACT_ID = 'calculator'
-    PUBLISH_VERSION = '3.0.1'
+    PUBLISH_GROUP_ID = 'com.simpletools'
+    PUBLISH_ARTIFACT_ID = 'commons'
+    PUBLISH_VERSION = '1.0'
 }
 
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
@@ -16,27 +16,20 @@ android {
         kotlinOptions.freeCompilerArgs += ['-module-name', "$PUBLISH_GROUP_ID.$PUBLISH_ARTIFACT_ID"]
     }
 
-
     defaultConfig {
-        applicationId "com.simplemobiletools.calculator"
         minSdkVersion 22
         targetSdkVersion 27
-        versionCode 15
-        versionName "3.0.1"
-        setProperty("archivesBaseName", "calculator")
+        versionCode 1
+        versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-    }
 
-    signingConfigs {
-        release
     }
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
         }
     }
 
@@ -51,30 +44,15 @@ android {
         exclude 'META-INF/ASL2.0'
     }
 
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-    }
-
-    lintOptions {
-        checkReleaseBuilds false
-        abortOnError false
-    }
-
-    testOptions {
-        unitTests {
-            includeAndroidResources = true
-        }
-    }
 }
 
 dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "com.android.support:support-v4:27.0.2"
     implementation "com.android.support:appcompat-v7:27.0.2"
     implementation "com.android.support:support-core-utils:27.0.2"
     implementation 'com.github.jusleg:Simple-Commons:3.3.12'
     implementation 'me.grantland:autofittextview:0.2.1'
-    implementation project(':commons')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:3.5.1'
@@ -83,28 +61,4 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test:rules:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-
-    compile 'com.beust:klaxon:2.1.9'
-}
-
-Properties props = new Properties()
-def propFile = new File('signing.properties')
-if (propFile.canRead()) {
-    props.load(new FileInputStream(propFile))
-
-    if (props != null && props.containsKey('STORE_FILE') && props.containsKey('KEY_ALIAS') && props.containsKey('PASSWORD')) {
-        android.signingConfigs.release.storeFile = file(props['STORE_FILE'])
-        android.signingConfigs.release.storePassword = props['PASSWORD']
-        android.signingConfigs.release.keyAlias = props['KEY_ALIAS']
-        android.signingConfigs.release.keyPassword = props['PASSWORD']
-    } else {
-        println 'signing.properties found but some entries are missing'
-        android.buildTypes.release.signingConfig = null
-    }
-} else {
-    println 'signing.properties not found'
-    android.buildTypes.release.signingConfig = null
-}
-repositories {
-    mavenCentral()
 }

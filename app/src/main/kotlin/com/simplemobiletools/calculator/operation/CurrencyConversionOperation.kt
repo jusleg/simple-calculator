@@ -1,22 +1,30 @@
 package com.simplemobiletools.calculator.operation
 
-import com.afollestad.bridge.Bridge
-import kotlin.math.absoluteValue
+import com.beust.klaxon.JsonObject
 
 class CurrencyConversionOperation(var value: Double, var conversion_from: String,
-                                  var conversion_to: String) {
+                                           var conversion_to: String, var conversionRates: JsonObject) {
 
-    init {
-        //TODO
+    internal fun getRate(): Double {
+        if(conversion_from == conversion_to) {
+            return 1.0
+        } else if(conversion_from == "CAD") {
+            return conversionRates.get(conversion_to) as Double
+        } else if(conversion_to == "CAD") {
+            return (1.0 / (conversionRates.get(conversion_from) as Double))
+        } else {
+            return ((1.0 / (conversionRates.get(conversion_from) as Double)) *
+                    (conversionRates.get(conversion_to) as Double))
+        }
     }
 
     fun getResult(): Double {
-        //TODO
-        return 1.00
+        return getRate() * value
     }
 
     fun getFormula(): String {
-        //TODO
-        return ""
+        return "Conversion rate from " + conversion_from + " to " + conversion_to + " is " + getRate()
     }
+
+
 }
