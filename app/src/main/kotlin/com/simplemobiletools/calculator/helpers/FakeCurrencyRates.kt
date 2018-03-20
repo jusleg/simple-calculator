@@ -9,6 +9,5 @@ class FakeCurrencyRates(private val context: Context): CurrencyRates {
     }
 
     override fun updateCurrencyRates() {
-
     }
 }

@@ -16,32 +16,32 @@ class CurrencyRatesImpl(private val context: Context): CurrencyRates {
 
     private lateinit var ratesFile: File
     private lateinit var rates: JsonObject
-    private val downloadRatesThread = Thread(Runnable {
-        try {
-            val url = "https://api.fixer.io/latest?base=CAD"
-            val obj = URL(url)
-
-            with(obj.openConnection() as HttpURLConnection) {
-                // optional default is GET
-                this.requestMethod = "GET"
-
-                val data: String? = BufferedReader(InputStreamReader(inputStream)).use {
-                    it.readText()
-                }
-                ratesFile = File(context.cacheDir, "rates")
-                ratesFile.printWriter().use {
-                    it.write(data)
-                }
-
-                rates = (Parser().parse(data!!.reader()) as JsonObject).obj("rates")!!
-            }
-        } catch(e: Exception) {
-            e.printStackTrace()
-        }
-    })
 
     override fun updateCurrencyRates() {
         if (isConnected()) {
+            val downloadRatesThread = Thread(Runnable {
+                try {
+                    val url = "https://api.fixer.io/latest?base=CAD"
+                    val obj = URL(url)
+
+                    with(obj.openConnection() as HttpURLConnection) {
+                        // optional default is GET
+                        this.requestMethod = "GET"
+
+                        val data: String? = BufferedReader(InputStreamReader(inputStream)).use {
+                            it.readText()
+                        }
+                        ratesFile = File(context.cacheDir, "rates")
+                        ratesFile.printWriter().use {
+                            it.write(data)
+                        }
+
+                        rates = (Parser().parse(data!!.reader()) as JsonObject).obj("rates")!!
+                    }
+                } catch(e: Exception) {
+                    e.printStackTrace()
+                }
+            })
             downloadRatesThread.start()
         }
     }
@@ -71,7 +71,6 @@ class CurrencyRatesImpl(private val context: Context): CurrencyRates {
             return true
         } else if (isConnected()){
             updateCurrencyRates()
-            downloadRatesThread.join()
             return true
         } else {
             return false

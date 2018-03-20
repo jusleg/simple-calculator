@@ -88,7 +88,10 @@ class MoneyActivity : SimpleActivity(), Calculator , MoneyCalculator {
         currencyModal.show()
 
         var convert_from = "CAD"
-        var convert_to = "CAD"
+        var convert_to = "USD"
+
+        currencyModal.findViewById<Spinner>(R.id.convert_from).setSelection(3)
+        currencyModal.findViewById<Spinner>(R.id.convert_to).setSelection(31)
 
         currencyModal.findViewById<Spinner>(R.id.convert_from).onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {

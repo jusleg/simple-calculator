@@ -114,14 +114,6 @@ public class MoneyActivityTest {
         press(R.id.btn_0);
         press(R.id.btn_currency);
 
-        onView(withId(R.id.convert_from)).inRoot(isDialog()).perform(click());
-        onView(withText(containsString("CAD"))).inRoot(isPlatformPopup()).perform(click());
-        onView(withId(R.id.convert_from)).check(matches(withSpinnerText(containsString("CAD"))));
-
-        onView(withId(R.id.convert_to)).inRoot(isDialog()).perform(click());
-        onView(withText(containsString("AUD"))).inRoot(isPlatformPopup()).perform(click());
-        onView(withId(R.id.convert_to)).check(matches(withSpinnerText(containsString("AUD"))));
-
         press(R.id.convert);
 
         checkResult("130.00");
