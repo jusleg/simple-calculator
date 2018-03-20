@@ -4,6 +4,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.simplemobiletools.calculator.activities.MainActivity;
+import com.simpletools.calculator.commons.helpers.Formatter;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -217,6 +218,96 @@ public class MainActivityTest {
         checkResult("-2");
         checkFormula("1×-2");
     }
+
+    @Test
+    public void squaredTest() {
+        press(R.id.btn_2);
+        press(R.id.btn_squared);
+        checkResult("4");
+        checkFormula("2²");
+        press(R.id.btn_squared);
+        checkResult("16");
+        checkFormula("4²");
+    }
+
+    @Test
+    public void cubedTest() {
+        press(R.id.btn_2);
+        press(R.id.btn_cubed);
+        checkResult("8");
+        checkFormula("2³");
+        press(R.id.btn_cubed);
+        checkResult("512");
+        checkFormula("8³");
+    }
+
+    @Test
+    public void powerTest1() {
+        press(R.id.btn_2);
+        press(R.id.btn_power);
+        press(R.id.btn_5);
+        press(R.id.btn_equals);
+        checkResult("32");
+        checkFormula("2^5");
+    }
+
+    @Test
+    public void powerTest2() {
+        press(R.id.btn_2);
+        press(R.id.btn_negative);
+        press(R.id.btn_power);
+        press(R.id.btn_5);
+        press(R.id.btn_equals);
+        checkResult("-32");
+        checkFormula("(-2)^5");
+    }
+
+    @Test
+    public void powerTest3() {
+        press(R.id.btn_2);
+        press(R.id.btn_power);
+        press(R.id.btn_5);
+        press(R.id.btn_negative);
+        press(R.id.btn_equals);
+        checkResult("0.03125");
+        checkFormula("2^(-5)");
+    }
+
+    @Test
+    public void powerTest4() {
+        press(R.id.btn_2);
+        press(R.id.btn_negative);
+        press(R.id.btn_power);
+        press(R.id.btn_5);
+        press(R.id.btn_negative);
+        press(R.id.btn_equals);
+        checkResult("-0.03125");
+        checkFormula("(-2)^(-5)");
+    }
+
+    @Test
+    public void powerTest5() {
+        press(R.id.btn_2);
+        press(R.id.btn_negative);
+        press(R.id.btn_power);
+        press(R.id.btn_decimal);
+        press(R.id.btn_5);
+        press(R.id.btn_equals);
+        checkResult(Formatter.INSTANCE.doubleToString(Double.NaN));
+        checkFormula("(-2)^0.5");
+    }
+
+    @Test
+    public void powerTest6() {
+        press(R.id.btn_0);
+        press(R.id.btn_power);
+        press(R.id.btn_5);
+        press(R.id.btn_negative);
+        press(R.id.btn_equals);
+        checkResult(Formatter.INSTANCE.doubleToString(Double.POSITIVE_INFINITY));
+        checkFormula("0^(-5)");
+    }
+
 
     private void press(int id) {
         onView(withId(id)).perform(click());

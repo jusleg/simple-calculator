@@ -19,9 +19,11 @@ object OperationFactory {
             DIVIDE -> return DivideOperation(baseValue, secondValue)
             MULTIPLY -> return MultiplyOperation(baseValue, secondValue)
             PERCENTAGE -> return PercentageOperation(baseValue)
-            POWER -> return PowerOperation(baseValue, secondValue)
+            POWER -> return PowerOperation(secondValue, baseValue)
             ROOT -> return RootOperation(baseValue)
             NEGATIVE -> return NegativeOperation(baseValue)
+            SQUARED -> return SquaredOperation(baseValue)
+            CUBED -> return CubedOperation(baseValue)
             else -> return null
         }
     }

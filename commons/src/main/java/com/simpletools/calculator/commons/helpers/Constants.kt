@@ -13,6 +13,8 @@ val DECIMAL = "decimal"
 val CLEAR = "clear"
 val RESET = "reset"
 val NEGATIVE = "negative"
+val SQUARED = "squared"
+val CUBED = "cubed"
 
 val NAN = "NaN"
 val ZERO = "zero"
