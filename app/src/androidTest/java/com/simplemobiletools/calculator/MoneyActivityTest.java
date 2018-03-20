@@ -4,13 +4,12 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.simplemobiletools.calculator.activities.MoneyActivity;
+import com.simplemobiletools.calculator.helpers.FakeCurrencyRates;
 
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.support.test.espresso.Espresso.closeSoftKeyboard;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
@@ -80,7 +79,6 @@ public class MoneyActivityTest {
         checkResult("0.00");
     }
 
-
     @Test
     public void taxWithoutGeoLocTest() {
         //TODO: Will need modification once geolocation is implemented
@@ -91,32 +89,11 @@ public class MoneyActivityTest {
         checkResult("25.99");
     }
 
-    @Ignore
     @Test
-    // This test is failing on Travis CI for an undetermined reason
-    public void testConversionSelection() {
-        String fromSelection = "EUR";
-        String toSelection = "USD";
-
-        press(R.id.btn_1);
-        closeSoftKeyboard();
-        press(R.id.btn_currency);
-
-        onView(withId(R.id.convert_from)).inRoot(isDialog()).perform(click());
-        onView(withText(containsString(fromSelection))).inRoot(isPlatformPopup()).perform(click());
-        onView(withId(R.id.convert_from)).check(matches(withSpinnerText(containsString(fromSelection))));
-
-        onView(withId(R.id.convert_to)).inRoot(isDialog()).perform(click());
-        onView(withText(containsString(toSelection))).inRoot(isPlatformPopup()).perform(click());
-        onView(withId(R.id.convert_to)).check(matches(withSpinnerText(containsString(toSelection))));
-    }
-
-    @Test
-    public void testTipDialogDisplayed() {
+    public void tipDialogDisplayedTest() {
         press(R.id.btn_tip);
         onView(withText("Calculate Tip")).check(matches(isDisplayed()));
     }
-
 
     @Test
     public void tipOpenApplyTest() {
@@ -126,6 +103,28 @@ public class MoneyActivityTest {
         press(R.id.btn_tip);
         onView(withText("15%")).perform(click());
         checkResult("115.00");
+    }
+
+    @Test
+    public void convertDisplayedTest() {
+        activity.getActivity().currencyRates = new FakeCurrencyRates(activity.getActivity().getApplicationContext());
+
+        press(R.id.btn_1);
+        press(R.id.btn_0);
+        press(R.id.btn_0);
+        press(R.id.btn_currency);
+
+        onView(withId(R.id.convert_from)).inRoot(isDialog()).perform(click());
+        onView(withText(containsString("CAD"))).inRoot(isPlatformPopup()).perform(click());
+        onView(withId(R.id.convert_from)).check(matches(withSpinnerText(containsString("CAD"))));
+
+        onView(withId(R.id.convert_to)).inRoot(isDialog()).perform(click());
+        onView(withText(containsString("AUD"))).inRoot(isPlatformPopup()).perform(click());
+        onView(withId(R.id.convert_to)).check(matches(withSpinnerText(containsString("AUD"))));
+
+        press(R.id.convert);
+
+        checkResult("130.00");
     }
 
     private void press(int id) {

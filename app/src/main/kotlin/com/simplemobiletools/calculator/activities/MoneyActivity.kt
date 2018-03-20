@@ -15,24 +15,14 @@ import com.simplemobiletools.calculator.R
 import com.simplemobiletools.commons.extensions.*
 import kotlinx.android.synthetic.main.activity_money.*
 import me.grantland.widget.AutofitHelper
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.net.HttpURLConnection
-import java.net.URL
 import android.app.ProgressDialog
-import android.os.AsyncTask
-import com.beust.klaxon.JsonObject
-import com.beust.klaxon.Parser
 import com.simplemobiletools.calculator.helpers.*
-import java.io.IOException
-import java.net.MalformedURLException
 import com.simpletools.calculator.commons.extensions.config
 import com.simpletools.calculator.commons.extensions.updateViewColors
 import com.simpletools.calculator.commons.helpers.Calculator
 import com.simplemobiletools.calculator.helpers.MoneyCalculatorImpl
 import android.content.DialogInterface
 import com.simpletools.calculator.commons.activities.SimpleActivity
-import android.util.Log
 
 
 class MoneyActivity : SimpleActivity(), Calculator , MoneyCalculator {
@@ -43,9 +33,9 @@ class MoneyActivity : SimpleActivity(), Calculator , MoneyCalculator {
     private var taxDialog:AlertDialog.Builder? = null
 
     lateinit var calc: MoneyCalculatorImpl
+    lateinit var currencyRates: CurrencyRates
 
     var pd: ProgressDialog? = null
-    var conversionRates : JsonObject = JsonObject()
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,7 +61,8 @@ class MoneyActivity : SimpleActivity(), Calculator , MoneyCalculator {
 
         AutofitHelper.create(result)
 
-        CurrencyRates(applicationContext).updateCurrencyRates()
+        currencyRates = CurrencyRatesImpl(applicationContext)
+        currencyRates.updateCurrencyRates()
     }
 
     override fun spawnTaxModal() {
@@ -118,7 +109,7 @@ class MoneyActivity : SimpleActivity(), Calculator , MoneyCalculator {
 
         currencyModal.findViewById<Button>(R.id.convert).setOnClickListener {
             currencyModal.dismiss()
-            calc.performConversion(convert_from, convert_to, CurrencyRates(applicationContext).getCurrencyRates())
+            calc.performConversion(convert_from, convert_to, currencyRates)
         }
     }
 

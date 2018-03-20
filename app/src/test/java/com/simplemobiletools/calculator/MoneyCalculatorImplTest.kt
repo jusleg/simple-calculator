@@ -1,6 +1,9 @@
 package com.simplemobiletools.calculator
 
 import com.simplemobiletools.calculator.activities.MoneyActivity
+import com.simplemobiletools.calculator.helpers.CurrencyRates
+import com.simplemobiletools.calculator.helpers.CurrencyRatesImpl
+import com.simplemobiletools.calculator.helpers.FakeCurrencyRates
 import com.simplemobiletools.calculator.helpers.MoneyCalculatorImpl
 import org.junit.Assert
 import org.junit.Before
@@ -115,5 +118,19 @@ class MoneyCalculatorImplTest {
 
         calc.calculateTip(0.25)
         Assert.assertEquals("143.75", activity.getResult())
+    }
+
+    @Test
+    fun calculateConversion() {
+        var fakedCurrencyRate: CurrencyRates = FakeCurrencyRates(activity.applicationContext)
+        calc.handleDelete()
+        calc.performConversion("CAD", "USD", fakedCurrencyRate)
+        Assert.assertEquals("0.00", activity.getResult())
+
+        calc.addDigit(1)
+        calc.addDigit(0)
+        calc.addDigit(0)
+        calc.performConversion("CAD", "USD", fakedCurrencyRate)
+        Assert.assertEquals("130.00", activity.getResult())
     }
 }
