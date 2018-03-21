@@ -1,6 +1,7 @@
 package com.simplemobiletools.calculator.activities
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -19,8 +20,13 @@ import com.simpletools.calculator.commons.activities.SimpleActivity
 import com.simpletools.calculator.commons.helpers.*
 import kotlinx.android.synthetic.main.activity_main.*
 import me.grantland.widget.AutofitHelper
+import android.net.NetworkInfo
+import android.content.Context.CONNECTIVITY_SERVICE
+import android.net.ConnectivityManager
+
 
 class MainActivity : SimpleActivity(), Calculator {
+
     private var storedTextColor = 0
     private var vibrateOnButtonPress = true
     private var storedUseEnglish = false
@@ -152,5 +158,9 @@ class MainActivity : SimpleActivity(), Calculator {
 
     override fun setFormula(value: String) {
         formula.text = value
+    }
+
+    override fun displayToast(message: String) {
+        applicationContext.toast(message,100)
     }
 }
