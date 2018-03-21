@@ -162,7 +162,6 @@ public class MoneyActivityTest {
         checkResult("766.20");
     }
 
-
     private void press(int id) {
         onView(withId(id)).perform(click());
     }

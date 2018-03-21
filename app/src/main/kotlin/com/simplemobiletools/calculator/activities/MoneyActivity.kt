@@ -291,7 +291,7 @@ class MoneyActivity : SimpleActivity(), Calculator , LocationListener {
     private fun performConversion(from:Any, to:Any) {
         if (!from.toString().equals(to.toString()) && isOnline()) {
             calc.calcCurrency(from.toString(),to.toString(),this)
-        }else{
+        } else if (!isOnline()) {
             displayToast("It seems there has been a connection problem, contact you ISP for more details !")
         }
     }

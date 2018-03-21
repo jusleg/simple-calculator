@@ -19,7 +19,6 @@ class FakeCurrencyTask(val from: String, val to: String, moneyActivity: Calculat
 
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
-        print(result)
         var json = Parser().parse(result!!.reader()) as JsonObject
         Log.d("Conversion rate was:", json.double("rate").toString())
         var rate: Double? = json.double("rate")
