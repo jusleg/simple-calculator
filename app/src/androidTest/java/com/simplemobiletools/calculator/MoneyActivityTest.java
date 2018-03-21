@@ -5,7 +5,6 @@ import android.os.Build;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.SdkSuppress;
 import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
@@ -14,23 +13,26 @@ import android.support.v4.content.PermissionChecker;
 import android.util.Log;
 
 import com.simplemobiletools.calculator.activities.MoneyActivity;
+import com.simplemobiletools.calculator.helpers.BackgroundCurrencyTaskBuilder;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static org.mockito.Mockito.*;
 
 @SdkSuppress(minSdkVersion = 18)
-@RunWith(AndroidJUnit4.class)
+@RunWith(MockitoJUnitRunner.class)
 public class MoneyActivityTest {
     @Rule public final ActivityTestRule<MoneyActivity> activity = new ActivityTestRule<>(MoneyActivity.class);
 
@@ -144,6 +146,22 @@ public class MoneyActivityTest {
         onView(withText("15%")).perform(click());
         checkResult("115.00");
     }
+
+    @Test
+    public void conversionWorkCADUSDTest(){
+        BackgroundCurrencyTaskBuilder taskBuilder = new BackgroundCurrencyTaskBuilder(this.activity.getActivity(), this.activity.getActivity().calc);
+        BackgroundCurrencyTaskBuilder fakeBuilder = spy(taskBuilder);
+        this.activity.getActivity().calc.supersedeBuilder(fakeBuilder);
+        when(fakeBuilder.build()).thenReturn((new FakeCurrencyTask("CAD", "USD", this.activity.getActivity(), this.activity.getActivity().calc)));
+        press(R.id.btn_1);
+        press(R.id.btn_0);
+        press(R.id.btn_0);
+        press(R.id.btn_2);
+        press(R.id.btn_currency);
+        press(R.id.btn_conversion);
+        checkResult("766.20");
+    }
+
 
     private void press(int id) {
         onView(withId(id)).perform(click());
