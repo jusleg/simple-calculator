@@ -26,6 +26,22 @@
     </string-array>
     <string name="location">Please pick your location!</string>
 
+    <string-array name="from_currencies_array">
+        <item>CAD</item>
+        <item>EUR</item>
+        <item>GBP</item>
+        <item>INR</item>
+        <item>USD</item>
+    </string-array>
+
+    <string-array name="to_currencies_array">
+        <item>USD</item>
+        <item>EUR</item>
+        <item>GBP</item>
+        <item>INR</item>
+        <item>CAD</item>
+    </string-array>
+
 
     <!--
         Haven't found some strings? There's more at

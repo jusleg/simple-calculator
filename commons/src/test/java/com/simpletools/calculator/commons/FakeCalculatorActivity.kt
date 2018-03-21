@@ -5,6 +5,7 @@ import com.simpletools.calculator.commons.activities.SimpleActivity
 import com.simpletools.calculator.commons.helpers.Calculator
 
 class FakeCalculator: SimpleActivity(), Calculator {
+
     private var formula:String = ""
     private var result:String = ""
 
@@ -25,4 +26,5 @@ class FakeCalculator: SimpleActivity(), Calculator {
     }
 
     override fun setClear(value: String) {}
+    override fun displayToast(message: String) {}
 }

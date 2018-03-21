@@ -8,20 +8,16 @@ import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.location.*
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.view.ViewCompat
 import android.util.Log
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ListView
-import android.widget.Toast
+import android.widget.*
 import com.simplemobiletools.calculator.R
 import com.simplemobiletools.calculator.helpers.MoneyCalculatorImpl
-import com.simplemobiletools.commons.extensions.copyToClipboard
-import com.simplemobiletools.commons.extensions.performHapticFeedback
-import com.simplemobiletools.commons.extensions.restartActivity
-import com.simplemobiletools.commons.extensions.value
+import com.simplemobiletools.commons.extensions.*
 import com.simpletools.calculator.commons.activities.SimpleActivity
 import com.simpletools.calculator.commons.extensions.config
 import com.simpletools.calculator.commons.extensions.updateViewColors
@@ -38,6 +34,7 @@ class MoneyActivity : SimpleActivity(), Calculator , LocationListener {
     private var storedUseEnglish = false
     private var taxDialog:AlertDialog.Builder? = null
     private var custom_dialog:AlertDialog? = null
+    private var conversionDialog:AlertDialog? = null
     private var locationManager: LocationManager? = null
     private var GPS_REQUEST_CODE = 101
     private var MINIMUM_TIME_BETWEEN_UPDATES : Long = 300000L //in ms
@@ -78,7 +75,7 @@ class MoneyActivity : SimpleActivity(), Calculator , LocationListener {
             it.setOnClickListener { calc.numpadClicked(it.id); checkHaptic(it) }
         }
 
-        btn_currency.setOnClickListener{ true } // TODO : Implement feature and connect
+        btn_currency.setOnClickListener{ displayConversionDialog() }
         btn_delete.setOnLongClickListener { calc.handleClear(); true }
         btn_delete.setOnClickListener { calc.handleDelete(); checkHaptic(it) }
         btn_tip.setOnClickListener { displayTipsDialog() }
@@ -114,10 +111,6 @@ class MoneyActivity : SimpleActivity(), Calculator , LocationListener {
     override fun onLocationChanged(location: Location) {
         currentLatitude = location.latitude
         currentLongitude = location.longitude
-        val message = String.format("New Location \n Longitude: %1\$s \n Latitude: %2\$s",
-                location.longitude, location.latitude
-        )
-        Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
     override fun onStatusChanged(s:String, i:Int, b:Bundle) {}
@@ -279,5 +272,37 @@ class MoneyActivity : SimpleActivity(), Calculator , LocationListener {
             // User cancelled the dialog
         })
         tipDialog.show()
+    }
+
+    private fun displayConversionDialog(){
+        val conversionDialogBuilder = AlertDialog.Builder(this)
+        val conversionDialogView = layoutInflater.inflate(R.layout.conversion_modal, null)
+        conversionDialogView.findViewById<Button>(R.id.btn_conversion).setOnClickListener {
+            performConversion(conversionDialogView.findViewById<Spinner>(R.id.conversion_spinner1).selectedItem,
+                    conversionDialogView.findViewById<Spinner>(R.id.conversion_spinner2).selectedItem)
+            conversionDialog!!.dismiss()
+        }
+        conversionDialogBuilder!!.setView(conversionDialogView)
+        conversionDialogBuilder!!.setCancelable(true)
+        conversionDialog = conversionDialogBuilder!!.create()
+        conversionDialog!!.show()
+    }
+
+    private fun performConversion(from:Any, to:Any) {
+        if (!from.toString().equals(to.toString()) && isOnline()) {
+            calc.calcCurrency(from.toString(),to.toString(),this)
+        } else if (!isOnline()) {
+            displayToast("It seems there has been a connection problem, contact you ISP for more details !")
+        }
+    }
+
+    fun isOnline(): Boolean {
+        val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val netInfo = cm.activeNetworkInfo
+        return netInfo != null && netInfo.isConnectedOrConnecting
+    }
+
+    override fun displayToast(message:String){
+        applicationContext.toast(message,100)
     }
 }

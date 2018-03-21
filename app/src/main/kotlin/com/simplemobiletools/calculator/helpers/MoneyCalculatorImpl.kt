@@ -1,18 +1,20 @@
 package com.simplemobiletools.calculator.helpers
 
-import com.simpletools.calculator.commons.helpers.Calculator
+import android.content.Context
+import android.os.AsyncTask
+import com.simplemobiletools.calculator.activities.MoneyActivity
 import com.simpletools.calculator.commons.R
+import com.simpletools.calculator.commons.helpers.Calculator
+import com.simpletools.calculator.commons.helpers.Formatter
 import com.simpletools.calculator.commons.operations.TaxOperation
 import com.simpletools.calculator.commons.operations.TipOperation
-import com.simpletools.calculator.commons.helpers.Formatter
-import android.content.Context
-
 
 class MoneyCalculatorImpl(calculator: Calculator, val context: Context) {
     private var mCallback: Calculator? = calculator
     private var number: String = ""
     private var decimalClicked: Boolean = false
     private var decimalCounter: Int = 0
+    private var taskBuilder: BackgroundCurrencyTaskBuilder = BackgroundCurrencyTaskBuilder(calculator, this)
 
     init {
         setValue("0.00")
@@ -82,7 +84,7 @@ class MoneyCalculatorImpl(calculator: Calculator, val context: Context) {
         number = ""
         decimalClicked = false
         decimalCounter = 0
-        setValue(String.format("%,.2f",newNumber.toDouble()))
+        setValue(String.format("%,.2f", newNumber))
     }
 
     private fun setValue(value: String) {
@@ -99,6 +101,14 @@ class MoneyCalculatorImpl(calculator: Calculator, val context: Context) {
         if (isNumberValid()) {
             overwriteNumber(TipOperation(getResult(), tip).getResult())
         }
+    }
+
+    fun calcCurrency(from: String, to: String, moneyActivity: MoneyActivity) {
+        var response: AsyncTask<Void, Void, String>? = taskBuilder.from(from).to(to).build().execute()
+    }
+
+    fun supersedeBuilder(builder: BackgroundCurrencyTaskBuilder){
+        taskBuilder = builder
     }
 
     private fun isNumberValid(): Boolean {

@@ -6,4 +6,5 @@ interface Calculator {
     fun setClear(value: String)
     fun getResult(): String
     fun getFormula(): String
+    fun displayToast(message: String)
 }
