@@ -1,9 +1,8 @@
-if [[ $1 == integration_tests ]]; then
-    sed -i.bak '150,163d' $FLAKY_PATH
+if [[ $1 == 1 ]]; then
 	echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
 	emulator -avd test -no-skin -no-audio -no-window &
 	android-wait-for-emulator; adb shell input keyevent 82 &
 	./gradlew clean connectedAndroidTest
-elif [[ $1 == unit_tests ]]; then
+else
 	./gradlew test
 fi

@@ -20,12 +20,14 @@ before_install:
 
 before_script:
   - echo "include ':app', ':commons'" > 'settings.gradle'
+  - sed -i.bak '150,163d' $FLAKY_PATH
 
-env:
-- TEST_SUITE=integration_tests
-- TEST_SUITE=unit_tests
-
-script: ./testing $TEST_SUITE
+jobs:
+  include:
+    - stage: test
+      script: ./testing 0
+    - # Parallelizing the unit and UI test
+      script: ./testing 1
 
 notifications:
   email:
