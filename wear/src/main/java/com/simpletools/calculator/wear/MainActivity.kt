@@ -16,6 +16,10 @@ import me.grantland.widget.AutofitHelper
 
 class MainActivity : WearableActivity(), Calculator {
 
+    override fun displayToast(message: String) {
+
+    }
+
     lateinit var calc: CalculatorImpl
     private var vibrateOnButtonPress = true
 
