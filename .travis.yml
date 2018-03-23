@@ -22,11 +22,17 @@ before_script:
   - echo "include ':app', ':commons'" > 'settings.gradle'
   - sed -i.bak '150,163d' $FLAKY_PATH
 
-env:
-  - TEST_SUITE=integration_tests
-  - TEST_SUITE=unit_tests
-
-script: ./testing $TEST_SUITE
+jobs:
+  include:
+    - stage: Compile (Debug, UnitTest, AndroidTest & Release) 🌚
+      script: 
+        - ./gradlew compileDebugAndroidTestSources
+        - ./gradlew compileDebugSources
+        - ./gradlew compileDebugUnitTestSources
+        - ./gradlew compileReleaseSources
+    - stage: Testing (Parallel integration & unit tests) 🏎
+      script: ./testing integration_tests
+    - script: ./testing unit_tests
 
 notifications:
   email:
