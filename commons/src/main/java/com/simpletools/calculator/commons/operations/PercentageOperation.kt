@@ -14,5 +14,4 @@ class PercentageOperation(baseValue: Double) : UnaryOperation(baseValue), Operat
     override fun getFormula(): String {
         return Formatter.doubleToString(value) + "%"
     }
-
 }

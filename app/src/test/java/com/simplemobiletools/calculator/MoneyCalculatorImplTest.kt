@@ -20,8 +20,7 @@ import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 import org.robolectric.shadows.ShadowLocationManager
-import java.util.*
-
+import java.util.Locale
 
 @RunWith(RobolectricTestRunner::class)
 @Config(constants = BuildConfig::class, sdk = intArrayOf(21))
@@ -30,9 +29,7 @@ class MoneyCalculatorImplTest {
     private lateinit var calc: MoneyCalculatorImpl
     private var locationManager: LocationManager? = null
     private var shadowLocationManager: ShadowLocationManager? = null
-    private var geocoder : Geocoder? = null
-
-
+    private var geocoder: Geocoder? = null
 
     @Before
     fun setUp() {
@@ -99,7 +96,7 @@ class MoneyCalculatorImplTest {
     }
 
     @Test
-    fun overwriteNumberTest(){
+    fun overwriteNumberTest() {
         calc.overwriteNumber(2139.2)
         Assert.assertEquals("2,139.20", activity.getResult())
         calc.addDigit(2)
@@ -109,7 +106,6 @@ class MoneyCalculatorImplTest {
         calc.handleDelete()
         Assert.assertEquals("0.00", activity.getResult())
     }
-
 
     @Test
     fun calculateTip() {
@@ -128,7 +124,7 @@ class MoneyCalculatorImplTest {
     }
 
     @Test
-    fun calculateTaxBritishColumbia(){
+    fun calculateTaxBritishColumbia() {
         calc.addDigit(2)
         Assert.assertEquals("2.00", activity.getResult())
         calc.addDigit(3)
@@ -140,7 +136,7 @@ class MoneyCalculatorImplTest {
     }
 
     @Test
-    fun calculateTaxAlberta(){
+    fun calculateTaxAlberta() {
         calc.addDigit(2)
         Assert.assertEquals("2.00", activity.getResult())
         calc.addDigit(3)
@@ -152,7 +148,7 @@ class MoneyCalculatorImplTest {
     }
 
     @Test
-    fun calculateTaxSaskatchewan(){
+    fun calculateTaxSaskatchewan() {
         calc.addDigit(2)
         Assert.assertEquals("2.00", activity.getResult())
         calc.addDigit(3)
@@ -163,9 +159,8 @@ class MoneyCalculatorImplTest {
         Assert.assertEquals("0.00", activity.getResult())
     }
 
-
     @Test
-    fun calculateTaxManitoba(){
+    fun calculateTaxManitoba() {
         calc.addDigit(2)
         Assert.assertEquals("2.00", activity.getResult())
         calc.addDigit(3)
@@ -177,7 +172,7 @@ class MoneyCalculatorImplTest {
     }
 
     @Test
-    fun calculateTaxOntario(){
+    fun calculateTaxOntario() {
         calc.addDigit(2)
         Assert.assertEquals("2.00", activity.getResult())
         calc.addDigit(3)
@@ -189,7 +184,7 @@ class MoneyCalculatorImplTest {
     }
 
     @Test
-    fun calculateTaxQuebec(){
+    fun calculateTaxQuebec() {
         calc.addDigit(2)
         Assert.assertEquals("2.00", activity.getResult())
         calc.addDigit(3)
@@ -201,7 +196,7 @@ class MoneyCalculatorImplTest {
     }
 
     @Test
-    fun calculateTaxNewBrunswick(){
+    fun calculateTaxNewBrunswick() {
         calc.addDigit(2)
         Assert.assertEquals("2.00", activity.getResult())
         calc.addDigit(3)
@@ -213,7 +208,7 @@ class MoneyCalculatorImplTest {
     }
 
     @Test
-    fun calculateTaxNovaScotia(){
+    fun calculateTaxNovaScotia() {
         calc.addDigit(2)
         Assert.assertEquals("2.00", activity.getResult())
         calc.addDigit(3)
@@ -225,7 +220,7 @@ class MoneyCalculatorImplTest {
     }
 
     @Test
-    fun calculateTaxPrinceEdwardIsland(){
+    fun calculateTaxPrinceEdwardIsland() {
         calc.addDigit(2)
         Assert.assertEquals("2.00", activity.getResult())
         calc.addDigit(3)
@@ -237,7 +232,7 @@ class MoneyCalculatorImplTest {
     }
 
     @Test
-    fun calculateTaxNewfoundlandandLabrador(){
+    fun calculateTaxNewfoundlandandLabrador() {
         calc.addDigit(2)
         Assert.assertEquals("2.00", activity.getResult())
         calc.addDigit(3)
@@ -249,7 +244,7 @@ class MoneyCalculatorImplTest {
     }
 
     @Test
-    fun calculateTaxNorthwestTerritories(){
+    fun calculateTaxNorthwestTerritories() {
         calc.addDigit(2)
         Assert.assertEquals("2.00", activity.getResult())
         calc.addDigit(3)
@@ -261,7 +256,7 @@ class MoneyCalculatorImplTest {
     }
 
     @Test
-    fun calculateTaxYukon(){
+    fun calculateTaxYukon() {
         calc.addDigit(2)
         Assert.assertEquals("2.00", activity.getResult())
         calc.addDigit(3)
@@ -273,7 +268,7 @@ class MoneyCalculatorImplTest {
     }
 
     @Test
-    fun calculateTaxNunavut(){
+    fun calculateTaxNunavut() {
         calc.addDigit(1)
         Assert.assertEquals("1.00", activity.getResult())
         calc.addDigit(0)
@@ -318,11 +313,9 @@ class MoneyCalculatorImplTest {
         Assert.assertEquals("10.00", activity.getResult())
         activity.taxLocationStrat(true, fakeLocation.latitude, fakeLocation.longitude, geocoder!!, true)
         Assert.assertEquals("11.50", activity.getResult())
-
     }
 
-
-    companion object TestLocationListener: LocationListener{
+    companion object TestLocationListener : LocationListener {
         var providerEnabled: Boolean = false
         var location: Location? = null
         var updateCount: Int = 0
@@ -341,7 +334,5 @@ class MoneyCalculatorImplTest {
         override fun onProviderDisabled(s: String) {
             providerEnabled = false
         }
-
     }
-
 }

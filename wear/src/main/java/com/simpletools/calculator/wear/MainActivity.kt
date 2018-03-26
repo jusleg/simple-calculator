@@ -9,15 +9,16 @@ import android.view.View
 import android.widget.LinearLayout
 import com.simplemobiletools.commons.extensions.performHapticFeedback
 import com.simpletools.calculator.commons.extensions.config
-import com.simpletools.calculator.commons.helpers.*
-import kotlinx.android.synthetic.main.activity_main.*
 import me.grantland.widget.AutofitHelper
 
+/* ktlint-disable no-wildcard-imports */
+import kotlinx.android.synthetic.main.activity_main.*
+import com.simpletools.calculator.commons.helpers.*
+/* ktlint-enable no-wildcard-imports */
 
 class MainActivity : WearableActivity(), Calculator {
 
     override fun displayToast(message: String) {
-
     }
 
     lateinit var calc: CalculatorImpl
@@ -25,13 +26,12 @@ class MainActivity : WearableActivity(), Calculator {
 
     lateinit var mDetector: GestureDetector
 
-
     class SimpleGestureListener(val activity: MainActivity) : GestureDetector.SimpleOnGestureListener() {
 
         override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
-            if(Math.abs(velocityY) > Math.abs(velocityX)){
+            if (Math.abs(velocityY) > Math.abs(velocityX)) {
                 if (e2!!.y > e1!!.y) {
-                    Log.d("debug","DOWN")
+                    Log.d("debug", "DOWN")
                     activity.showOperations()
                     // direction up
                 }
@@ -80,9 +80,9 @@ class MainActivity : WearableActivity(), Calculator {
         btn_clear.setOnLongClickListener { calc.handleReset(); true }
 
         btn_multiply.setOnClickListener { calc.handleOperation(MULTIPLY); showNumpad() }
-        btn_minus.setOnClickListener { calc.handleOperation(MINUS); showNumpad()}
-        btn_divide.setOnClickListener { calc.handleOperation(DIVIDE);  showNumpad()}
-        btn_plus.setOnClickListener { calc.handleOperation(PLUS);  showNumpad()}
+        btn_minus.setOnClickListener { calc.handleOperation(MINUS); showNumpad() }
+        btn_divide.setOnClickListener { calc.handleOperation(DIVIDE); showNumpad() }
+        btn_plus.setOnClickListener { calc.handleOperation(PLUS); showNumpad() }
 
         btn_equals.setOnClickListener { calc.handleEquals(); }
 
@@ -91,22 +91,22 @@ class MainActivity : WearableActivity(), Calculator {
         setAmbientEnabled()
     }
 
-    fun showOperations(){
+    fun showOperations() {
         val linearLayout = findViewById(R.id.operation) as LinearLayout
-        linearLayout.setVisibility(View.VISIBLE);
+        linearLayout.setVisibility(View.VISIBLE)
         val resultHeader = findViewById(R.id.result_header) as LinearLayout
-        resultHeader.setVisibility(View.GONE);
-        val numPad= findViewById(R.id.num_pad) as LinearLayout
-        numPad.setVisibility(View.GONE);
+        resultHeader.setVisibility(View.GONE)
+        val numPad = findViewById(R.id.num_pad) as LinearLayout
+        numPad.setVisibility(View.GONE)
     }
 
-    fun showNumpad(){
+    fun showNumpad() {
         val linearLayout = findViewById(R.id.operation) as LinearLayout
-        linearLayout.setVisibility(View.GONE);
+        linearLayout.setVisibility(View.GONE)
         val resultHeader = findViewById(R.id.result_header) as LinearLayout
-        resultHeader.setVisibility(View.VISIBLE);
-        val numPad= findViewById(R.id.num_pad) as LinearLayout
-        numPad.setVisibility(View.VISIBLE);
+        resultHeader.setVisibility(View.VISIBLE)
+        val numPad = findViewById(R.id.num_pad) as LinearLayout
+        numPad.setVisibility(View.VISIBLE)
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
@@ -122,5 +122,4 @@ class MainActivity : WearableActivity(), Calculator {
             view.performHapticFeedback()
         }
     }
-
 }

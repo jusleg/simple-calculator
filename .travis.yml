@@ -24,6 +24,8 @@ before_script:
 
 jobs:
   include:
+    - stage: Lint (ktlint) 🚲🏠
+      script: ./gradlew ktlint
     - stage: Compile (Debug, UnitTest, AndroidTest & Release) 🌚
       script: 
         - ./gradlew compileDebugAndroidTestSources

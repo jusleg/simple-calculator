@@ -56,19 +56,19 @@ class CalculatorImpl(calculator: Calculator) {
         if (OperationFactory.forId(operator!!, firstNumber, secondNumber) is UnaryOperation) {
             if (lastIsOperation == true) swapRegisters()
             handleEquals()
-        } else if(OperationFactory.forId(operator!!, firstNumber, secondNumber) is BinaryOperation && lastIsOperation == false) {
+        } else if (OperationFactory.forId(operator!!, firstNumber, secondNumber) is BinaryOperation && lastIsOperation == false) {
             lastOperator = operation
             swapRegisters()
         }
     }
 
-    fun decimalClick(){
+    fun decimalClick() {
         decimalClicked = true
     }
 
     fun handleEquals() {
-        val operation : Operation?
-        if (operator != "") {   // Handle new operation
+        val operation: Operation?
+        if (operator != "") { // Handle new operation
             operation = OperationFactory.forId(operator!!, firstNumber, secondNumber)
 
             if ((operation != null) && (digits > 0 || operation is UnaryOperation)) {
@@ -94,11 +94,10 @@ class CalculatorImpl(calculator: Calculator) {
     }
 
     fun handleClear() {
-        if(!secondNumberSet){
+        if (!secondNumberSet) {
             handleReset()
             setAllClear()
-        }
-        else {
+        } else {
             firstNumber = 0.0
             setAllClear()
             setValue("0")
@@ -144,7 +143,7 @@ class CalculatorImpl(calculator: Calculator) {
             resetValues()
         }
 
-        firstNumber = if (!decimalClicked) signumMultiply(firstNumber) * (Math.abs(firstNumber)  * 10 + i)
+        firstNumber = if (!decimalClicked) signumMultiply(firstNumber) * (Math.abs(firstNumber) * 10 + i)
         else signumMultiply(firstNumber) * (Math.abs(firstNumber) + i * Math.pow(10.0, decimalCounter.toDouble()))
         setValue(Formatter.doubleToStringWithGivenDigits(firstNumber, Math.abs(decimalCounter)))
 
@@ -165,15 +164,15 @@ class CalculatorImpl(calculator: Calculator) {
         lastIsOperation = true
     }
 
-    private fun setClear(){
-       mCallback!!.setClear("CE")
+    private fun setClear() {
+        mCallback!!.setClear("CE")
     }
 
-    private fun setAllClear(){
+    private fun setAllClear() {
         mCallback!!.setClear("AC")
     }
 
-    private fun negateNumber(){
+    private fun negateNumber() {
         firstNumber *= -1
         setValue(Formatter.doubleToString(firstNumber))
     }

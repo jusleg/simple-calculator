@@ -2,7 +2,7 @@ package com.simpletools.calculator.commons.helpers
 
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
-import java.util.*
+import java.util.Locale
 
 object Formatter {
     fun doubleToString(d: Double): String {
