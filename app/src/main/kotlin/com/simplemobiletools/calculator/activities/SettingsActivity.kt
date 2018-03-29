@@ -7,8 +7,8 @@ import com.simplemobiletools.commons.extensions.beVisibleIf
 import com.simplemobiletools.commons.extensions.updateTextColors
 import com.simplemobiletools.commons.extensions.useEnglishToggled
 import com.simpletools.calculator.commons.activities.SimpleActivity
-import kotlinx.android.synthetic.main.activity_settings.*
-import java.util.*
+import kotlinx.android.synthetic.main.activity_settings.* // ktlint-disable no-wildcard-imports
+import java.util.Locale
 
 class SettingsActivity : SimpleActivity() {
 

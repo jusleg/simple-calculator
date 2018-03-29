@@ -1,13 +1,12 @@
 package com.simpletools.calculator.commons
 
-import android.content.Context
 import com.simpletools.calculator.commons.activities.SimpleActivity
 import com.simpletools.calculator.commons.helpers.Calculator
 
-class FakeCalculator: SimpleActivity(), Calculator {
+class FakeCalculator : SimpleActivity(), Calculator {
 
-    private var formula:String = ""
-    private var result:String = ""
+    private var formula: String = ""
+    private var result: String = ""
 
     override fun setFormula(value: String) {
         formula = value

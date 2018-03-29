@@ -1,7 +1,6 @@
 package com.simplemobiletools.calculator.activities
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -11,19 +10,18 @@ import com.simplemobiletools.calculator.BuildConfig
 import com.simplemobiletools.calculator.R
 import com.simpletools.calculator.commons.extensions.config
 import com.simpletools.calculator.commons.extensions.updateViewColors
-import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.LICENSE_AUTOFITTEXTVIEW
 import com.simplemobiletools.commons.helpers.LICENSE_ESPRESSO
 import com.simplemobiletools.commons.helpers.LICENSE_KOTLIN
 import com.simplemobiletools.commons.helpers.LICENSE_ROBOLECTRIC
 import com.simpletools.calculator.commons.activities.SimpleActivity
+import me.grantland.widget.AutofitHelper
+
+/* ktlint-disable no-wildcard-imports */
 import com.simpletools.calculator.commons.helpers.*
 import kotlinx.android.synthetic.main.activity_main.*
-import me.grantland.widget.AutofitHelper
-import android.net.NetworkInfo
-import android.content.Context.CONNECTIVITY_SERVICE
-import android.net.ConnectivityManager
-
+import com.simplemobiletools.commons.extensions.*
+/* ktlint-enable no-wildcard-imports */
 
 class MainActivity : SimpleActivity(), Calculator {
 
@@ -161,6 +159,6 @@ class MainActivity : SimpleActivity(), Calculator {
     }
 
     override fun displayToast(message: String) {
-        applicationContext.toast(message,100)
+        applicationContext.toast(message, 100)
     }
 }

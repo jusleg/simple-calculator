@@ -7,47 +7,48 @@ import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.location.*
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.view.ViewCompat
 import android.util.Log
 import android.view.View
-import android.widget.*
 import com.simplemobiletools.calculator.R
 import com.simplemobiletools.calculator.helpers.MoneyCalculatorImpl
-import com.simplemobiletools.commons.extensions.*
 import com.simpletools.calculator.commons.activities.SimpleActivity
 import com.simpletools.calculator.commons.extensions.config
 import com.simpletools.calculator.commons.extensions.updateViewColors
 import com.simpletools.calculator.commons.helpers.Calculator
-import kotlinx.android.synthetic.main.activity_money.*
 import me.grantland.widget.AutofitHelper
+
+/* ktlint-disable no-wildcard-imports */
 import java.util.*
+import android.location.*
+import android.widget.*
+import kotlinx.android.synthetic.main.activity_money.*
+import com.simplemobiletools.commons.extensions.*
+/* ktlint-enable no-wildcard-imports */
 
-
-class MoneyActivity : SimpleActivity(), Calculator , LocationListener {
+class MoneyActivity : SimpleActivity(), Calculator, LocationListener {
 
     private var storedTextColor = 0
     private var vibrateOnButtonPress = true
     private var storedUseEnglish = false
-    private var taxDialog:AlertDialog.Builder? = null
-    private var custom_dialog:AlertDialog? = null
-    private var conversionDialog:AlertDialog? = null
+    private var taxDialog: AlertDialog.Builder? = null
+    private var custom_dialog: AlertDialog? = null
+    private var conversionDialog: AlertDialog? = null
     private var locationManager: LocationManager? = null
     private var GPS_REQUEST_CODE = 101
-    private var MINIMUM_TIME_BETWEEN_UPDATES : Long = 300000L //in ms
-    private var MINIMUM_DISTANCE_CHANGE_FOR_UPDATES : Float = 1000f //in meters
-    private var currentLongitude : Double = 0.0
-    private var currentLatitude : Double = 0.0
-    private var lastLocation : Location = Location(LocationManager.GPS_PROVIDER)
-    private var geocoder : Geocoder? = null
-    private var province : String = ""
-    private var testing : Boolean = false
+    private var MINIMUM_TIME_BETWEEN_UPDATES: Long = 300000L //in ms
+    private var MINIMUM_DISTANCE_CHANGE_FOR_UPDATES: Float = 1000f //in meters
+    private var currentLongitude: Double = 0.0
+    private var currentLatitude: Double = 0.0
+    private var lastLocation: Location = Location(LocationManager.GPS_PROVIDER)
+    private var geocoder: Geocoder? = null
+    private var province: String = ""
+    private var testing: Boolean = false
 
     lateinit var calc: MoneyCalculatorImpl
-
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,9 +62,9 @@ class MoneyActivity : SimpleActivity(), Calculator , LocationListener {
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
         //Checks for permission granted for location service
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             //if not granted then request permission
-            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), GPS_REQUEST_CODE);
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), GPS_REQUEST_CODE)
         }
         try {
             locationManager!!.requestLocationUpdates(LocationManager.GPS_PROVIDER, MINIMUM_TIME_BETWEEN_UPDATES, MINIMUM_DISTANCE_CHANGE_FOR_UPDATES, this)
@@ -75,24 +76,24 @@ class MoneyActivity : SimpleActivity(), Calculator , LocationListener {
             it.setOnClickListener { calc.numpadClicked(it.id); checkHaptic(it) }
         }
 
-        btn_currency.setOnClickListener{ displayConversionDialog() }
+        btn_currency.setOnClickListener { displayConversionDialog() }
         btn_delete.setOnLongClickListener { calc.handleClear(); true }
         btn_delete.setOnClickListener { calc.handleDelete(); checkHaptic(it) }
         btn_tip.setOnClickListener { displayTipsDialog() }
         result.setOnLongClickListener { copyToClipboard(result.value); true }
         btn_taxes.setOnClickListener({ view ->
-            var gpsStatus : Boolean = false
-            try{
+            var gpsStatus: Boolean = false
+            try {
                 //checks gps status
                 gpsStatus = locationManager!!.isProviderEnabled(LocationManager.GPS_PROVIDER)
-            } catch(e: Exception) {}
+            } catch (e: Exception) {}
             //if permission not granted then set gpsStatus to false
             if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 gpsStatus = false
             }
 
             //if the gps status is enabled then get the location
-            if(gpsStatus) {
+            if (gpsStatus) {
                 //get the last known location
                 lastLocation = locationManager!!.getLastKnownLocation(LocationManager.GPS_PROVIDER)
 
@@ -100,7 +101,7 @@ class MoneyActivity : SimpleActivity(), Calculator , LocationListener {
                 if (lastLocation != null) {
                     currentLatitude = lastLocation.latitude
                     currentLongitude = lastLocation.longitude
-                }}
+                } }
             geocoder = Geocoder(applicationContext, Locale.getDefault())
             taxLocationStrat(gpsStatus, currentLatitude, currentLongitude, geocoder!!, testing)
         })
@@ -113,29 +114,29 @@ class MoneyActivity : SimpleActivity(), Calculator , LocationListener {
         currentLongitude = location.longitude
     }
 
-    override fun onStatusChanged(s:String, i:Int, b:Bundle) {}
+    override fun onStatusChanged(s: String, i: Int, b: Bundle) {}
 
-    override fun onProviderDisabled(s:String) {
-        Toast.makeText(applicationContext,"Location service has been turned off", Toast.LENGTH_LONG).show()
+    override fun onProviderDisabled(s: String) {
+        Toast.makeText(applicationContext, "Location service has been turned off", Toast.LENGTH_LONG).show()
     }
-    override fun onProviderEnabled(s:String) {
-        Toast.makeText(applicationContext,"Locattion service has been turned on", Toast.LENGTH_LONG).show()
+    override fun onProviderEnabled(s: String) {
+        Toast.makeText(applicationContext, "Locattion service has been turned on", Toast.LENGTH_LONG).show()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if(requestCode == GPS_REQUEST_CODE) {
-            if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.e("PermissionTag","Permission Granted (if 0 then is granted): " + grantResults[0])
+        if (requestCode == GPS_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.e("PermissionTag", "Permission Granted (if 0 then is granted): " + grantResults[0])
             }
         }
     }
 
     //method signature here has been added for the sake of testing
-    fun taxLocationStrat(gpsEnabled:Boolean, latitude:Double, longitude:Double, geocoder: Geocoder, testing:Boolean) {
+    fun taxLocationStrat(gpsEnabled: Boolean, latitude: Double, longitude: Double, geocoder: Geocoder, testing: Boolean) {
         //if location service is enabled then retrieve the latest location and performs tax rate with that location
-        if(gpsEnabled) {
-            if(testing == true) {
+        if (gpsEnabled) {
+            if (testing == true) {
                 calc.performTaxing(province)
             } else {
                 //uses Android's Geocoder to locate the address with a given latitude and longitude
@@ -175,7 +176,7 @@ class MoneyActivity : SimpleActivity(), Calculator , LocationListener {
     }
 
     //this method is only used for testing purpose. NEVER CALL THIS METHOD UNLESS FOR TESTING
-    fun supersedeProvince(province:String) {
+    fun supersedeProvince(province: String) {
         this.province = province
     }
 
@@ -222,7 +223,7 @@ class MoneyActivity : SimpleActivity(), Calculator , LocationListener {
         return result.text.toString()
     }
 
-    override fun setClear(text: String){}
+    override fun setClear(text: String) {}
 
     override fun getFormula(): String { return "" }
 
@@ -256,7 +257,6 @@ class MoneyActivity : SimpleActivity(), Calculator , LocationListener {
 
     private fun getButtonIds() = arrayOf(btn_decimal, btn_0, btn_1, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9)
 
-
     private fun displayTipsDialog() {
         val tipAmount = arrayOf("10%", "12%", "15%", "18%", "20%", "25%")
 
@@ -274,7 +274,7 @@ class MoneyActivity : SimpleActivity(), Calculator , LocationListener {
         tipDialog.show()
     }
 
-    private fun displayConversionDialog(){
+    private fun displayConversionDialog() {
         val conversionDialogBuilder = AlertDialog.Builder(this)
         val conversionDialogView = layoutInflater.inflate(R.layout.conversion_modal, null)
         conversionDialogView.findViewById<Button>(R.id.btn_conversion).setOnClickListener {
@@ -288,9 +288,9 @@ class MoneyActivity : SimpleActivity(), Calculator , LocationListener {
         conversionDialog!!.show()
     }
 
-    private fun performConversion(from:Any, to:Any) {
+    private fun performConversion(from: Any, to: Any) {
         if (!from.toString().equals(to.toString()) && isOnline()) {
-            calc.calcCurrency(from.toString(),to.toString(),this)
+            calc.calcCurrency(from.toString(), to.toString(), this)
         } else if (!isOnline()) {
             displayToast("It seems there has been a connection problem, contact you ISP for more details !")
         }
@@ -302,7 +302,7 @@ class MoneyActivity : SimpleActivity(), Calculator , LocationListener {
         return netInfo != null && netInfo.isConnectedOrConnecting
     }
 
-    override fun displayToast(message:String){
-        applicationContext.toast(message,100)
+    override fun displayToast(message: String) {
+        applicationContext.toast(message, 100)
     }
 }

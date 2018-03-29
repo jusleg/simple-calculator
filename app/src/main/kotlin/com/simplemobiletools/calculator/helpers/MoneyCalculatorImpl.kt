@@ -43,21 +43,21 @@ class MoneyCalculatorImpl(calculator: Calculator, val context: Context) {
             if (decimalClicked) {
                 decimalCounter++
             }
-            setValue(String.format("%,.2f",number.toDouble()))
+            setValue(String.format("%,.2f", number.toDouble()))
         }
     }
 
-    fun decimalClick(){
+    fun decimalClick() {
         if (number == "") {
             number = "0."
-        } else if(!decimalClicked) {
+        } else if (!decimalClicked) {
             number += "."
         }
         decimalClicked = true
     }
 
     fun handleDelete() {
-        if (number.length <= 1){
+        if (number.length <= 1) {
             return handleClear()
         } else if (decimalClicked && decimalCounter<2) {
             number = number.dropLast(1 + decimalCounter)
@@ -69,7 +69,7 @@ class MoneyCalculatorImpl(calculator: Calculator, val context: Context) {
         } else {
             number = number.dropLast(1)
         }
-        setValue(String.format("%,.2f",number.toDouble()))
+        setValue(String.format("%,.2f", number.toDouble()))
     }
 
     fun handleClear() {
@@ -91,7 +91,7 @@ class MoneyCalculatorImpl(calculator: Calculator, val context: Context) {
         mCallback!!.setValue(value)
     }
 
-    fun performTaxing(location:String){
+    fun performTaxing(location: String) {
         overwriteNumber(TaxOperation(getResult(), location).getResult())
     }
 
@@ -107,7 +107,7 @@ class MoneyCalculatorImpl(calculator: Calculator, val context: Context) {
         var response: AsyncTask<Void, Void, String>? = taskBuilder.from(from).to(to).build().execute()
     }
 
-    fun supersedeBuilder(builder: BackgroundCurrencyTaskBuilder){
+    fun supersedeBuilder(builder: BackgroundCurrencyTaskBuilder) {
         taskBuilder = builder
     }
 

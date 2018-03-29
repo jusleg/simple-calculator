@@ -1,14 +1,20 @@
 package com.simpletools.calculator.commons
 
-import com.simpletools.calculator.commons.helpers.*
+import com.simpletools.calculator.commons.helpers.Calculator
+import com.simpletools.calculator.commons.helpers.CalculatorImpl
+import com.simpletools.calculator.commons.helpers.PLUS
+import com.simpletools.calculator.commons.helpers.MINUS
+import com.simpletools.calculator.commons.helpers.DIVIDE
+import com.simpletools.calculator.commons.helpers.MULTIPLY
+import com.simpletools.calculator.commons.helpers.PERCENTAGE
+import com.simpletools.calculator.commons.helpers.POWER
+import com.simpletools.calculator.commons.helpers.NEGATIVE
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
-
-
 
 @RunWith(RobolectricTestRunner::class)
 @Config(constants = BuildConfig::class, sdk = intArrayOf(21))
@@ -51,7 +57,7 @@ class CalculatorImplTest {
         calc.handleOperation("minus")
         calc.addDigit(4)
         calc.handleEquals()
-        var result  = activity.getResult()
+        var result = activity.getResult()
 
         assertEquals("1", result)
         checkFormula("5−4")
@@ -63,7 +69,7 @@ class CalculatorImplTest {
         calc.handleOperation("multiply")
         calc.addDigit(4)
         calc.handleEquals()
-        var result  = activity.getResult()
+        var result = activity.getResult()
 
         assertEquals("20", result)
         checkFormula("5×4")
@@ -75,7 +81,7 @@ class CalculatorImplTest {
         calc.handleOperation("divide")
         calc.addDigit(2)
         calc.handleEquals()
-        var result  = activity.getResult()
+        var result = activity.getResult()
 
         assertEquals("3", result)
     }
@@ -86,7 +92,7 @@ class CalculatorImplTest {
         calc.handleOperation("divide")
         calc.addDigit(0)
         calc.handleEquals()
-        var result  = activity.getResult()
+        var result = activity.getResult()
 
         assertEquals("∞", result)
     }
@@ -95,7 +101,7 @@ class CalculatorImplTest {
     fun percentageTest() {
         calc.addDigit(8)
         calc.handleOperation("percentage")
-        var result  = activity.getResult()
+        var result = activity.getResult()
 
         assertEquals("0.08", result)
         checkFormula("8%")
@@ -107,7 +113,7 @@ class CalculatorImplTest {
         calc.handleOperation("power")
         calc.addDigit(6)
         calc.handleEquals()
-        var result  = activity.getResult().toString()
+        var result = activity.getResult().toString()
 
         assertEquals("729", result)
         checkFormula("3^6")
@@ -121,7 +127,7 @@ class CalculatorImplTest {
         calc.handleClear()
         calc.addDigit(3)
         calc.handleEquals()
-        var result  = activity.getResult().toString()
+        var result = activity.getResult().toString()
 
         assertEquals("4", result)
     }
@@ -252,14 +258,12 @@ class CalculatorImplTest {
     private fun setDouble(d: Double) {
         var doubleString = d.toString()
         for (letter in doubleString.indices) {
-           if(doubleString[letter].equals(".".single())){
-                calc.decimalClick();
-           }
-            else{
-               calc.addDigit(Integer.parseInt(doubleString[letter].toString()))
-           }
+            if (doubleString[letter].equals(".".single())) {
+                calc.decimalClick()
+            } else {
+                calc.addDigit(Integer.parseInt(doubleString[letter].toString()))
+            }
         }
-
     }
 
     private fun handleOperation(operation: String) {
@@ -269,5 +273,4 @@ class CalculatorImplTest {
     private fun checkFormula(desired: String) {
         assertEquals(desired, activity.getFormula())
     }
-
 }

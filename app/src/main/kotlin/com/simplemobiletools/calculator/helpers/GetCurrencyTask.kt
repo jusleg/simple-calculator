@@ -22,12 +22,12 @@ class GetCurrencyTask(val from: String, val to: String, moneyActivity: Calculato
 
         val httpClient = url.openConnection() as HttpURLConnection
 
-        if(httpClient.responseCode == HttpURLConnection.HTTP_OK){
+        if (httpClient.responseCode == HttpURLConnection.HTTP_OK) {
             try {
                 val stream = BufferedInputStream(httpClient.inputStream)
                 val data: String = readStream(inputStream = stream)
                 return data
-            } catch (e : Exception) {
+            } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
                 httpClient.disconnect()
