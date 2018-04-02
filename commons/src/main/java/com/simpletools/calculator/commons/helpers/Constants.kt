@@ -15,6 +15,7 @@ val RESET = "reset"
 val NEGATIVE = "negative"
 val SQUARED = "squared"
 val CUBED = "cubed"
+val MODULO = "modulo"
 
 val NAN = "NaN"
 val ZERO = "zero"

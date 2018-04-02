@@ -48,6 +48,7 @@ class MainActivity : SimpleActivity(), Calculator {
         btn_power.setOnClickListener { calc.handleOperation(POWER); checkHaptic(it) }
         btn_squared.setOnClickListener { calc.handleOperation(SQUARED); checkHaptic(it) }
         btn_cubed.setOnClickListener { calc.handleOperation(CUBED); checkHaptic(it) }
+        btn_mod.setOnClickListener { calc.handleOperation(MODULO); checkHaptic(it) }
 
         btn_clear.setOnClickListener { calc.handleClear(); checkHaptic(it) }
         btn_clear.setOnLongClickListener { calc.handleReset(); true }

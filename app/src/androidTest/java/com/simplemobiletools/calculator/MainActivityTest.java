@@ -71,7 +71,7 @@ public class MainActivityTest {
         press(R.id.btn_6);
         press(R.id.btn_equals);
         checkResult("3.5");
-        checkFormula("-2.5+6");
+        checkFormula("(-2.5)+6");
     }
 
     @Test
@@ -216,7 +216,7 @@ public class MainActivityTest {
         press(R.id.btn_negative);
         press(R.id.btn_equals);
         checkResult("-2");
-        checkFormula("1×-2");
+        checkFormula("1×(-2)");
     }
 
     @Test
@@ -307,6 +307,78 @@ public class MainActivityTest {
         checkResult(Formatter.INSTANCE.doubleToString(Double.POSITIVE_INFINITY));
         checkFormula("0^(-5)");
     }
+
+    @Test
+    public void moduloTest1() {
+        press(R.id.btn_1);
+        press(R.id.btn_0);
+        press(R.id.btn_mod);
+        press(R.id.btn_6);
+        press(R.id.btn_equals);
+        checkResult("4");
+        checkFormula("10mod6");
+    }
+
+    @Test
+    public void moduloTest2() {
+        press(R.id.btn_1);
+        press(R.id.btn_0);
+        press(R.id.btn_negative);
+        press(R.id.btn_mod);
+        press(R.id.btn_6);
+        press(R.id.btn_equals);
+        checkResult("2");
+        checkFormula("(-10)mod6");
+    }
+
+    @Test
+    public void moduloTest3() {
+        press(R.id.btn_1);
+        press(R.id.btn_0);
+        press(R.id.btn_negative);
+        press(R.id.btn_mod);
+        press(R.id.btn_6);
+        press(R.id.btn_negative);
+        press(R.id.btn_equals);
+        checkResult("2");
+        checkFormula("(-10)mod(-6)");
+    }
+
+    @Test
+    public void moduloTest4() {
+        press(R.id.btn_1);
+        press(R.id.btn_0);
+        press(R.id.btn_mod);
+        press(R.id.btn_6);
+        press(R.id.btn_negative);
+        press(R.id.btn_equals);
+        checkResult("4");
+        checkFormula("10mod(-6)");
+    }
+
+    @Test
+    public void moduloTest5() {
+        press(R.id.btn_1);
+        press(R.id.btn_0);
+        press(R.id.btn_mod);
+        press(R.id.btn_0);
+        press(R.id.btn_equals);
+        checkResult("10");
+        checkFormula("10mod0");
+    }
+
+    @Test
+    public void moduloTest6() {
+        press(R.id.btn_0);
+        press(R.id.btn_mod);
+        press(R.id.btn_1);
+        press(R.id.btn_0);
+        press(R.id.btn_equals);
+        checkResult("0");
+        checkFormula("0mod10");
+    }
+
+
 
 
     private void press(int id) {

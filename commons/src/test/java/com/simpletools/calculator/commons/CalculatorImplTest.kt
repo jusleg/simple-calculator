@@ -1,6 +1,6 @@
 package com.simpletools.calculator.commons
 
-import com.simpletools.calculator.commons.helpers.*
+import com.simpletools.calculator.commons.helpers.* // ktlint-disable no-wildcard-imports
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -292,7 +292,7 @@ class CalculatorImplTest {
         handleOperation(NEGATIVE)
         calc.handleEquals()
         assertEquals("-80", activity.getResult())
-        checkFormula("-84−-4")
+        checkFormula("(-84)−(-4)")
     }
 
     @Test
@@ -331,24 +331,81 @@ class CalculatorImplTest {
         checkFormula("0³")
     }
 
+    @Test
+    fun moduloTest1() {
+        setDouble(10.0)
+        handleOperation(MODULO)
+        setDouble(6.0)
+        calc.handleEquals()
+        assertEquals("4", activity.getResult())
+        checkFormula("10mod6")
+    }
+
+    @Test
+    fun moduloTest2() {
+        setDouble(-10.0)
+        handleOperation(MODULO)
+        setDouble(6.0)
+        calc.handleEquals()
+        assertEquals("2", activity.getResult())
+        checkFormula("(-10)mod6")
+    }
+
+    @Test
+    fun moduloTest3() {
+        setDouble(-10.0)
+        handleOperation(MODULO)
+        setDouble(-6.0)
+        calc.handleEquals()
+        assertEquals("2", activity.getResult())
+        checkFormula("(-10)mod(-6)")
+    }
+
+    @Test
+    fun moduloTest4() {
+        setDouble(10.0)
+        handleOperation(MODULO)
+        setDouble(-6.0)
+        calc.handleEquals()
+        assertEquals("4", activity.getResult())
+        checkFormula("10mod(-6)")
+    }
+
+    @Test
+    fun moduloTest5() {
+        setDouble(10.0)
+        handleOperation(MODULO)
+        setDouble(0.0)
+        calc.handleEquals()
+        assertEquals("10", activity.getResult())
+        checkFormula("10mod0")
+    }
+
+    @Test
+    fun moduloTest6() {
+        setDouble(0.0)
+        handleOperation(MODULO)
+        setDouble(10.0)
+        calc.handleEquals()
+        assertEquals("0", activity.getResult())
+        checkFormula("0mod10")
+    }
+
     private fun setDouble(d: Double) {
-        var doubleString = d.toString()
+        val doubleString = d.toString()
         var negative = false
         for (letter in doubleString.indices) {
-           if (doubleString[letter].equals(".".single())){
-               calc.decimalClick();
-           }
-           else if (doubleString[letter].equals("-".single())){
-               negative = !negative
-           }
-           else{
-               calc.addDigit(Integer.parseInt(doubleString[letter].toString()))
-           }
+            if (doubleString[letter].equals(".".single())) {
+                calc.decimalClick()
+            } else if (doubleString[letter].equals("-".single())) {
+                negative = !negative
+            } else {
+                calc.addDigit(Integer.parseInt(doubleString[letter].toString()))
+            }
         }
         if (negative) {
             calc.handleOperation(NEGATIVE)
         }
-
     }
 
     private fun handleOperation(operation: String) {

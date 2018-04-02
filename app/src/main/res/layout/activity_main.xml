@@ -117,12 +117,14 @@
             android:text="xʸ" />
 
         <Button
-            android:id="@+id/btn_divide"
+            android:id="@+id/btn_mod"
             style="@style/MyButton"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="÷" />
+            android:text="mod"
+            android:textAllCaps="false"
+            android:textSize="11pt" />
 
     </LinearLayout>
 
@@ -157,12 +159,12 @@
             android:text="9"/>
 
         <Button
-            android:id="@+id/btn_multiply"
+            android:id="@+id/btn_divide"
             style="@style/MyButton"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="×" />
+            android:text="÷" />
     </LinearLayout>
 
     <LinearLayout
@@ -196,12 +198,12 @@
             android:text="6"/>
 
         <Button
-            android:id="@+id/btn_minus"
+            android:id="@+id/btn_multiply"
             style="@style/MyButton"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="−" />
+            android:text="×" />
     </LinearLayout>
 
     <LinearLayout
@@ -235,12 +237,12 @@
             android:text="3"/>
 
         <Button
-            android:id="@+id/btn_plus"
+            android:id="@+id/btn_minus"
             style="@style/MyButton"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="+" />
+            android:text="−" />
     </LinearLayout>
 
     <LinearLayout
@@ -254,7 +256,7 @@
             style="@style/MyButton"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight=".67"
+            android:layout_weight="1"
             android:text="0" />
 
         <Button
@@ -272,6 +274,14 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="=" />
+
+        <Button
+            android:id="@+id/btn_plus"
+            style="@style/MyButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="+" />
 
     </LinearLayout>
 </LinearLayout>

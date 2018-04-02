@@ -1,20 +1,22 @@
 package com.simpletools.calculator.commons.operations
 
-import com.simpletools.calculator.commons.helpers.Formatter
 import com.simpletools.calculator.commons.operations.base.BinaryOperation
-import com.simpletools.calculator.commons.operations.base.Operation
+import java.lang.Math.abs
 
-class ModuloOperation(baseValue: Double, secondValue: Double) : BinaryOperation(baseValue, secondValue), Operation {
+class ModuloOperation(baseValue: Double, secondValue: Double) : BinaryOperation(baseValue, secondValue) {
 
     override fun getResult(): Double {
-        var result = 0.0
-        if (secondValue != 0.0) {
-            result = secondValue % baseValue
+
+        if (baseValue == 0.0) return secondValue
+
+        val remainder = secondValue % baseValue
+        if (remainder < 0) {
+            return remainder + abs(baseValue)
         }
-        return result
+        return remainder
     }
 
-    override fun getFormula(): String {
-        return Formatter.doubleToString(secondValue) + "%" + Formatter.doubleToString(baseValue)
+    override fun getOperator(): String {
+        return "mod"
     }
 }
