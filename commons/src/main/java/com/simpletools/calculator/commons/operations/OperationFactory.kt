@@ -24,13 +24,13 @@ object OperationFactory {
         }
     }
 
-    private fun binarySet(operation : BinaryOperation, baseValue : Double, secondValue : Double) : Operation? {
+    private fun binarySet(operation: BinaryOperation, baseValue: Double, secondValue: Double): Operation? {
         operation.baseValue = baseValue
         operation.secondValue = secondValue
         return operation
     }
 
-    private fun unarySet(operation : UnaryOperation, value : Double) : Operation? {
+    private fun unarySet(operation: UnaryOperation, value: Double): Operation? {
         operation.value = value
         return operation
     }

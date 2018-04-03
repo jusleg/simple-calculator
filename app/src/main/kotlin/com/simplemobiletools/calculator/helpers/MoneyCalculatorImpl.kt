@@ -91,7 +91,7 @@ class MoneyCalculatorImpl(calculator: Calculator, val context: Context) {
         mCallback!!.setValue(value)
     }
 
-    fun performTaxing(location:String){
+    fun performTaxing(location: String) {
         overwriteNumber(TaxOperation.setParams(getResult(), location)!!.getResult())
     }
 

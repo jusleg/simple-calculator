@@ -3,7 +3,7 @@ package com.simpletools.calculator.commons.operations
 import com.simpletools.calculator.commons.operations.base.BinaryOperation
 import java.lang.Math.abs
 
-object ModuloOperation: BinaryOperation() {
+object ModuloOperation : BinaryOperation() {
 
     override fun getResult(): Double {
 
