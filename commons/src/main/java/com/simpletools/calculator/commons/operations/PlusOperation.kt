@@ -1,7 +1,8 @@
 package com.simpletools.calculator.commons.operations
 
 import com.simpletools.calculator.commons.operations.base.BinaryOperation
-class PlusOperation(baseValue: Double, secondValue: Double) : BinaryOperation(baseValue, secondValue) {
+
+object PlusOperation : BinaryOperation() {
 
     override fun getResult() = baseValue + secondValue
 

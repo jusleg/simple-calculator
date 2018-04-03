@@ -1,7 +1,9 @@
 package com.simpletools.calculator.commons.operations
 
-class TaxOperation(var value: Double, var location: String) {
+object TaxOperation {
 
+    var value: Double = 0.0
+    var location: String = ""
     var taxesMap = HashMap<String, Double>()
 
     init {
@@ -18,6 +20,12 @@ class TaxOperation(var value: Double, var location: String) {
         taxesMap.put("Northwest Territories", 0.05)
         taxesMap.put("Nunavut", 0.05)
         taxesMap.put("Yukon", 0.05)
+    }
+
+    fun setParams(value: Double, location: String): TaxOperation? {
+        this.value = value
+        this.location = location
+        return this
     }
 
     fun getResult(): Double {

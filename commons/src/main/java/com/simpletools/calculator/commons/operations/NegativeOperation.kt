@@ -2,7 +2,7 @@ package com.simpletools.calculator.commons.operations
 
 import com.simpletools.calculator.commons.operations.base.UnaryOperation
 
-class NegativeOperation(value: Double) : UnaryOperation(value) {
+object NegativeOperation : UnaryOperation() {
 
     override fun getResult() = value * -1
 
