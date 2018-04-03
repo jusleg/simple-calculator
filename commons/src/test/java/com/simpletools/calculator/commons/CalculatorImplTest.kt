@@ -1,14 +1,6 @@
 package com.simpletools.calculator.commons
 
-import com.simpletools.calculator.commons.helpers.Calculator
-import com.simpletools.calculator.commons.helpers.CalculatorImpl
-import com.simpletools.calculator.commons.helpers.PLUS
-import com.simpletools.calculator.commons.helpers.MINUS
-import com.simpletools.calculator.commons.helpers.DIVIDE
-import com.simpletools.calculator.commons.helpers.MULTIPLY
-import com.simpletools.calculator.commons.helpers.PERCENTAGE
-import com.simpletools.calculator.commons.helpers.POWER
-import com.simpletools.calculator.commons.helpers.NEGATIVE
+import com.simpletools.calculator.commons.helpers.* // ktlint-disable no-wildcard-imports
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -108,15 +100,63 @@ class CalculatorImplTest {
     }
 
     @Test
-    fun powerTest() {
-        calc.addDigit(3)
-        calc.handleOperation("power")
-        calc.addDigit(6)
+    fun powerTest1() {
+        setDouble(2.0)
+        handleOperation(POWER)
+        setDouble(5.0)
         calc.handleEquals()
-        var result = activity.getResult().toString()
+        assertEquals("32", activity.getResult())
+        checkFormula("2^5")
+    }
 
-        assertEquals("729", result)
-        checkFormula("3^6")
+    @Test
+    fun powerTest2() {
+        setDouble(-2.0)
+        handleOperation(POWER)
+        setDouble(5.0)
+        calc.handleEquals()
+        assertEquals("-32", activity.getResult())
+        checkFormula("(-2)^5")
+    }
+
+    @Test
+    fun powerTest3() {
+        setDouble(2.0)
+        handleOperation(POWER)
+        setDouble(-5.0)
+        calc.handleEquals()
+        assertEquals("0.03125", activity.getResult())
+        checkFormula("2^(-5)")
+    }
+
+    @Test
+    fun powerTest4() {
+        setDouble(-2.0)
+        handleOperation(POWER)
+        setDouble(-5.0)
+        calc.handleEquals()
+        assertEquals("-0.03125", activity.getResult())
+        checkFormula("(-2)^(-5)")
+    }
+
+    @Test
+    fun powerTest5() {
+        setDouble(-2.0)
+        handleOperation(POWER)
+        setDouble(0.5)
+        calc.handleEquals()
+        assertEquals(Formatter.doubleToString(Double.NaN), activity.getResult())
+        checkFormula("(-2)^0.5")
+    }
+
+    @Test
+    fun powerTest6() {
+        setDouble(0.0)
+        handleOperation(POWER)
+        setDouble(-2.0)
+        calc.handleEquals()
+        assertEquals(Formatter.doubleToString(Double.POSITIVE_INFINITY), activity.getResult())
+        checkFormula("0^(-2)")
     }
 
     @Test
@@ -252,17 +292,119 @@ class CalculatorImplTest {
         handleOperation(NEGATIVE)
         calc.handleEquals()
         assertEquals("-80", activity.getResult())
-        checkFormula("-84−-4")
+        checkFormula("(-84)−(-4)")
+    }
+
+    @Test
+    fun squaredTest() {
+        setDouble(2.0)
+        handleOperation(SQUARED)
+        assertEquals("4", activity.getResult())
+        checkFormula("2²")
+
+        setDouble(-2.0)
+        handleOperation(SQUARED)
+        assertEquals("4", activity.getResult())
+        checkFormula("(-2)²")
+
+        setDouble(0.0)
+        handleOperation(SQUARED)
+        assertEquals("0", activity.getResult())
+        checkFormula("0²")
+    }
+
+    @Test
+    fun cubedTest() {
+        setDouble(2.0)
+        handleOperation(CUBED)
+        assertEquals("8", activity.getResult())
+        checkFormula("2³")
+
+        setDouble(-2.0)
+        handleOperation(CUBED)
+        assertEquals("-8", activity.getResult())
+        checkFormula("(-2)³")
+
+        setDouble(0.0)
+        handleOperation(CUBED)
+        assertEquals("0", activity.getResult())
+        checkFormula("0³")
+    }
+
+    @Test
+    fun moduloTest1() {
+        setDouble(10.0)
+        handleOperation(MODULO)
+        setDouble(6.0)
+        calc.handleEquals()
+        assertEquals("4", activity.getResult())
+        checkFormula("10mod6")
+    }
+
+    @Test
+    fun moduloTest2() {
+        setDouble(-10.0)
+        handleOperation(MODULO)
+        setDouble(6.0)
+        calc.handleEquals()
+        assertEquals("2", activity.getResult())
+        checkFormula("(-10)mod6")
+    }
+
+    @Test
+    fun moduloTest3() {
+        setDouble(-10.0)
+        handleOperation(MODULO)
+        setDouble(-6.0)
+        calc.handleEquals()
+        assertEquals("2", activity.getResult())
+        checkFormula("(-10)mod(-6)")
+    }
+
+    @Test
+    fun moduloTest4() {
+        setDouble(10.0)
+        handleOperation(MODULO)
+        setDouble(-6.0)
+        calc.handleEquals()
+        assertEquals("4", activity.getResult())
+        checkFormula("10mod(-6)")
+    }
+
+    @Test
+    fun moduloTest5() {
+        setDouble(10.0)
+        handleOperation(MODULO)
+        setDouble(0.0)
+        calc.handleEquals()
+        assertEquals("10", activity.getResult())
+        checkFormula("10mod0")
+    }
+
+    @Test
+    fun moduloTest6() {
+        setDouble(0.0)
+        handleOperation(MODULO)
+        setDouble(10.0)
+        calc.handleEquals()
+        assertEquals("0", activity.getResult())
+        checkFormula("0mod10")
     }
 
     private fun setDouble(d: Double) {
-        var doubleString = d.toString()
+        val doubleString = d.toString()
+        var negative = false
         for (letter in doubleString.indices) {
             if (doubleString[letter].equals(".".single())) {
                 calc.decimalClick()
+            } else if (doubleString[letter].equals("-".single())) {
+                negative = !negative
             } else {
                 calc.addDigit(Integer.parseInt(doubleString[letter].toString()))
             }
+        }
+        if (negative) {
+            calc.handleOperation(NEGATIVE)
         }
     }
 
