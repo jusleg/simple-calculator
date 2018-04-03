@@ -4,42 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="100">
+
     <RelativeLayout
         android:id="@+id/draw_layout"
-        android:layout_weight="90"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-    </RelativeLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="10"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:orientation="horizontal">
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Clear"
-            android:id="@+id/btn_draw_clear"
-            android:layout_weight="10"
-            android:background="@color/md_red_300" />
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Send"
-            android:id="@+id/btn_draw_send"
-            android:layout_weight="10"
-            android:background="@color/md_green_300" />
-    </LinearLayout>
+        android:layout_weight="90">
 
-    <WebView
-        android:id="@+id/wolfram_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/draw_layout"
-        android:visibility="gone" />
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/draw_ui"
@@ -48,19 +20,55 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_weight="10"
-        android:orientation="horizontal"
-        android:visibility="visible">
+        android:orientation="horizontal">
 
         <Button
-            android:id="@+id/done"
+            android:id="@+id/btn_draw_clear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:background="@color/md_red_300"
+            android:text="Clear" />
+
+        <Button
+            android:id="@+id/btn_draw_send"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="10"
+            android:background="@color/md_green_300"
+            android:text="Send" />
+    </LinearLayout>
+
+    <WebView
+        android:id="@+id/wolfram_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:visibility="gone">
+
+    </WebView>
+
+    <LinearLayout
+        android:id="@+id/done_ui"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_weight="10"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/btn_done"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
             android:background="@color/md_red_300"
-            android:text="Done"
-            android:visibility="gone" />
+            android:text="Done" />
 
     </LinearLayout>
+
+
 
 
 </RelativeLayout>

@@ -47,7 +47,7 @@ public class DrawActivity extends AppCompatActivity {
                 }
         });
 
-        findViewById(R.id.done).setOnClickListener(new View.OnClickListener(){
+        findViewById(R.id.btn_done).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 toggleWebView(null);
@@ -60,7 +60,7 @@ public class DrawActivity extends AppCompatActivity {
         this.equationSketchView = equationSketchView;
     }
 
-    public void toggleWebView(@Nullable String uri){
+    public void toggleWebView(@Nullable String uri) {
         WebView view = findViewById(R.id.wolfram_view);
         view.getSettings().setJavaScriptEnabled(true);
         view.getSettings().setAppCacheEnabled(true);
@@ -69,15 +69,15 @@ public class DrawActivity extends AppCompatActivity {
 
         LinearLayout buttons = findViewById(R.id.draw_ui);
         RelativeLayout canvas = findViewById(R.id.draw_layout);
-        Button done = findViewById(R.id.done);
-        if(view.getVisibility() == View.GONE && uri != null){
+        LinearLayout done = findViewById(R.id.done_ui);
+        if (view.getVisibility() == View.GONE && uri != null){
             view.setVisibility(View.VISIBLE);
             done.setVisibility(View.VISIBLE);
             buttons.setVisibility(View.GONE);
             canvas.setVisibility(View.GONE);
             view.loadUrl(uri);
         }
-        else{
+        else {
             view.setVisibility(View.GONE);
             buttons.setVisibility(View.VISIBLE);
             canvas.setVisibility(View.VISIBLE);
