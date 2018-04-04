@@ -27,6 +27,8 @@ import android.location.*
 import android.widget.*
 import kotlinx.android.synthetic.main.activity_money.*
 import com.simplemobiletools.commons.extensions.*
+import com.simpletools.calculator.commons.operations.TaxOperation
+
 /* ktlint-enable no-wildcard-imports */
 
 class MoneyActivity : SimpleActivity(), Calculator, LocationListener {
@@ -162,6 +164,9 @@ class MoneyActivity : SimpleActivity(), Calculator, LocationListener {
                     spawnTaxModal()
                     return
                 }
+                var taxRate: Double = (TaxOperation.getTaxRate(province))*100
+                var message: String = "Current Location: " + province + "\nTax rate: " + taxRate + " % "
+                Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
 
                 calc.performTaxing(province)
             }
