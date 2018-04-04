@@ -8,7 +8,11 @@ import android.support.v4.view.ViewCompat
 import android.view.View
 import com.simplemobiletools.calculator.R
 import com.simplemobiletools.calculator.helpers.MoneyCalculatorImpl
-import com.simplemobiletools.commons.extensions.*
+import com.simplemobiletools.commons.extensions.copyToClipboard
+import com.simplemobiletools.commons.extensions.restartActivity
+import com.simplemobiletools.commons.extensions.value
+import com.simplemobiletools.commons.extensions.performHapticFeedback
+import com.simplemobiletools.commons.extensions.toast
 import com.simpletools.calculator.commons.activities.SimpleActivity
 import com.simpletools.calculator.commons.extensions.config
 import com.simpletools.calculator.commons.extensions.updateViewColors
@@ -33,12 +37,14 @@ class CryptoActivity : SimpleActivity(), Calculator {
         updateButtonColor(config.customPrimaryColor)
 
         getButtonIds().forEach {
-            it.setOnClickListener { calc.numpadClicked(it.id); checkHaptic(it) }
+            it.setOnClickListener {
+                calc.numpadClicked(it.id); checkHaptic(it)
+            }
         }
 
         btn_delete.setOnClickListener { calc.handleDelete(); checkHaptic(it) }
         btn_delete.setOnLongClickListener { calc.handleClear(); true }
-        btn_btc2eth.setOnClickListener{ true } // TODO : Implement feature and connect
+        btn_btc2eth.setOnClickListener { true } // TODO : Implement feature and connect
         btn_btc2xrp.setOnClickListener { true } // TODO : Implement feature and connect
         btn_eth2btc.setOnClickListener { true } // TODO : Implement feature and connect
         btn_eth2xrp.setOnClickListener { true } // TODO : Implement feature and connect
@@ -75,7 +81,7 @@ class CryptoActivity : SimpleActivity(), Calculator {
         return result.text.toString()
     }
 
-    override fun setClear(text: String){}
+    override fun setClear(text: String) {}
 
     override fun getFormula(): String { return "" }
 
