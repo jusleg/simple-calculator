@@ -9,7 +9,8 @@
         android:id="@+id/draw_layout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="90">
+        android:layout_weight="90"
+        android:visibility="visible">
 
     </RelativeLayout>
 
@@ -68,6 +69,14 @@
 
     </LinearLayout>
 
+    <WebView
+        android:id="@+id/loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/batman"
+        android:visibility="gone"
+        android:background="@color/white">
+    </WebView>
 
 
 

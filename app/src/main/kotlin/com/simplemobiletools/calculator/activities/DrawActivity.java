@@ -5,10 +5,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.view.ViewGroup.LayoutParams;
+
 import com.simplemobiletools.calculator.R;
 import com.simplemobiletools.calculator.helpers.GetGraphTask;
 import com.simplemobiletools.calculator.views.SketchSheetView;
@@ -65,17 +65,31 @@ public class DrawActivity extends AppCompatActivity {
         view.getSettings().setJavaScriptEnabled(true);
         view.getSettings().setAppCacheEnabled(true);
 
-        view.setWebViewClient(new WebViewClient());
+        view.setWebViewClient(new WebViewClient(){
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                //hide loading image
+                LinearLayout done = findViewById(R.id.done_ui);
+                findViewById(R.id.loading).setVisibility(View.GONE);
+                view.setVisibility(View.VISIBLE);
+                done.setVisibility(View.VISIBLE);
+            }
+
+        });
 
         LinearLayout buttons = findViewById(R.id.draw_ui);
         RelativeLayout canvas = findViewById(R.id.draw_layout);
         LinearLayout done = findViewById(R.id.done_ui);
         if (view.getVisibility() == View.GONE && uri != null){
-            view.setVisibility(View.VISIBLE);
-            done.setVisibility(View.VISIBLE);
+            WebView loading = findViewById(R.id.loading);
+            loading.setVisibility(View.VISIBLE);
+            loading.setWebViewClient(new WebViewClient());
+            loading.loadUrl("file:///android_asset/batman.html");
             buttons.setVisibility(View.GONE);
             canvas.setVisibility(View.GONE);
             view.loadUrl(uri);
+
         }
         else {
             view.setVisibility(View.GONE);
