@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/crypto_holder"
+    tools:context=".activities.CryptoActivity">
+
+    <TextView
+        android:id="@+id/result"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.25"
+        android:fontFamily="sans-serif-light"
+        android:gravity="center_vertical|center_horizontal"
+        android:maxLines="1"
+        android:paddingLeft="@dimen/activity_margin"
+        android:paddingRight="@dimen/activity_margin"
+        android:text="0"
+        android:textSize="@dimen/large_text_size" />
+
+    <LinearLayout
+        android:id="@+id/button_holder1"
+        android:layout_width="match_parent"
+        android:layout_height="39dp"
+        android:orientation="horizontal"
+        android:paddingBottom="2dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="2dp">
+
+        <Button
+            android:id="@+id/btn_btc2eth"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_weight="1"
+            android:text="BTC -> ETH"
+            android:textSize="12sp"
+            android:theme="@style/MoneyButton" />
+
+        <Button
+            android:id="@+id/btn_eth2btc"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_weight="1"
+            android:text="ETH -> BTC"
+            android:textSize="12sp"
+            android:theme="@style/MoneyButton" />
+
+        <Button
+            android:id="@+id/btn_xrp2btc"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_weight="1"
+            android:text="XRP -> BTC"
+            android:textSize="12sp"
+            android:theme="@style/MoneyButton" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/button_holder2"
+        android:layout_width="match_parent"
+        android:layout_height="39dp"
+        android:orientation="horizontal"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp">
+
+        <Button
+            android:id="@+id/btn_btc2xrp"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_weight="1"
+            android:text="BTC -> XRP"
+            android:textSize="12sp"
+            android:theme="@style/MoneyButton" />
+
+        <Button
+            android:id="@+id/btn_eth2xrp"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_weight="1"
+            android:text="ETH -> XRP"
+            android:textSize="12sp"
+            android:theme="@style/MoneyButton" />
+
+        <Button
+            android:id="@+id/btn_xrp2eth"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_weight="1"
+            android:text="XRP -> ETH"
+            android:textSize="12sp"
+            android:theme="@style/MoneyButton" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/button_holder3"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:orientation="horizontal"
+        android:paddingBottom="4dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="2dp">
+
+        <Button
+            android:id="@+id/btn_usd2btc"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_weight="1"
+            android:text="USD -> BTC"
+            android:textSize="12sp"
+            android:theme="@style/MoneyButton" />
+
+        <Button
+            android:id="@+id/btn_usd2eth"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_weight="1"
+            android:text="USD -> ETH"
+            android:textSize="12sp"
+            android:theme="@style/MoneyButton" />
+
+        <Button
+            android:id="@+id/btn_usd2xrp"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_weight="1"
+            android:text="USD -> XRP"
+            android:textSize="12sp"
+            android:theme="@style/MoneyButton" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_weight="0.6">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btn_1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="1"
+                style="@style/MyButton"/>
+            <Button
+                android:id="@+id/btn_2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="2"
+                style="@style/MyButton"/>
+            <Button
+                android:id="@+id/btn_3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="3"
+                style="@style/MyButton"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btn_4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="4"
+                style="@style/MyButton"/>
+            <Button
+                android:id="@+id/btn_5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="5"
+                style="@style/MyButton"/>
+            <Button
+                android:id="@+id/btn_6"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="6"
+                style="@style/MyButton"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btn_7"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="7"
+                style="@style/MyButton"/>
+            <Button
+                android:id="@+id/btn_8"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="8"
+                style="@style/MyButton"/>
+            <Button
+                android:id="@+id/btn_9"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="9"
+                style="@style/MyButton"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btn_decimal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="."
+                style="@style/MyButton"/>
+            <Button
+                android:id="@+id/btn_0"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="0"
+                style="@style/MyButton"/>
+            <ImageButton
+                android:id="@+id/btn_delete"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/ic_backspace_black_24dp"
+                android:contentDescription="Delete button"
+                style="@style/MyButton"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
