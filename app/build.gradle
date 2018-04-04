@@ -21,9 +21,11 @@ android {
         applicationId "com.simplemobiletools.calculator"
         minSdkVersion 22
         targetSdkVersion 27
+        multiDexEnabled true
         versionCode 15
         versionName "3.0.1"
         setProperty("archivesBaseName", "calculator")
+
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
