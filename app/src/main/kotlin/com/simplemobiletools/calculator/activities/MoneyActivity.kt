@@ -164,8 +164,8 @@ class MoneyActivity : SimpleActivity(), Calculator, LocationListener {
                     spawnTaxModal()
                     return
                 }
-                var taxRate: Double = (TaxOperation.getTaxRate(province))*100
-                var message: String = "Current Location: " + province + "\nTax rate: " + taxRate + " % "
+                var taxRate: Double = (TaxOperation.getTaxRate(province)) * 100
+                var message: String = "Current Location: " + province + "\nTax rate: " + taxRate + "% "
                 Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
 
                 calc.performTaxing(province)
