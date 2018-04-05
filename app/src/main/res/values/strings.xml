@@ -13,6 +13,7 @@
     </string>
     <string name="money">Money Operations</string>
     <string name="draw">Draw Equations</string>
+    <string name="unitConversion">Unit Conversion</string>
     <string-array name="provinces">item
         <item>British Columbia</item>
         <item>Alberta</item>

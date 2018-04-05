@@ -97,6 +97,7 @@ class MainActivity : SimpleActivity(), Calculator {
             R.id.about -> launchAbout()
             R.id.money -> launchMoney()
             R.id.draw -> launchDraw()
+            R.id.unityConversion -> launchUnitConversion()
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -121,6 +122,10 @@ class MainActivity : SimpleActivity(), Calculator {
 
     private fun launchMoney() {
         startActivity(Intent(applicationContext, MoneyActivity::class.java))
+    }
+
+    private fun launchUnitConversion() {
+        startActivity(Intent(applicationContext, UnitConversionActivity::class.java))
     }
 
     private fun launchDraw() {

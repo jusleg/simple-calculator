@@ -39,6 +39,10 @@
             android:label="@string/money"
             android:parentActivityName=".activities.MainActivity" />
         <activity
+            android:name=".activities.UnitConversionActivity"
+            android:label="@string/money"
+            android:parentActivityName=".activities.MainActivity" />
+        <activity
             android:name=".activities.DrawActivity"
             android:label="@string/draw"
             android:parentActivityName=".activities.MainActivity" />
