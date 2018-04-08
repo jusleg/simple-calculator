@@ -162,8 +162,6 @@ class MoneyActivity : SimpleActivity(), Calculator, LocationListener {
                     spawnTaxModal()
                     return
                 }
-                var message: String = String.format("Current Location: " + province + " \n Longitude: " + lastLocation.longitude + " \n Latitude: " + lastLocation.latitude)
-                Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
 
                 calc.performTaxing(province)
             }
