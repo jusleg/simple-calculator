@@ -2,19 +2,14 @@ package com.simplemobiletools.calculator.activities
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.Context
 import android.content.DialogInterface
-import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.net.ConnectivityManager
 import android.os.Bundle
-import android.support.v4.app.ActivityCompat
 import android.support.v4.view.ViewCompat
-import android.util.Log
 import android.view.View
 import com.simplemobiletools.calculator.R
-import com.simplemobiletools.calculator.helpers.MoneyCalculatorImpl
+import com.simplemobiletools.calculator.helpers.ConversionCalculatorImpl
 import com.simpletools.calculator.commons.activities.SimpleActivity
 import com.simpletools.calculator.commons.extensions.config
 import com.simpletools.calculator.commons.extensions.updateViewColors
@@ -24,7 +19,9 @@ import me.grantland.widget.AutofitHelper
 /* ktlint-disable no-wildcard-imports */
 import com.simplemobiletools.commons.extensions.*
 import kotlinx.android.synthetic.main.activity_unit_conversion.*
-/* ktlint-enable no-wildcard-imports */
+import android.widget.Spinner
+import android.widget.ArrayAdapter
+
 
 
 
@@ -33,14 +30,14 @@ class UnitConversionActivity : SimpleActivity(), Calculator {
     private var vibrateOnButtonPress = true
     private var storedUseEnglish = false
 
-    lateinit var calc: MoneyCalculatorImpl
+    lateinit var calc: ConversionCalculatorImpl
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_unit_conversion)
 
-        calc = MoneyCalculatorImpl(this, applicationContext)
+        calc = ConversionCalculatorImpl(this, applicationContext)
         updateViewColors(money_holder, config.textColor)
         updateButtonColor(config.customPrimaryColor)
 
@@ -48,16 +45,16 @@ class UnitConversionActivity : SimpleActivity(), Calculator {
             it.setOnClickListener { calc.numpadClicked(it.id); checkHaptic(it) }
         }
 
+        result.setOnLongClickListener { copyToClipboard(result.value); true }
+        AutofitHelper.create(result)
+
         btn_delete.setOnClickListener { calc.handleDelete(); checkHaptic(it) }
         btn_delete.setOnLongClickListener { calc.handleClear(); true }
 
+        btn_weight.setOnClickListener { displayWeightDialog() }
+
         btn_length.setOnClickListener{ true } // TODO : Implement feature and connect
-        btn_weight.setOnClickListener{ true } // TODO : Implement feature and connect
         btn_temp.setOnClickListener { true } // TODO : Implement feature and connect
-
-        result.setOnLongClickListener { copyToClipboard(result.value); true }
-
-        AutofitHelper.create(result)
     }
 
     @SuppressLint("MissingSuperCall")
@@ -116,5 +113,36 @@ class UnitConversionActivity : SimpleActivity(), Calculator {
 
     override fun displayToast(message: String) {
         applicationContext.toast(message, 100)
+    }
+
+    private fun displayWeightDialog() {
+
+        val fromBuilder =  AlertDialog.Builder(this@UnitConversionActivity)
+
+        val view = layoutInflater.inflate(R.layout.weight_conversion_dialog, null)
+        val fromSpinner = view.findViewById<View>(R.id.from_weight_spinner) as Spinner
+        val fromWeightAdapter: ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(this,
+                R.array.from_weight, android.R.layout.simple_spinner_item)
+        fromWeightAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        fromSpinner.adapter = fromWeightAdapter
+
+        val toSpinner = view.findViewById<View>(R.id.to_weight_spinner) as Spinner
+        val toWeightAdapter: ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(this,
+                R.array.from_weight, android.R.layout.simple_spinner_item)
+        toWeightAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        toSpinner.adapter = toWeightAdapter
+
+
+        fromBuilder.setPositiveButton("Convert", DialogInterface.OnClickListener { dialog, id ->
+            val from = fromSpinner.selectedItem.toString()
+            val to = toSpinner.selectedItem.toString()
+            calc.performWeightConversion(from, to)
+        })
+                .setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, id ->
+                    // Cancel
+                })
+
+        fromBuilder.setView(view)
+        fromBuilder.show()
     }
 }

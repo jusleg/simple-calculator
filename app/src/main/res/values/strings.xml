@@ -44,6 +44,19 @@
         <item>CAD</item>
     </string-array>
 
+    <string-array name="from_weight">
+        <item>g</item>
+        <item>kg</item>
+        <item>oz</item>
+        <item>lb</item>
+    </string-array>
+
+    <string-array name="to_weight">
+        <item>g</item>
+        <item>kg</item>
+        <item>oz</item>
+        <item>lb</item>
+    </string-array>
 
     <!--
         Haven't found some strings? There's more at
