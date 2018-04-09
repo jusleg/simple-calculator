@@ -7,8 +7,8 @@ abstract class BinaryOperation : Operation() {
     var secondValue: Double = 0.0
 
     override fun getFormula(): String {
-        val baseString = if (baseValue < 0.0) parenthesize(Formatter.doubleToString(baseValue)) else Formatter.doubleToString(baseValue)
-        val secondString = if (secondValue < 0.0) parenthesize(Formatter.doubleToString(secondValue)) else Formatter.doubleToString(secondValue)
+        val baseString = Formatter.doubleToString(baseValue, true)
+        val secondString = Formatter.doubleToString(secondValue, true)
         return secondString + getOperator() + baseString
     }
 

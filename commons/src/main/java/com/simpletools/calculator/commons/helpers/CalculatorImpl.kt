@@ -109,7 +109,7 @@ class CalculatorImpl(calculator: Calculator) {
         setAllClear()
         resetValues()
         firstNumber = operation.getResult()
-        setValue(Formatter.doubleToString(firstNumber))
+        setValue(Formatter.doubleToString(firstNumber, false))
         setFormula(operation.getFormula())
         lastIsOperation = false
     }
@@ -174,6 +174,6 @@ class CalculatorImpl(calculator: Calculator) {
 
     private fun negateNumber() {
         firstNumber *= -1
-        setValue(Formatter.doubleToString(firstNumber))
+        setValue(Formatter.doubleToString(firstNumber, false))
     }
 }

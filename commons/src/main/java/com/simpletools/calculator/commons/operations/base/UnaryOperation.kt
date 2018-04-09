@@ -6,7 +6,7 @@ abstract class UnaryOperation : Operation() {
     var value: Double = 0.0
 
     override fun getFormula(): String {
-        val baseString = if (value < 0.0) parenthesize(Formatter.doubleToString(value)) else Formatter.doubleToString(value)
+        val baseString = Formatter.doubleToString(value, true)
         return applyOperator(baseString)
     }
 

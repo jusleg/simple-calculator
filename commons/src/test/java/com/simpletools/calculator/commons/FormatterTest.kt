@@ -13,12 +13,12 @@ class FormatterTest {
 
     @Test
     fun doubleToStringCommaTest() {
-        assertEquals("1,234", Formatter.doubleToString(1234.0))
+        assertEquals("1,234", Formatter.doubleToString(1234.0, false))
     }
 
     @Test
     fun doubleToStringCommaAndDecimalTest() {
-        assertEquals("1,234.5", Formatter.doubleToString(1234.5))
+        assertEquals("1,234.5", Formatter.doubleToString(1234.5, false))
     }
 
     @Test
@@ -29,5 +29,20 @@ class FormatterTest {
     @Test
     fun stringToDoubleTest() {
         assertEquals(1234.5, Formatter.stringToDouble("1,234.5000"), 0.0000001)
+    }
+
+    @Test
+    fun parenthesizeTest() {
+        assertEquals("(-123.4)", Formatter.doubleToString(-123.4, true))
+    }
+
+    @Test
+    fun scientificNotationTest1() {
+        assertEquals("1.0E15", Formatter.doubleToString(1000000000000000.0, false))
+    }
+
+    @Test
+    fun scientificNotationTest2() {
+        assertEquals("1.0E-15", Formatter.doubleToString(0.000000000000001, false))
     }
 }
