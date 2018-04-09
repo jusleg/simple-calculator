@@ -379,6 +379,36 @@ public class MainActivityTest {
     }
 
     @Test
+    public void negativeThenNumberTest(){
+        press(R.id.btn_negative);
+        checkResult("-0");
+        press(R.id.btn_1);
+        checkResult("-1");
+        press(R.id.btn_multiply);
+        press(R.id.btn_3);
+        press(R.id.btn_5);
+        press(R.id.btn_equals);
+        checkResult("-35");
+        checkFormula("(-1)×35");
+    }
+
+    @Test
+    public void negativeThenNumberDecimalTest() {
+        press(R.id.btn_negative);
+        checkResult("-0");
+        press(R.id.btn_decimal);
+        press(R.id.btn_0);
+        checkResult("-0.0");
+        press(R.id.btn_1);
+        checkResult("-0.01");
+        press(R.id.btn_multiply);
+        press(R.id.btn_3);
+        press(R.id.btn_5);
+        press(R.id.btn_equals);
+        checkResult("-0.35");
+        checkFormula("(-0.01)×35");
+    }
+
     public void scientificNotationTest1() {
         press(R.id.btn_1);
         pressX(R.id.btn_0, 15);
@@ -432,6 +462,23 @@ public class MainActivityTest {
         checkFormula("1.0E-15×10");
     }
 
+    @Test
+    public void negativeThenNumberChainedEqualsTest() {
+        press(R.id.btn_negative);
+        press(R.id.btn_5);
+        press(R.id.btn_plus);
+        press(R.id.btn_2);
+        press(R.id.btn_equals);
+        checkResult("-3");
+        checkFormula("(-5)+2");
+        press(R.id.btn_equals);
+        checkResult("-1");
+        checkFormula("(-3)+2");
+        press(R.id.btn_negative);
+        press(R.id.btn_equals);
+        checkResult("3");
+        checkFormula("1+2");
+    }
 
     private void press(int id) {
         onView(withId(id)).perform(click());

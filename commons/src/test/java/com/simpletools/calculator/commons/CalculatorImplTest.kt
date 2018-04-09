@@ -394,6 +394,52 @@ class CalculatorImplTest {
     }
 
     @Test
+    fun negativeThenNumberTest() {
+        calc.handleOperation(NEGATIVE)
+        assertEquals("-0", activity.getResult())
+        calc.addDigit(1)
+        assertEquals("-1", activity.getResult())
+        calc.handleOperation(MULTIPLY)
+        setDouble(35.0)
+        calc.handleEquals()
+        assertEquals("-35", activity.getResult())
+        checkFormula("(-1)×35")
+    }
+
+    @Test
+    fun negativeThenNumberDecimalTest() {
+        calc.handleOperation(NEGATIVE)
+        assertEquals("-0", activity.getResult())
+        calc.decimalClick()
+        calc.addDigit(0)
+        assertEquals("-0.0", activity.getResult())
+        calc.addDigit(1)
+        assertEquals("-0.01", activity.getResult())
+        calc.handleOperation(MULTIPLY)
+        setDouble(35.0)
+        calc.handleEquals()
+        assertEquals("-0.35", activity.getResult())
+        checkFormula("(-0.01)×35")
+    }
+
+    @Test
+    fun negativeThenNumberChainedEqualsTest() {
+        calc.handleOperation(NEGATIVE)
+        calc.addDigit(5)
+        calc.handleOperation(PLUS)
+        calc.addDigit(2)
+        calc.handleEquals()
+        assertEquals("-3", activity.getResult())
+        checkFormula("(-5)+2")
+        calc.handleEquals()
+        assertEquals("-1", activity.getResult())
+        checkFormula("(-3)+2")
+        calc.handleOperation(NEGATIVE)
+        calc.handleEquals()
+        assertEquals("3", activity.getResult())
+        checkFormula("1+2")
+    }
+
     fun scientificNotationTest1() {
         setDouble(Math.pow(10.0, 15.0))
         handleOperation(MULTIPLY)
