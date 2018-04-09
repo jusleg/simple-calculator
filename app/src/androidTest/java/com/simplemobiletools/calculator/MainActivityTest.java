@@ -293,7 +293,7 @@ public class MainActivityTest {
         press(R.id.btn_decimal);
         press(R.id.btn_5);
         press(R.id.btn_equals);
-        checkResult(Formatter.INSTANCE.doubleToString(Double.NaN));
+        checkResult(Formatter.INSTANCE.doubleToString(Double.NaN, false));
         checkFormula("(-2)^0.5");
     }
 
@@ -304,7 +304,7 @@ public class MainActivityTest {
         press(R.id.btn_5);
         press(R.id.btn_negative);
         press(R.id.btn_equals);
-        checkResult(Formatter.INSTANCE.doubleToString(Double.POSITIVE_INFINITY));
+        checkResult(Formatter.INSTANCE.doubleToString(Double.POSITIVE_INFINITY, false));
         checkFormula("0^(-5)");
     }
 
@@ -393,7 +393,7 @@ public class MainActivityTest {
     }
 
     @Test
-    public void negativeThenNumberDecimalTest(){
+    public void negativeThenNumberDecimalTest() {
         press(R.id.btn_negative);
         checkResult("-0");
         press(R.id.btn_decimal);
@@ -407,6 +407,59 @@ public class MainActivityTest {
         press(R.id.btn_equals);
         checkResult("-0.35");
         checkFormula("(-0.01)×35");
+    }
+
+    public void scientificNotationTest1() {
+        press(R.id.btn_1);
+        pressX(R.id.btn_0, 15);
+        press(R.id.btn_multiply);
+        press(R.id.btn_1);
+        press(R.id.btn_0);
+        press(R.id.btn_equals);
+        checkResult("1.0E16");
+        checkFormula("1.0E15×10");
+    }
+
+    @Test
+    public void scientificNotationTest2() {
+        press(R.id.btn_1);
+        pressX(R.id.btn_0, 15);
+        press(R.id.btn_negative);
+        press(R.id.btn_multiply);
+        press(R.id.btn_1);
+        press(R.id.btn_0);
+        press(R.id.btn_equals);
+        checkResult("-1.0E16");
+        checkFormula("(-1.0E15)×10");
+    }
+
+    @Test
+    public void scientificNotationTest3() {
+        press(R.id.btn_0);
+        press(R.id.btn_decimal);
+        pressX(R.id.btn_0, 14);
+        press(R.id.btn_1);
+        press(R.id.btn_negative);
+        press(R.id.btn_multiply);
+        press(R.id.btn_1);
+        press(R.id.btn_0);
+        press(R.id.btn_equals);
+        checkResult("-1.0E-14");
+        checkFormula("(-1.0E-15)×10");
+    }
+
+    @Test
+    public void scientificNotationTest4() {
+        press(R.id.btn_0);
+        press(R.id.btn_decimal);
+        pressX(R.id.btn_0, 14);
+        press(R.id.btn_1);
+        press(R.id.btn_multiply);
+        press(R.id.btn_1);
+        press(R.id.btn_0);
+        press(R.id.btn_equals);
+        checkResult("1.0E-14");
+        checkFormula("1.0E-15×10");
     }
 
     @Test
@@ -441,5 +494,11 @@ public class MainActivityTest {
 
     private void checkFormula(String desired) {
         onView(withId(R.id.formula)).check(matches(withText(desired)));
+    }
+
+    private void pressX(int id, int numTimes) {
+        for (int i = 0; i < numTimes; ++i) {
+            press(id);
+        }
     }
 }

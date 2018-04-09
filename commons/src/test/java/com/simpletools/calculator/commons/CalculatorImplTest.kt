@@ -7,6 +7,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import java.lang.Math.abs
+import java.text.DecimalFormat
 
 @RunWith(RobolectricTestRunner::class)
 @Config(constants = BuildConfig::class, sdk = intArrayOf(21))
@@ -145,7 +147,7 @@ class CalculatorImplTest {
         handleOperation(POWER)
         setDouble(0.5)
         calc.handleEquals()
-        assertEquals(Formatter.doubleToString(Double.NaN), activity.getResult())
+        assertEquals(Formatter.doubleToString(Double.NaN, false), activity.getResult())
         checkFormula("(-2)^0.5")
     }
 
@@ -155,7 +157,7 @@ class CalculatorImplTest {
         handleOperation(POWER)
         setDouble(-2.0)
         calc.handleEquals()
-        assertEquals(Formatter.doubleToString(Double.POSITIVE_INFINITY), activity.getResult())
+        assertEquals(Formatter.doubleToString(Double.POSITIVE_INFINITY, false), activity.getResult())
         checkFormula("0^(-2)")
     }
 
@@ -438,9 +440,50 @@ class CalculatorImplTest {
         checkFormula("1+2")
     }
 
+    fun scientificNotationTest1() {
+        setDouble(Math.pow(10.0, 15.0))
+        handleOperation(MULTIPLY)
+        setDouble(10.0)
+        calc.handleEquals()
+        assertEquals("1.0E16", activity.getResult())
+        checkFormula("1.0E15×10")
+    }
+
+    @Test
+    fun scientificNotationTest2() {
+        setDouble(Math.pow(-10.0, 15.0))
+        handleOperation(MULTIPLY)
+        setDouble(10.0)
+        calc.handleEquals()
+        assertEquals("-1.0E16", activity.getResult())
+        checkFormula("(-1.0E15)×10")
+    }
+
+    @Test
+    fun scientificNotationTest3() {
+        setDouble(Math.pow(-10.0, -15.0))
+        handleOperation(MULTIPLY)
+        setDouble(10.0)
+        calc.handleEquals()
+        assertEquals("-1.0E-14", activity.getResult())
+        checkFormula("(-1.0E-15)×10")
+    }
+
+    @Test
+    fun scientificNotationTest4() {
+        setDouble(Math.pow(10.0, -15.0))
+        handleOperation(MULTIPLY)
+        setDouble(10.0)
+        calc.handleEquals()
+        assertEquals("1.0E-14", activity.getResult())
+        checkFormula("1.0E-15×10")
+    }
+
     private fun setDouble(d: Double) {
-        val doubleString = d.toString()
+
+        val doubleString = doubleToString(d)
         var negative = false
+
         for (letter in doubleString.indices) {
             if (doubleString[letter].equals(".".single())) {
                 calc.decimalClick()
@@ -450,6 +493,7 @@ class CalculatorImplTest {
                 calc.addDigit(Integer.parseInt(doubleString[letter].toString()))
             }
         }
+
         if (negative) {
             calc.handleOperation(NEGATIVE)
         }
@@ -461,5 +505,13 @@ class CalculatorImplTest {
 
     private fun checkFormula(desired: String) {
         assertEquals(desired, activity.getFormula())
+    }
+
+    private fun doubleToString(d: Double): String {
+        if (abs(d) >= Math.pow(10.0, 12.0) || abs(d) <= Math.pow(10.0, -12.0) && abs(d) != 0.0) {
+            val formatter = DecimalFormat("#.########################################")
+            return formatter.format(d)
+        }
+        return d.toString()
     }
 }
