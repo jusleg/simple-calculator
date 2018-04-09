@@ -5,4 +5,11 @@
         <item name="colorButtonNormal">#FFF57C00</item>
     </style>
 
+    <style name="cryptoNumbPicker" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:background">#ffffff</item>
+        <item name="android:fadingEdge">vertical</item>
+        <item name="android:fadingEdgeLength">50dip</item>
+
+    </style>
+
 </resources>

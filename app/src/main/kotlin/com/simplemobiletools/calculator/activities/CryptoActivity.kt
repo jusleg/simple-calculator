@@ -1,10 +1,7 @@
 package com.simplemobiletools.calculator.activities
 
 import android.annotation.SuppressLint
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
-import android.support.v4.view.ViewCompat
 import android.view.View
 import com.simplemobiletools.calculator.R
 import com.simplemobiletools.calculator.helpers.MoneyCalculatorImpl
@@ -19,11 +16,16 @@ import com.simpletools.calculator.commons.extensions.updateViewColors
 import com.simpletools.calculator.commons.helpers.Calculator
 import kotlinx.android.synthetic.main.activity_crypto.*
 import me.grantland.widget.AutofitHelper
+import android.widget.NumberPicker
+import android.widget.Toast
 
 class CryptoActivity : SimpleActivity(), Calculator {
     private var storedTextColor = 0
     private var vibrateOnButtonPress = true
     private var storedUseEnglish = false
+
+    private var cryptoFROM: String = ""
+    private var cryptoTO: String = ""
 
     lateinit var calc: MoneyCalculatorImpl
 
@@ -34,7 +36,6 @@ class CryptoActivity : SimpleActivity(), Calculator {
 
         calc = MoneyCalculatorImpl(this, applicationContext)
         updateViewColors(crypto_holder, config.textColor)
-        updateButtonColor(config.customPrimaryColor)
 
         getButtonIds().forEach {
             it.setOnClickListener {
@@ -42,20 +43,46 @@ class CryptoActivity : SimpleActivity(), Calculator {
             }
         }
 
+        var numberPickerFROM: NumberPicker = numberPicker1
+        var numberPickerTO: NumberPicker = numberPicker2
+
+        // Values of each of the Number Pickers
+        val valuesFROM = arrayOf("Bitcoin", "Ethereum", "Ripple", "Litecoin", "USD")
+        val valuesTO = arrayOf("Ethereum", "Ripple", "Litecoin", "USD", "Bitcoin")
+
+        // Setting default value of each Number Picker
+        numberPickerFROM.minValue = 0
+        numberPickerTO.minValue = 0
+
+        // Setting size of each Number Picker
+        numberPickerFROM.maxValue = valuesFROM.size - 1
+        numberPickerTO.maxValue = valuesTO.size - 1
+
+        // Setting Number Pickers to the values
+        numberPickerFROM.displayedValues = valuesFROM
+        numberPickerTO.displayedValues = valuesTO
+
+        // Sets whether the selector wheel wraps when reaching the min/max value.
+        numberPickerFROM.wrapSelectorWheel = true
+        numberPickerTO.wrapSelectorWheel = true
+
+        btn_convert_cryto.setOnClickListener { _ ->
+            cryptoFROM = valuesFROM[numberPickerFROM.value]
+            cryptoTO = valuesTO[numberPickerTO.value]
+
+            var text = "val FROM: " + cryptoFROM + ", value TO: " + cryptoTO
+            Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+            performConversion(cryptoFROM, cryptoTO)
+        }
         btn_delete.setOnClickListener { calc.handleDelete(); checkHaptic(it) }
         btn_delete.setOnLongClickListener { calc.handleClear(); true }
-        btn_btc2eth.setOnClickListener { true } // TODO : Implement feature and connect
-        btn_btc2xrp.setOnClickListener { true } // TODO : Implement feature and connect
-        btn_eth2btc.setOnClickListener { true } // TODO : Implement feature and connect
-        btn_eth2xrp.setOnClickListener { true } // TODO : Implement feature and connect
-        btn_xrp2btc.setOnClickListener { true } // TODO : Implement feature and connect
-        btn_xrp2eth.setOnClickListener { true } // TODO : Implement feature and connect
-        btn_usd2btc.setOnClickListener { true } // TODO : Implement feature and connect
-        btn_usd2eth.setOnClickListener { true } // TODO : Implement feature and connect
-        btn_usd2xrp.setOnClickListener { true } // TODO : Implement feature and connect
         result.setOnLongClickListener { copyToClipboard(result.value); true }
 
         AutofitHelper.create(result)
+    }
+
+    private fun performConversion(cryptoFROM: String, cryptoTO: String) {
+        print("")
     }
 
     @SuppressLint("MissingSuperCall")
@@ -68,7 +95,7 @@ class CryptoActivity : SimpleActivity(), Calculator {
 
         if (storedTextColor != config.textColor) {
             updateViewColors(crypto_holder, config.textColor)
-            updateButtonColor(config.customPrimaryColor)
+//            updateButtonColor(config.customPrimaryColor)
         }
         vibrateOnButtonPress = config.vibrateOnButtonPress
     }
@@ -96,26 +123,6 @@ class CryptoActivity : SimpleActivity(), Calculator {
             view.performHapticFeedback()
         }
     }
-
-    private fun updateButtonColor(color: Int) {
-        val states = arrayOf(intArrayOf(android.R.attr.state_enabled))
-        val colors = intArrayOf(config.primaryColor)
-        val myList = ColorStateList(states, colors)
-
-        getCryptoButtonIds().forEach {
-            it.setTextColor(getContrastColor(color))
-            ViewCompat.setBackgroundTintList(it, myList)
-        }
-    }
-
-    @SuppressLint("Range")
-    private fun getContrastColor(color: Int): Int {
-        val DARK_GREY = -13421773
-        val y = (299 * Color.red(color) + 587 * Color.green(color) + 114 * Color.blue(color)) / 1000
-        return if (y >= 149) DARK_GREY else Color.WHITE
-    }
-
-    private fun getCryptoButtonIds() = arrayOf(btn_btc2eth, btn_btc2xrp, btn_eth2btc, btn_eth2xrp, btn_xrp2btc, btn_xrp2eth, btn_usd2btc, btn_usd2eth, btn_usd2xrp)
 
     private fun getButtonIds() = arrayOf(btn_decimal, btn_0, btn_1, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9)
 }
