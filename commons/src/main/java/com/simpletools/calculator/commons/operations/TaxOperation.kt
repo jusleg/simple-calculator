@@ -35,4 +35,8 @@ object TaxOperation {
     fun getFormula(): String {
         return "Tax in" + location + " is " + taxesMap[location]
     }
+
+    fun getTaxRate(province: String): Double {
+        return taxesMap[province]!!
+    }
 }
