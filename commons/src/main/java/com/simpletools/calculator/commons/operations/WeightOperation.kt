@@ -4,7 +4,7 @@ object WeightOperation {
     var value: Double = 0.0
     var conversion: String = ""
     var weightMap = HashMap<String, Double>()
-    
+
     init {
         weightMap.put("lb oz", 16.0)
         weightMap.put("lb lb", 1.0)
@@ -23,7 +23,7 @@ object WeightOperation {
         weightMap.put("g g", 1.0)
         weightMap.put("g kg", 0.001)
     }
-    
+
     fun setParams(value: Double, conversion: String): WeightOperation? {
         WeightOperation.value = value
         WeightOperation.conversion = conversion

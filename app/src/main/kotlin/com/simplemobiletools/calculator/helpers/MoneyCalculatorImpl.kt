@@ -11,7 +11,6 @@ class MoneyCalculatorImpl(calculator: Calculator, override val context: Context)
     private var mCallback: Calculator? = calculator
     private var taskBuilder: BackgroundCurrencyTaskBuilder = BackgroundCurrencyTaskBuilder(calculator, this)
 
-
     fun performTaxing(location: String) {
         overwriteNumber(TaxOperation.setParams(getResult(), location)!!.getResult())
     }

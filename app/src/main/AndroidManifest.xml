@@ -40,7 +40,7 @@
             android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name=".activities.UnitConversionActivity"
-            android:label="@string/money"
+            android:label="@string/unitConversion"
             android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name=".activities.DrawActivity"

@@ -22,9 +22,6 @@ import kotlinx.android.synthetic.main.activity_unit_conversion.*
 import android.widget.Spinner
 import android.widget.ArrayAdapter
 
-
-
-
 class UnitConversionActivity : SimpleActivity(), Calculator {
     private var storedTextColor = 0
     private var vibrateOnButtonPress = true
@@ -53,7 +50,7 @@ class UnitConversionActivity : SimpleActivity(), Calculator {
 
         btn_weight.setOnClickListener { displayWeightDialog() }
 
-        btn_length.setOnClickListener{ true } // TODO : Implement feature and connect
+        btn_length.setOnClickListener { true } // TODO : Implement feature and connect
         btn_temp.setOnClickListener { true } // TODO : Implement feature and connect
     }
 
@@ -80,7 +77,7 @@ class UnitConversionActivity : SimpleActivity(), Calculator {
         return result.text.toString()
     }
 
-    override fun setClear(text: String){}
+    override fun setClear(text: String) {}
     override fun getFormula(): String { return "" }
     override fun setFormula(value: String) {}
 
@@ -117,7 +114,7 @@ class UnitConversionActivity : SimpleActivity(), Calculator {
 
     private fun displayWeightDialog() {
 
-        val fromBuilder =  AlertDialog.Builder(this@UnitConversionActivity)
+        val fromBuilder = AlertDialog.Builder(this@UnitConversionActivity)
 
         val view = layoutInflater.inflate(R.layout.weight_conversion_dialog, null)
         val fromSpinner = view.findViewById<View>(R.id.from_weight_spinner) as Spinner
@@ -131,7 +128,6 @@ class UnitConversionActivity : SimpleActivity(), Calculator {
                 R.array.from_weight, android.R.layout.simple_spinner_item)
         toWeightAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         toSpinner.adapter = toWeightAdapter
-
 
         fromBuilder.setPositiveButton("Convert", DialogInterface.OnClickListener { dialog, id ->
             val from = fromSpinner.selectedItem.toString()
