@@ -182,20 +182,12 @@
                     android:text="0"
                     style="@style/MyButton"/>
                 <Button
-                    android:id="@+id/btn_decimal"
+                    android:id="@+id/btn_negative"
+                    style="@style/MyButton"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="."
-                    style="@style/MyButton"/>
-                <ImageButton
-                    android:id="@+id/btn_delete"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_backspace_black_24dp"
-                    android:contentDescription="Delete button"
-                    style="@style/MyButton"/>
+                    android:text="+/−" />
                 <Button
                     android:id="@+id/btn_equals"
                     style="@style/MyButton"
@@ -203,6 +195,14 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="=" />
+                <Button
+                    android:id="@+id/btn_inv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="INV"
+                    style="@style/MyButton"/>
+
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
