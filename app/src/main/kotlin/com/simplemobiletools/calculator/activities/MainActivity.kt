@@ -97,6 +97,7 @@ class MainActivity : SimpleActivity(), Calculator {
             R.id.about -> launchAbout()
             R.id.money -> launchMoney()
             R.id.draw -> launchDraw()
+            R.id.base -> launchBase()
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -125,6 +126,10 @@ class MainActivity : SimpleActivity(), Calculator {
 
     private fun launchDraw() {
         startActivity(Intent(applicationContext, DrawActivity::class.java))
+    }
+
+    private fun launchBase() {
+        startActivity(Intent(applicationContext, BaseActivity::class.java))
     }
 
     private fun launchAbout() {

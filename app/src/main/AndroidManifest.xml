@@ -43,6 +43,10 @@
             android:label="@string/draw"
             android:parentActivityName=".activities.MainActivity" />
         <activity
+            android:name=".activities.BaseActivity"
+            android:label="Base Operations"
+            android:parentActivityName=".activities.MainActivity" />
+        <activity
             android:name="com.simplemobiletools.commons.activities.AboutActivity"
             android:label="@string/about"
             android:parentActivityName=".activities.MainActivity" />
