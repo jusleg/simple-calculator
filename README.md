@@ -1,18 +1,24 @@
-# Simple Calculator
+# Simple Calculator 
 <img alt="Logo" src="commons/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="80">
 
-[![Build Status](https://travis-ci.org/jusleg/simple-calculator-FAMINGO.svg?branch=master)](https://travis-ci.org/jusleg/simple-calculator-FAMINGO) [![codebeat badge](https://codebeat.co/badges/9ce2c059-5bb7-46bd-b512-a746ce275690)](https://codebeat.co/projects/github-com-jusleg-simple-calculator-master)
+**Android app:** [![Build Status](https://travis-ci.org/jusleg/simple-calculator-FAMINGO.svg?branch=master)](https://travis-ci.org/jusleg/simple-calculator-FAMINGO) [![codebeat badge](https://codebeat.co/badges/9ce2c059-5bb7-46bd-b512-a746ce275690)](https://codebeat.co/projects/github-com-jusleg-simple-calculator-master)
+
+**[seshat-web server](https://github.com/jusleg/seshat-web):** [![Build Status](https://travis-ci.org/jusleg/seshat-web.svg?branch=master)](https://travis-ci.org/jusleg/seshat-web) [![codebeat badge](https://codebeat.co/badges/89221ca6-ae12-4acf-a4c5-a967f2f8a77e)](https://codebeat.co/projects/github-com-jusleg-seshat-web-master) [![Dependency Status](https://gemnasium.com/badges/github.com/jusleg/seshat-web.svg)](https://gemnasium.com/github.com/jusleg/seshat-web) [![Maintainability](https://api.codeclimate.com/v1/badges/8a958baf7fd286770d40/maintainability)](https://codeclimate.com/github/jusleg/seshat-web/maintainability)
+
+A calculator with the basic functions, money operations, unit conversions and handwritten equation analysis. It is fully opensource and provides customizable colors. The application is also built for Android Wear. This application is based on a fork of [Simple Calculator by Simple Tools](https://github.com/SimpleMobileTools/Simple-Calculator) and was built for our SOEN 390 class (Software Engineering Team Design Project).
 
 Check out our project [wiki](https://github.com/jusleg/simple-calculator/wiki)!
 
-A calculator with the basic functions and money operations. A fork of [Simple Calculator by Simple Tools](https://github.com/SimpleMobileTools/Simple-Calculator) used for our SOEN 390 class.
+## Screenshots
 
-You can copy the result or formula to clipboard by long pressing it.
+<img width="250" alt="Main Calculator" src="https://user-images.githubusercontent.com/4406751/38581965-4645bc46-3cdc-11e8-978f-ca166ca8bbda.png"> <img width="250" alt="Money view" src="https://user-images.githubusercontent.com/4406751/38581999-62d1e83a-3cdc-11e8-9269-db4a887b94cb.png"> <img width="250" alt="Draw Equations" src="https://user-images.githubusercontent.com/4406751/38582150-e0edc05e-3cdc-11e8-92c8-4b61fdf0aff9.png">
 
-Contains no ads or unnecessary permissions. It is fully opensource, provides customizable colors.
+**Android Wear**
 
-<img alt="App image" src="screenshots/app.png" width="250">
-<img alt="App image" src="screenshots/app_2.png" width="250">
+<img width="250" alt="Android Wear" src="https://camo.githubusercontent.com/692db6d0eb1172a33d81b02e93aeadc82ca05676/68747470733a2f2f6d656469612e67697068792e636f6d2f6d656469612f32354c757736496d446e47356530494c59702f67697068792e676966">
+
+## Seshat-web
+In order to analyse the handwritten equation, a [seshat](https://github.com/falvaro/seshat) server was created. The application sends the drawing as a sequence of strokes in a [`sgcink`](https://www.scg.uwaterloo.ca/mathbrush/publications/corpus.pdf) format. The server returns the result in LaTeX syntax. This is used to query wolfram alpha to show the analysis of the function. [Seshat-web](https://github.com/jusleg/seshat-web) is a sinatra server that interfaces with the C++ code of the seshat program.
 
 ## Contributing
 
@@ -31,24 +37,20 @@ User facing features are represented as user stories which are further broken do
 * **[Task Template](https://github.com/jusleg/simple-calculator-FAMINGO/blob/master/.github/TASK_TEMPLATE.md)**
 * **[Epic Template](https://github.com/jusleg/simple-calculator-FAMINGO/blob/master/.github/EPIC_TEMPLATE.md)**
 
-## Testing
+## Testing locally
+### 1. Linting
 
-This app contains UI and unit tests that can be ran with the following instructions.
+To test if it passes the linting checks run `./gradlew ktlint`. Use `./gradlew ktlintFormat` to automatically format the code to follow the conventions
 
-<h3>Running Espresso UI tests</h3>
-<p>1. Run -> Edit Configurations</p>
-<p>2. Create a new "Android Instrumentation Tests" configuration, give it a name (i.e. "MainActivityEspressoTest")</p>
-<p>3. Choose the "app" module</p>
-<p>4. OK</p>
-<p>5. Make sure MainActivityEspressoTest is selected near the Run button</p>
-<p>6. Run</p>
+### 2. Unit tests
 
-<h3>Running Robolectric tests</h3>
-<p>1. At the Project tab right click the folder containing the tests (i.e. "calculator.simplemobiletools.com.simple_calculator (test)")</p>
-<p>2. select Run 'Tests in 'calculator.simplemob...' to run all the tests</p>
-<p>3. if you are on Linux or Mac, go to Run -> Edit Configurations, select the new JUnit configuration and change the "Working Directory" item to "$MODULE_DIR$" (without quotes)</p>
-<p>4. OK</p>
-<p>5. Run</p>
+`./gradlew test`
+
+### 3. Instrumentation tests
+
+Start an Android emulator API 22. When the emulator is booted, run `./gradlew clean connectedAndroidTest`
+
+**N.B.** The static analysis done by Codebeat cannot be run locally. It is triggered by new branches and PR.
 
 ## License
 
