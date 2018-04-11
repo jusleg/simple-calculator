@@ -97,6 +97,72 @@ public class BaseActivityTest {
     }
 
     @Test
+    public void conversionDecBinTest() {
+        press(R.id.btn_dec);
+        press(R.id.btn_9);
+        press(R.id.btn_bin);
+        checkResult("1001");
+    }
+
+    @Test
+    public void conversionDecOctTest() {
+        press(R.id.btn_dec);
+        press(R.id.btn_9);
+        press(R.id.btn_oct);
+        checkResult("11");
+    }
+
+    @Test
+    public void conversionOctDecTest() {
+        press(R.id.btn_oct);
+        press(R.id.btn_1);
+        press(R.id.btn_1);
+        press(R.id.btn_dec);
+        checkResult("9");
+    }
+
+    @Test
+    public void conversionOctBinTest() {
+        press(R.id.btn_oct);
+        press(R.id.btn_1);
+        press(R.id.btn_1);
+        press(R.id.btn_bin);
+        checkResult("1001");
+    }
+
+    @Test
+    public void conversionBinDecTest() {
+        press(R.id.btn_bin);
+        press(R.id.btn_1);
+        press(R.id.btn_0);
+        press(R.id.btn_0);
+        press(R.id.btn_1);
+        press(R.id.btn_dec);
+        checkResult("9");
+    }
+
+    @Test
+    public void conversionBinOctTest() {
+        press(R.id.btn_bin);
+        press(R.id.btn_1);
+        press(R.id.btn_0);
+        press(R.id.btn_0);
+        press(R.id.btn_1);
+        press(R.id.btn_oct);
+        checkResult("11");
+    }
+
+    @Test
+    public void conversionWithAfterOperation() {
+        press(R.id.btn_dec);
+        press(R.id.btn_9);
+        press(R.id.btn_and);
+        press(R.id.btn_1);
+        press(R.id.btn_bin);
+        checkResult("0");
+    }
+
+    @Test
     public void clearTest() {
         press(R.id.btn_dec);
         press(R.id.btn_1);
@@ -110,20 +176,6 @@ public class BaseActivityTest {
         onView(withId(R.id.btn_clear)).check(matches(withText("CE")));
         press(R.id.btn_equals);
         checkResult("8");
-    }
-
-    @Test
-    public void clearLongTest() {
-        press(R.id.btn_2);
-        press(R.id.btn_and);
-        press(R.id.btn_5);
-        press(R.id.btn_equals);
-        longPress((R.id.btn_clear));
-        press(R.id.btn_plus);
-        press(R.id.btn_2);
-        press(R.id.btn_equals);
-        checkResult("2");
-        checkFormula("0+2");
     }
 
     private void press(int id) {

@@ -39,6 +39,7 @@
         android:layout_height="match_parent"
         android:layout_weight="2"
         android:orientation="horizontal">
+
         <Button
             android:id="@+id/btn_bin"
             android:layout_width="match_parent"
@@ -59,6 +60,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="DEC"
+            android:enabled="false"
             style="@style/MyButton"/>
         <Button
             android:id="@+id/btn_clear"

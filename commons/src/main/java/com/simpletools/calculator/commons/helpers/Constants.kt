@@ -33,5 +33,9 @@ val SEVEN = "seven"
 val EIGHT = "eight"
 val NINE = "nine"
 
+val DEC = "dec"
+val OCT = "oct"
+val BIN = "bin"
+
 // shared preferences
 val VIBRATE_ON_BUTTON_PRESS = "vibrate_on_button_press"

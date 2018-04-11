@@ -9,6 +9,7 @@ import com.simpletools.calculator.commons.operations.base.UnaryOperation
 import com.simpletools.calculator.commons.operations.base.UnaryBitwiseOperation
 import com.simpletools.calculator.commons.operations.base.BinaryBitwiseOperation
 import com.simpletools.calculator.commons.operations.base.BitwiseOperation
+import com.simpletools.calculator.commons.helpers.* // ktlint-disable no-wildcard-imports
 
 class BaseCalculatorImpl(calculator: Calculator, val context: Context) {
     private var mCallback: Calculator? = calculator
@@ -110,6 +111,77 @@ class BaseCalculatorImpl(calculator: Calculator, val context: Context) {
         setValue(Integer.toString(firstNumberWithSign()))
         setFormula(operation.getFormula())
         lastIsOperation = false
+    }
+
+    fun convertToDecimal(baseFrom: String) {
+        if (secondNumberSet || lastIsOperation) {
+            setAllClear()
+            resetValues()
+        } else if (baseFrom.equals(OCT)) {
+            firstNumber = convertDec(OCT)
+            setValue(firstNumber.toString())
+            lastIsOperation = false
+        } else {
+            firstNumber = convertDec(BIN)
+            setValue(firstNumber.toString())
+            lastIsOperation = false
+        }
+    }
+
+    fun convertToOctal(baseFrom: String) {
+        if (secondNumberSet || lastIsOperation) {
+            setAllClear()
+            resetValues()
+        } else if (baseFrom.equals(DEC)) {
+            firstNumber = convertOct(DEC)
+            setValue(firstNumber.toString())
+            lastIsOperation = false
+        } else {
+            firstNumber = convertOct(BIN)
+            setValue(firstNumber.toString())
+            lastIsOperation = false
+        }
+    }
+
+    fun convertToBinary(baseFrom: String) {
+        if (secondNumberSet || lastIsOperation) {
+            setAllClear()
+            resetValues()
+        } else if (baseFrom.equals(DEC)) {
+            firstNumber = convertBin(DEC)
+            setValue(firstNumber.toString())
+            lastIsOperation = false
+        } else {
+            firstNumber = convertBin(OCT)
+            setValue(firstNumber.toString())
+            lastIsOperation = false
+        }
+    }
+
+    private fun convertDec(baseFrom: String): Int {
+        if (baseFrom.equals(OCT)) {
+            return Integer.valueOf(firstNumberWithSign().toString(), 8)
+        } else if (baseFrom.equals(BIN)) {
+            return Integer.valueOf(firstNumberWithSign().toString(), 2)
+        } else return 0
+    }
+
+    private fun convertOct(baseFrom: String): Int {
+        if (baseFrom.equals(DEC)) {
+            return Integer.valueOf(Integer.toOctalString(firstNumberWithSign()))
+        } else if (baseFrom.equals(BIN)) {
+            var decimalValue = convertDec(BIN)
+            return Integer.valueOf(Integer.toOctalString(decimalValue))
+        } else return 0
+    }
+
+    private fun convertBin(baseFrom: String): Int {
+        if (baseFrom.equals(DEC)) {
+            return Integer.valueOf(Integer.toBinaryString(firstNumberWithSign()))
+        } else if (baseFrom.equals(OCT)) {
+            var decimalValue = convertDec(OCT)
+            return Integer.valueOf(Integer.toBinaryString(decimalValue))
+        } else return 0
     }
 
     private fun setValue(value: String) {

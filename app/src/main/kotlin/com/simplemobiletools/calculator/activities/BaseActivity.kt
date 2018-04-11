@@ -8,7 +8,6 @@ import com.simplemobiletools.calculator.helpers.BaseCalculatorImpl
 import com.simpletools.calculator.commons.activities.SimpleActivity
 import com.simpletools.calculator.commons.extensions.config
 import com.simpletools.calculator.commons.extensions.updateViewColors
-import me.grantland.widget.AutofitHelper
 
 /* ktlint-disable no-wildcard-imports */
 import com.simpletools.calculator.commons.helpers.*
@@ -22,7 +21,8 @@ class BaseActivity : SimpleActivity(), Calculator {
     private var vibrateOnButtonPress = true
     private var storedUseEnglish = false
 
-    lateinit var calc: BaseCalculatorImpl
+    private lateinit var currentBase: String
+    private lateinit var calc: BaseCalculatorImpl
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,10 +30,14 @@ class BaseActivity : SimpleActivity(), Calculator {
         setContentView(R.layout.activity_base)
 
         calc = BaseCalculatorImpl(this, applicationContext)
-
+        currentBase = DEC
         getButtonIds().forEach {
             it.setOnClickListener { calc.numpadClicked(it.id); checkHaptic(it) }
         }
+
+        btn_dec.setOnClickListener { setBaseToDecimal(); checkHaptic(it) }
+        btn_oct.setOnClickListener { setBaseToOctal(); checkHaptic(it) }
+        btn_bin.setOnClickListener { setBaseToBinary(); checkHaptic(it) }
         btn_negative.setOnClickListener { calc.handleOperation(NEGATIVE); checkHaptic(it) }
         btn_and.setOnClickListener { calc.handleOperation(AND); checkHaptic(it) }
         btn_or.setOnClickListener { calc.handleOperation(OR); checkHaptic(it) }
@@ -46,34 +50,82 @@ class BaseActivity : SimpleActivity(), Calculator {
         result.setOnLongClickListener { copyToClipboard(true) }
 
         updateViewColors(base_holder, config.textColor)
-        AutofitHelper.create(result)
-    }
-
-    @SuppressLint("MissingSuperCall")
-    override fun onResume() {
-        super.onResume()
-        if (storedUseEnglish != config.useEnglish) {
-            restartActivity()
-            return
-        }
-
-        if (storedTextColor != config.textColor) {
-            updateViewColors(base_holder, config.textColor)
-        }
-        vibrateOnButtonPress = config.vibrateOnButtonPress
-    }
-
-    private fun storeStateVariables() {
-        config.apply {
-            storedTextColor = textColor
-            storedUseEnglish = useEnglish
-        }
+        btn_dec.setTextColor(config.customPrimaryColor)
     }
 
     private fun checkHaptic(view: View) {
         if (vibrateOnButtonPress) {
             view.performHapticFeedback()
         }
+    }
+
+    private fun setBaseToDecimal() {
+        calc.convertToDecimal(currentBase)
+        currentBase = DEC
+        btn_dec.setTextColor(config.customPrimaryColor)
+        btn_dec.isEnabled = false
+
+        btn_oct.setTextColor(config.textColor)
+        btn_oct.isEnabled = true
+
+        btn_bin.setTextColor(config.textColor)
+        btn_bin.isEnabled = true
+
+        btn_2.isEnabled = true
+        btn_3.isEnabled = true
+        btn_4.isEnabled = true
+        btn_5.isEnabled = true
+        btn_6.isEnabled = true
+        btn_7.isEnabled = true
+        btn_8.isEnabled = true
+        btn_9.isEnabled = true
+        btn_inv.isEnabled = false
+    }
+
+    private fun setBaseToOctal() {
+        calc.convertToOctal(currentBase)
+        currentBase = OCT
+        btn_dec.setTextColor(config.textColor)
+        btn_dec.isEnabled = true
+
+        btn_oct.setTextColor(config.customPrimaryColor)
+        btn_oct.isEnabled = false
+
+        btn_bin.setTextColor(config.textColor)
+        btn_bin.isEnabled = true
+
+        btn_2.isEnabled = true
+        btn_3.isEnabled = true
+        btn_4.isEnabled = true
+        btn_5.isEnabled = true
+        btn_6.isEnabled = true
+        btn_7.isEnabled = true
+        btn_8.isEnabled = false
+        btn_9.isEnabled = false
+        btn_inv.isEnabled = false
+    }
+
+    private fun setBaseToBinary() {
+        calc.convertToBinary(currentBase)
+        currentBase = BIN
+        btn_dec.setTextColor(config.textColor)
+        btn_dec.isEnabled = true
+
+        btn_oct.setTextColor(config.textColor)
+        btn_oct.isEnabled = true
+
+        btn_bin.setTextColor(config.customPrimaryColor)
+        btn_bin.isEnabled = false
+
+        btn_2.isEnabled = false
+        btn_3.isEnabled = false
+        btn_4.isEnabled = false
+        btn_5.isEnabled = false
+        btn_6.isEnabled = false
+        btn_7.isEnabled = false
+        btn_8.isEnabled = false
+        btn_9.isEnabled = false
+        btn_inv.isEnabled = true
     }
 
     private fun getButtonIds() = arrayOf(btn_0, btn_1, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9)
