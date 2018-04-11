@@ -1,9 +1,7 @@
 package com.simpletools.calculator.commons.operations
 
-import com.simpletools.calculator.commons.operations.base.Operation
 import com.simpletools.calculator.commons.helpers.* // ktlint-disable no-wildcard-imports
-import com.simpletools.calculator.commons.operations.base.BinaryOperation
-import com.simpletools.calculator.commons.operations.base.UnaryOperation
+import com.simpletools.calculator.commons.operations.base.* // ktlint-disable no-wildcard-imports
 
 object OperationFactory {
 

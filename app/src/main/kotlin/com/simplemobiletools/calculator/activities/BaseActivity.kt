@@ -35,7 +35,15 @@ class BaseActivity : SimpleActivity(), Calculator {
             it.setOnClickListener { calc.numpadClicked(it.id); checkHaptic(it) }
         }
         btn_negative.setOnClickListener { calc.handleOperation(NEGATIVE); checkHaptic(it) }
-        result.setOnLongClickListener { copyToClipboard(result.value); true }
+        btn_and.setOnClickListener { calc.handleOperation(AND); checkHaptic(it) }
+        btn_or.setOnClickListener { calc.handleOperation(OR); checkHaptic(it) }
+        btn_xor.setOnClickListener { calc.handleOperation(XOR); checkHaptic(it) }
+        btn_inv.setOnClickListener { calc.handleOperation(INV); checkHaptic(it) }
+        btn_equals.setOnClickListener { calc.handleEquals(); checkHaptic(it) }
+        btn_clear.setOnClickListener { calc.handleClear(); checkHaptic(it) }
+        btn_clear.setOnLongClickListener { calc.handleReset(); true }
+        formula.setOnLongClickListener { copyToClipboard(false) }
+        result.setOnLongClickListener { copyToClipboard(true) }
 
         updateViewColors(base_holder, config.textColor)
         AutofitHelper.create(result)
@@ -70,19 +78,39 @@ class BaseActivity : SimpleActivity(), Calculator {
 
     private fun getButtonIds() = arrayOf(btn_0, btn_1, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9)
 
+    private fun copyToClipboard(copyResult: Boolean): Boolean {
+        var value = formula.value
+        if (copyResult) {
+            value = result.value
+        }
+
+        return if (value.isEmpty()) {
+            false
+        } else {
+            copyToClipboard(value)
+            true
+        }
+    }
+
     override fun setValue(value: String) {
         result.text = value
     }
 
-    override fun setFormula(value: String) {}
+    override fun setFormula(value: String) {
+        formula.text = value
+    }
 
-    override fun setClear(value: String) {}
+    override fun setClear(text: String) {
+        btn_clear.text = text
+    }
 
     override fun getResult(): String {
         return result.text.toString()
     }
 
-    override fun getFormula(): String { return "" }
+    override fun getFormula(): String {
+        return formula.text.toString()
+    }
 
     override fun displayToast(message: String) {
         applicationContext.toast(message, 100)

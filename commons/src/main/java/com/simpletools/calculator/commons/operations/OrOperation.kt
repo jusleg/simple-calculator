@@ -1,12 +1,12 @@
 package com.simpletools.calculator.commons.operations
 
-import com.simpletools.calculator.commons.operations.base.BitwiseOperation
+import com.simpletools.calculator.commons.operations.base.BinaryBitwiseOperation
 
-object OrOperation : BitwiseOperation() {
+object OrOperation : BinaryBitwiseOperation() {
 
     override fun getResult() = secondValue.or(baseValue)
 
     override fun getOperator(): String {
-        return "OR"
+        return "|"
     }
 }
