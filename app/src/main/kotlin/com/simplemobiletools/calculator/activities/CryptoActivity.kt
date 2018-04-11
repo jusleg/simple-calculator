@@ -1,10 +1,12 @@
 package com.simplemobiletools.calculator.activities
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.net.ConnectivityManager
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import com.simplemobiletools.calculator.R
-import com.simplemobiletools.calculator.helpers.MoneyCalculatorImpl
 import com.simplemobiletools.commons.extensions.copyToClipboard
 import com.simplemobiletools.commons.extensions.restartActivity
 import com.simplemobiletools.commons.extensions.value
@@ -18,6 +20,8 @@ import kotlinx.android.synthetic.main.activity_crypto.*
 import me.grantland.widget.AutofitHelper
 import android.widget.NumberPicker
 import android.widget.Toast
+import com.simplemobiletools.calculator.helpers.CryptoCalculatorImpl
+import com.simpletools.calculator.commons.helpers.Formatter
 
 class CryptoActivity : SimpleActivity(), Calculator {
     private var storedTextColor = 0
@@ -27,14 +31,14 @@ class CryptoActivity : SimpleActivity(), Calculator {
     private var cryptoFROM: String = ""
     private var cryptoTO: String = ""
 
-    lateinit var calc: MoneyCalculatorImpl
+    lateinit var calc: CryptoCalculatorImpl
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_crypto)
 
-        calc = MoneyCalculatorImpl(this, applicationContext)
+        calc = CryptoCalculatorImpl(this, applicationContext)
         updateViewColors(crypto_holder, config.textColor)
 
         getButtonIds().forEach {
@@ -66,13 +70,28 @@ class CryptoActivity : SimpleActivity(), Calculator {
         numberPickerFROM.wrapSelectorWheel = true
         numberPickerTO.wrapSelectorWheel = true
 
-        btn_convert_cryto.setOnClickListener { _ ->
-            cryptoFROM = valuesFROM[numberPickerFROM.value]
-            cryptoTO = valuesTO[numberPickerTO.value]
+        val cryptoSymbolHashMap = HashMap<String,String>()
+        cryptoSymbolHashMap.put("Ethereum", "ETH")
+        cryptoSymbolHashMap.put("Bitcoin", "BTC")
+        cryptoSymbolHashMap.put("Ripple", "XRP")
+        cryptoSymbolHashMap.put("Litecoin", "LTC")
+        cryptoSymbolHashMap.put("USD", "USD")
 
+        btn_convert_cryto.setOnClickListener { _ ->
+            cryptoFROM = cryptoSymbolHashMap.get(valuesFROM[numberPickerFROM.value]).toString()
+            cryptoTO = cryptoSymbolHashMap.get(valuesTO[numberPickerTO.value]).toString()
+
+            //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             var text = "val FROM: " + cryptoFROM + ", value TO: " + cryptoTO
             Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
-            performConversion(cryptoFROM, cryptoTO)
+            //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+            if (cryptoTO == cryptoFROM) {
+                calc.overwriteNumber(Formatter.stringToDouble(getResult()))
+            } else {
+                performConversion(cryptoFROM, cryptoTO)
+            }
+
         }
         btn_delete.setOnClickListener { calc.handleDelete(); checkHaptic(it) }
         btn_delete.setOnLongClickListener { calc.handleClear(); true }
@@ -82,8 +101,19 @@ class CryptoActivity : SimpleActivity(), Calculator {
     }
 
     private fun performConversion(cryptoFROM: String, cryptoTO: String) {
-        print("")
+        if (isOnline()) {
+            calc.calculateCrypto(cryptoFROM, cryptoTO, this)
+        } else if (!isOnline()) {
+            displayToast("It seems there has been a connection problem, contact you ISP for more details !")
+        }
     }
+
+    fun isOnline(): Boolean {
+        val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val netInfo = cm.activeNetworkInfo
+        return netInfo != null && netInfo.isConnectedOrConnecting
+    }
+
 
     @SuppressLint("MissingSuperCall")
     override fun onResume() {

@@ -34,38 +34,6 @@
         android:paddingTop="2dp">
 
 
-        <!--<Button-->
-        <!--android:id="@+id/btn_btc2eth"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="40dp"-->
-        <!--android:layout_marginLeft="4dp"-->
-        <!--android:layout_marginRight="4dp"-->
-        <!--android:layout_weight="1"-->
-        <!--android:text="BTC -> ETH"-->
-        <!--android:textSize="12sp"-->
-        <!--android:theme="@style/MoneyButton" />-->
-
-        <!--<Button-->
-        <!--android:id="@+id/btn_eth2btc"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="40dp"-->
-        <!--android:layout_marginLeft="4dp"-->
-        <!--android:layout_marginRight="4dp"-->
-        <!--android:layout_weight="1"-->
-        <!--android:text="ETH -> BTC"-->
-        <!--android:textSize="12sp"-->
-        <!--android:theme="@style/MoneyButton" />-->
-
-        <!--<Button-->
-        <!--android:id="@+id/btn_xrp2btc"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="40dp"-->
-        <!--android:layout_marginLeft="4dp"-->
-        <!--android:layout_marginRight="4dp"-->
-        <!--android:layout_weight="1"-->
-        <!--android:text="XRP -> BTC"-->
-        <!--android:textSize="12sp"-->
-        <!--android:theme="@style/MoneyButton" />-->
         <NumberPicker
             android:id="@+id/numberPicker1"
             android:layout_width="128dp"
