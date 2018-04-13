@@ -24,7 +24,8 @@ public class BaseActivityTest {
     public final ActivityTestRule<BaseActivity> activity = new ActivityTestRule<>(BaseActivity.class);
 
     @Test
-    public void addDigitsTest() {
+    public void addDigitsDecTest() {
+        press(R.id.btn_dec);
         press(R.id.btn_1);
         press(R.id.btn_2);
         press(R.id.btn_3);
@@ -36,6 +37,38 @@ public class BaseActivityTest {
         press(R.id.btn_9);
         press(R.id.btn_0);
         checkResult("1234567890");
+    }
+
+    @Test
+    public void addDigitsOctTest() {
+        press(R.id.btn_oct);
+        press(R.id.btn_1);
+        press(R.id.btn_2);
+        press(R.id.btn_3);
+        press(R.id.btn_4);
+        press(R.id.btn_5);
+        press(R.id.btn_6);
+        press(R.id.btn_7);
+        press(R.id.btn_8);
+        press(R.id.btn_9);
+        press(R.id.btn_0);
+        checkResult("12345670");
+    }
+
+    @Test
+    public void addDigitsBinTest() {
+        press(R.id.btn_bin);
+        press(R.id.btn_1);
+        press(R.id.btn_2);
+        press(R.id.btn_3);
+        press(R.id.btn_4);
+        press(R.id.btn_5);
+        press(R.id.btn_6);
+        press(R.id.btn_7);
+        press(R.id.btn_8);
+        press(R.id.btn_9);
+        press(R.id.btn_0);
+        checkResult("10");
     }
 
     @Test
@@ -72,7 +105,7 @@ public class BaseActivityTest {
     }
 
     @Test
-    public void bitwiseXorTest() {
+    public void bitwiseDecXorTest() {
         press(R.id.btn_dec);
         press(R.id.btn_1);
         press(R.id.btn_2);
@@ -84,16 +117,112 @@ public class BaseActivityTest {
         checkFormula("12^25");
     }
 
-    @Ignore
     @Test
-    public void bitwiseInvTest() {
+    public void bitwiseDecInvTest() {
         press(R.id.btn_dec);
         press(R.id.btn_3);
         press(R.id.btn_5);
+        press(R.id.btn_inv);
+        checkResult("-36");
+        checkFormula("~(35)");
+    }
 
+    @Test
+    public void bitwiseOctAndTest() {
+        press(R.id.btn_oct);
+        press(R.id.btn_1);
+        press(R.id.btn_2);
+        press(R.id.btn_and);
+        press(R.id.btn_2);
+        press(R.id.btn_5);
         press(R.id.btn_equals);
-        checkResult("21");
+        checkResult("0");
+        checkFormula("12&25");
+    }
+
+    @Test
+    public void bitwiseOctOrTest() {
+        press(R.id.btn_oct);
+        press(R.id.btn_1);
+        press(R.id.btn_2);
+        press(R.id.btn_or);
+        press(R.id.btn_2);
+        press(R.id.btn_5);
+        press(R.id.btn_equals);
+        checkResult("37");
+        checkFormula("12|25");
+    }
+
+    @Test
+    public void bitwiseOctXorTest() {
+        press(R.id.btn_oct);
+        press(R.id.btn_1);
+        press(R.id.btn_2);
+        press(R.id.btn_xor);
+        press(R.id.btn_2);
+        press(R.id.btn_5);
+        press(R.id.btn_equals);
+        checkResult("37");
         checkFormula("12^25");
+    }
+
+    @Test
+    public void bitwiseOctInvTest() {
+        press(R.id.btn_oct);
+        press(R.id.btn_3);
+        press(R.id.btn_5);
+        press(R.id.btn_inv);
+        checkResult("-36");
+        checkFormula("~(35)");
+    }
+
+    @Test
+    public void bitwiseBinAndTest() {
+        press(R.id.btn_bin);
+        press(R.id.btn_1);
+        press(R.id.btn_0);
+        press(R.id.btn_and);
+        press(R.id.btn_1);
+        press(R.id.btn_1);
+        press(R.id.btn_equals);
+        checkResult("10");
+        checkFormula("10&11");
+    }
+
+    @Test
+    public void bitwiseBinOrTest() {
+        press(R.id.btn_bin);
+        press(R.id.btn_1);
+        press(R.id.btn_0);
+        press(R.id.btn_or);
+        press(R.id.btn_1);
+        press(R.id.btn_1);
+        press(R.id.btn_equals);
+        checkResult("11");
+        checkFormula("10|11");
+    }
+
+    @Test
+    public void bitwiseBinXorTest() {
+        press(R.id.btn_bin);
+        press(R.id.btn_1);
+        press(R.id.btn_0);
+        press(R.id.btn_xor);
+        press(R.id.btn_1);
+        press(R.id.btn_1);
+        press(R.id.btn_equals);
+        checkResult("1");
+        checkFormula("10^11");
+    }
+
+    @Test
+    public void bitwiseBinInvTest() {
+        press(R.id.btn_bin);
+        press(R.id.btn_1);
+        press(R.id.btn_1);
+        press(R.id.btn_inv);
+        checkResult("-100");
+        checkFormula("~(11)");
     }
 
     @Test

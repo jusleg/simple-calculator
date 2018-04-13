@@ -4,5 +4,9 @@ abstract class BitwiseOperation {
 
     abstract fun getResult(): Int
 
-    abstract fun getFormula(): String
+    abstract fun getBinaryFormula(): String
+
+    abstract fun getOctalFormula(): String
+
+    abstract fun getDecimalFormula(): String
 }

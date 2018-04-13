@@ -79,7 +79,6 @@ class BaseActivity : SimpleActivity(), Calculator {
         btn_7.isEnabled = true
         btn_8.isEnabled = true
         btn_9.isEnabled = true
-        btn_inv.isEnabled = false
     }
 
     private fun setBaseToOctal() {
@@ -102,7 +101,6 @@ class BaseActivity : SimpleActivity(), Calculator {
         btn_7.isEnabled = true
         btn_8.isEnabled = false
         btn_9.isEnabled = false
-        btn_inv.isEnabled = false
     }
 
     private fun setBaseToBinary() {
@@ -125,7 +123,6 @@ class BaseActivity : SimpleActivity(), Calculator {
         btn_7.isEnabled = false
         btn_8.isEnabled = false
         btn_9.isEnabled = false
-        btn_inv.isEnabled = true
     }
 
     private fun getButtonIds() = arrayOf(btn_0, btn_1, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9)

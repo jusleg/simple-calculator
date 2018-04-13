@@ -5,7 +5,6 @@ import com.simpletools.calculator.commons.R
 import com.simpletools.calculator.commons.helpers.Calculator
 import com.simpletools.calculator.commons.operations.BitwiseNegativeOperation
 import com.simpletools.calculator.commons.operations.BitwiseOperationFactory
-import com.simpletools.calculator.commons.operations.base.UnaryOperation
 import com.simpletools.calculator.commons.operations.base.UnaryBitwiseOperation
 import com.simpletools.calculator.commons.operations.base.BinaryBitwiseOperation
 import com.simpletools.calculator.commons.operations.base.BitwiseOperation
@@ -22,7 +21,7 @@ class BaseCalculatorImpl(calculator: Calculator, val context: Context) {
     private var secondNumberSet: Boolean = false
     private var digits = 0
     private var lastIsOperation: Boolean = false
-    private var firstNumberSign: Int = 1
+    private var currentBase: String? = DEC
 
     init {
         resetValues()
@@ -65,18 +64,25 @@ class BaseCalculatorImpl(calculator: Calculator, val context: Context) {
     }
 
     fun handleEquals() {
+        if (currentBase.equals(OCT)) {
+            firstNumber = convertDec(OCT, firstNumber)
+            secondNumber = convertDec(OCT, secondNumber)
+        } else if (currentBase.equals(BIN)) {
+            firstNumber = convertDec(BIN, firstNumber)
+            secondNumber = convertDec(BIN, secondNumber)
+        }
         val operation: BitwiseOperation?
         if (operator != "") { // Handle new operation
-            operation = BitwiseOperationFactory.forId(operator!!, firstNumberWithSign(), secondNumber)
+            operation = BitwiseOperationFactory.forId(operator!!, firstNumber, secondNumber)
 
-            if ((operation != null) && (digits > 0 || operation is UnaryOperation)) {
-                if (operation !is UnaryOperation) {
-                    lastOperand = firstNumberWithSign()
+            if ((operation != null) && (digits > 0 || operation is UnaryBitwiseOperation)) {
+                if (operation !is UnaryBitwiseOperation) {
+                    lastOperand = firstNumber
                 }
                 executeCalculation(operation)
             }
         } else { // Handle chained equals
-            operation = BitwiseOperationFactory.forId(lastOperator!!, lastOperand, firstNumberWithSign())
+            operation = BitwiseOperationFactory.forId(lastOperator!!, lastOperand, firstNumber)
 
             if (operation != null) {
                 executeCalculation(operation)
@@ -97,7 +103,6 @@ class BaseCalculatorImpl(calculator: Calculator, val context: Context) {
             setAllClear()
         } else {
             firstNumber = 0
-            firstNumberSign = 1
             setAllClear()
             setValue("0")
             secondNumberSet = false
@@ -107,80 +112,120 @@ class BaseCalculatorImpl(calculator: Calculator, val context: Context) {
     private fun executeCalculation(operation: BitwiseOperation) {
         setAllClear()
         resetValues()
-        firstNumber = operation.getResult()
-        setValue(Integer.toString(firstNumberWithSign()))
-        setFormula(operation.getFormula())
         lastIsOperation = false
+        if (currentBase.equals(BIN)) {
+            firstNumber = convertBin(DEC, operation.getResult())
+            setValue(Integer.toString(firstNumber))
+            setFormula(operation.getBinaryFormula())
+        } else if (currentBase.equals(OCT)) {
+            firstNumber = convertOct(DEC, operation.getResult())
+            setValue(Integer.toString(firstNumber))
+            setFormula(operation.getOctalFormula())
+        } else {
+            firstNumber = operation.getResult()
+            setValue(Integer.toString(firstNumber))
+            setFormula(operation.getDecimalFormula())
+        }
     }
 
     fun convertToDecimal(baseFrom: String) {
+        currentBase = DEC
         if (secondNumberSet || lastIsOperation) {
-            setAllClear()
-            resetValues()
+            handleReset()
         } else if (baseFrom.equals(OCT)) {
-            firstNumber = convertDec(OCT)
+            var value = firstNumber
+            firstNumber = convertDec(OCT, value)
             setValue(firstNumber.toString())
             lastIsOperation = false
         } else {
-            firstNumber = convertDec(BIN)
+            var value = firstNumber
+            firstNumber = convertDec(BIN, value)
             setValue(firstNumber.toString())
             lastIsOperation = false
         }
     }
 
     fun convertToOctal(baseFrom: String) {
+        currentBase = OCT
         if (secondNumberSet || lastIsOperation) {
-            setAllClear()
-            resetValues()
+            handleReset()
         } else if (baseFrom.equals(DEC)) {
-            firstNumber = convertOct(DEC)
+            var value = firstNumber
+            firstNumber = convertOct(DEC, value)
             setValue(firstNumber.toString())
             lastIsOperation = false
         } else {
-            firstNumber = convertOct(BIN)
+            var value = firstNumber
+            firstNumber = convertOct(BIN, value)
             setValue(firstNumber.toString())
             lastIsOperation = false
         }
     }
 
     fun convertToBinary(baseFrom: String) {
+        currentBase = BIN
         if (secondNumberSet || lastIsOperation) {
-            setAllClear()
-            resetValues()
+            handleReset()
         } else if (baseFrom.equals(DEC)) {
-            firstNumber = convertBin(DEC)
+            var value = firstNumber
+            firstNumber = convertBin(DEC, value)
             setValue(firstNumber.toString())
             lastIsOperation = false
         } else {
-            firstNumber = convertBin(OCT)
+            var value = firstNumber
+            firstNumber = convertBin(OCT, value)
             setValue(firstNumber.toString())
             lastIsOperation = false
         }
     }
 
-    private fun convertDec(baseFrom: String): Int {
+    private fun convertDec(baseFrom: String, value: Int): Int {
         if (baseFrom.equals(OCT)) {
-            return Integer.valueOf(firstNumberWithSign().toString(), 8)
+            if (value < 0) {
+                return -1 * Integer.valueOf((value*-1).toString(), 8)
+            } else {
+                return Integer.valueOf(value.toString(), 8)
+            }
         } else if (baseFrom.equals(BIN)) {
-            return Integer.valueOf(firstNumberWithSign().toString(), 2)
+            if (value < 0) {
+                return -1 * Integer.valueOf((value*-1).toString(), 2)
+            } else {
+                return Integer.valueOf(value.toString(), 2)
+            }
         } else return 0
     }
 
-    private fun convertOct(baseFrom: String): Int {
+    private fun convertOct(baseFrom: String, value: Int): Int {
         if (baseFrom.equals(DEC)) {
-            return Integer.valueOf(Integer.toOctalString(firstNumberWithSign()))
+            if (value < 0) {
+                return -1 * Integer.valueOf(Integer.toOctalString(value * -1)) // toOctalString with negative integer give errors
+            } else {
+                return Integer.valueOf(Integer.toOctalString(value))
+            }
         } else if (baseFrom.equals(BIN)) {
-            var decimalValue = convertDec(BIN)
-            return Integer.valueOf(Integer.toOctalString(decimalValue))
+            var decimalValue = convertDec(BIN, value)
+            if (value < 0) {
+                return -1 * Integer.valueOf(Integer.toOctalString(decimalValue * -1)) // toOctalString with negative integer give errors
+            } else {
+                return Integer.valueOf(Integer.toOctalString(decimalValue))
+            }
         } else return 0
     }
 
-    private fun convertBin(baseFrom: String): Int {
+    private fun convertBin(baseFrom: String, value: Int): Int {
         if (baseFrom.equals(DEC)) {
-            return Integer.valueOf(Integer.toBinaryString(firstNumberWithSign()))
+            if (value < 0) {
+                return -1 * Integer.valueOf(Integer.toBinaryString(value * -1)) // toBinaryString with negative integer give errors
+            } else {
+                return Integer.valueOf(Integer.toBinaryString(value))
+            }
         } else if (baseFrom.equals(OCT)) {
-            var decimalValue = convertDec(OCT)
-            return Integer.valueOf(Integer.toBinaryString(decimalValue))
+            var decimalValue = convertDec(OCT, value)
+            if (value < 0) {
+                return -1 * Integer.valueOf(Integer.toBinaryString(decimalValue * -1)) // toBinaryString with negative integer give errors
+            } else {
+                return Integer.valueOf(Integer.toBinaryString(decimalValue))
+            }
         } else return 0
     }
 
@@ -206,24 +251,20 @@ class BaseCalculatorImpl(calculator: Calculator, val context: Context) {
         if (operator != "") {
             secondNumberSet = true
             setClear()
-        } else if (digits == 0 && firstNumberSign == 1) {
-            resetValues()
         }
 
         firstNumber = firstNumber * 10 + i
-        setValue(Integer.toString(firstNumberWithSign()))
+        setValue(Integer.toString(firstNumber))
 
         digits++
     }
 
     private fun swapRegisters() {
-        firstNumber = firstNumberWithSign()
         firstNumber += secondNumber
         secondNumber = firstNumber - secondNumber
         firstNumber -= secondNumber
         digits = 0
         lastIsOperation = true
-        firstNumberSign = 1
     }
 
     private fun setClear() {
@@ -234,12 +275,8 @@ class BaseCalculatorImpl(calculator: Calculator, val context: Context) {
         mCallback!!.setClear("AC")
     }
 
-    private fun firstNumberWithSign(): Int {
-        return firstNumber * firstNumberSign
-    }
-
     private fun negateNumber() {
-        firstNumberSign *= -1
-        setValue(Integer.toString(firstNumberWithSign()))
+        firstNumber *= -1
+        setValue(Integer.toString(firstNumber))
     }
 }
