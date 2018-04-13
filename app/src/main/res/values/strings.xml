@@ -44,18 +44,25 @@
         <item>CAD</item>
     </string-array>
 
-    <string-array name="from_weight">
+    <string-array name="weight">
         <item>g</item>
         <item>kg</item>
         <item>oz</item>
         <item>lb</item>
     </string-array>
 
-    <string-array name="to_weight">
-        <item>g</item>
-        <item>kg</item>
-        <item>oz</item>
-        <item>lb</item>
+    <string-array name="length">
+        <item>cm</item>
+        <item>m</item>
+        <item>in</item>
+        <item>ft</item>
+    </string-array>
+
+    <string-array name="volume">
+        <item>Ml</item>
+        <item>L</item>
+        <item>Quart</item>
+        <item>Gallon</item>
     </string-array>
 
     <!--

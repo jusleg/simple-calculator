@@ -50,14 +50,14 @@
             android:text="Length" />
 
         <Button
-            android:id="@+id/btn_temp"
+            android:id="@+id/btn_volume"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_weight="1"
             android:theme="@style/MoneyButton"
-            android:text="Temp" />
+            android:text="Volume" />
     </LinearLayout>
 
     <LinearLayout
