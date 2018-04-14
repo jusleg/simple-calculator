@@ -1,9 +1,9 @@
 package com.simpletools.calculator.commons.operations
 
 object LengthOperation {
-    var value: Double = 0.0
-    var conversion: String = ""
-    var LengthMap = HashMap<String, Double>()
+    private var value: Double = 0.0
+    private var conversion: String = ""
+    private var LengthMap = HashMap<String, Double>()
 
     init {
         LengthMap.put("cm cm", 1.0)

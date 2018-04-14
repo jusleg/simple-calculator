@@ -1,9 +1,9 @@
 package com.simpletools.calculator.commons.operations
 
 object WeightOperation {
-    var value: Double = 0.0
-    var conversion: String = ""
-    var weightMap = HashMap<String, Double>()
+    private var value: Double = 0.0
+    private var conversion: String = ""
+    private var weightMap = HashMap<String, Double>()
 
     init {
         weightMap.put("lb oz", 16.0)

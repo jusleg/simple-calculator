@@ -1,9 +1,9 @@
 package com.simpletools.calculator.commons.operations
 
 object VolumeOperation {
-    var value: Double = 0.0
-    var conversion: String = ""
-    var VolumeMap = HashMap<String, Double>()
+    private var value: Double = 0.0
+    private var conversion: String = ""
+    private var VolumeMap = HashMap<String, Double>()
 
     init {
         VolumeMap.put("Ml Ml", 1.0)

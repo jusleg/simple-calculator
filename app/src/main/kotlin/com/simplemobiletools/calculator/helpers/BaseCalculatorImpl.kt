@@ -7,12 +7,11 @@ import com.simpletools.calculator.commons.helpers.Formatter
 
 open class BaseCalculatorImpl(calculator: Calculator, open val context: Context) {
     private var mCallback: Calculator? = calculator
-    private var number: String = ""
-    private var decimalClicked: Boolean = false
-    private var decimalCounter: Int = 0
+    var number: String = ""
+    var decimalClicked: Boolean = false
+    var decimalCounter: Int = 0
 
     init {
-        setValue("0.00")
         handleClear()
     }
 
@@ -32,7 +31,7 @@ open class BaseCalculatorImpl(calculator: Calculator, open val context: Context)
         }
     }
 
-    fun addDigit(i: Int) {
+    open fun addDigit(i: Int) {
         if ((number != "" || i != 0) && decimalCounter < 2) {
             number = number + i
             if (decimalClicked) {
@@ -51,7 +50,7 @@ open class BaseCalculatorImpl(calculator: Calculator, open val context: Context)
         decimalClicked = true
     }
 
-    fun handleDelete() {
+    open fun handleDelete() {
         if (number.length <= 1) {
             return handleClear()
         } else if (decimalClicked && decimalCounter<2) {
@@ -67,7 +66,7 @@ open class BaseCalculatorImpl(calculator: Calculator, open val context: Context)
         setValue(String.format("%,.2f", number.toDouble()))
     }
 
-    fun handleClear() {
+    open fun handleClear() {
         number = ""
         decimalClicked = false
         decimalCounter = 0
@@ -75,14 +74,14 @@ open class BaseCalculatorImpl(calculator: Calculator, open val context: Context)
     }
 
     // will be used by the 3 money action buttons to display the result
-    fun overwriteNumber(newNumber: Double) {
+    open fun overwriteNumber(newNumber: Double) {
         number = ""
         decimalClicked = false
         decimalCounter = 0
         setValue(String.format("%,.2f", newNumber))
     }
 
-    private fun setValue(value: String) {
+    fun setValue(value: String) {
         mCallback!!.setValue(value)
     }
 

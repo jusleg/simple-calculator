@@ -2,7 +2,6 @@ package com.simplemobiletools.calculator.activities
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
@@ -48,9 +47,12 @@ class UnitConversionActivity : SimpleActivity(), Calculator {
         btn_delete.setOnClickListener { calc.handleDelete(); checkHaptic(it) }
         btn_delete.setOnLongClickListener { calc.handleClear(); true }
 
-        btn_weight.setOnClickListener { displayWeightDialog() }
-        btn_length.setOnClickListener { displayLengthDialog() }
-        btn_volume.setOnClickListener { displayVolumeDialog() }
+        btn_weight.setOnClickListener { displayDialog("weight", R.layout.weight_conversion_dialog,
+                R.array.weight, R.id.from_weight_spinner, R.id.to_weight_spinner) }
+        btn_length.setOnClickListener { displayDialog("length", R.layout.length_conversion_dialog,
+                R.array.length, R.id.from_length_spinner, R.id.to_length_spinner) }
+        btn_volume.setOnClickListener { displayDialog("volume", R.layout.volume_conversion_dialog,
+                R.array.volume, R.id.from_volume_spinner, R.id.to_volume_spinner) }
     }
 
     @SuppressLint("MissingSuperCall")
@@ -111,92 +113,34 @@ class UnitConversionActivity : SimpleActivity(), Calculator {
         applicationContext.toast(message, 100)
     }
 
-    private fun displayWeightDialog() {
+    private fun displayDialog(type: String, layoutElem: Int, arrayElem: Int, fromSpinnerElem: Int, toSpinnerElem: Int) {
 
         val fromBuilder = AlertDialog.Builder(this@UnitConversionActivity)
 
-        val view = layoutInflater.inflate(R.layout.weight_conversion_dialog, null)
+        val view = layoutInflater.inflate(layoutElem, null)
 
-        val fromSpinner = view.findViewById<View>(R.id.from_weight_spinner) as Spinner
+        val fromSpinner = view.findViewById<View>(fromSpinnerElem) as Spinner
         val fromAdapter: ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(this,
-                R.array.weight, android.R.layout.simple_spinner_item)
+                arrayElem, android.R.layout.simple_spinner_item)
         fromAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         fromSpinner.adapter = fromAdapter
 
-        val toSpinner = view.findViewById<View>(R.id.to_weight_spinner) as Spinner
+        val toSpinner = view.findViewById<View>(toSpinnerElem) as Spinner
         val toAdapter: ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(this,
-                R.array.weight, android.R.layout.simple_spinner_item)
+                arrayElem, android.R.layout.simple_spinner_item)
         toAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         toSpinner.adapter = toAdapter
 
-        fromBuilder.setPositiveButton("Convert", DialogInterface.OnClickListener { dialog, id ->
+        fromBuilder.setPositiveButton("Convert", { dialog, id ->
             val from = fromSpinner.selectedItem.toString()
             val to = toSpinner.selectedItem.toString()
-            calc.performWeightConversion(from, to)
+            when (type) {
+                "weight" -> calc.performWeightConversion(from, to)
+                "length" -> calc.performLengthConversion(from, to)
+                "volume" -> calc.performVolumeOperation(from, to)
+            }
         })
-                .setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, id ->
-                    // Cancel
-                })
-
-        fromBuilder.setView(view)
-        fromBuilder.show()
-    }
-
-    private fun displayLengthDialog() {
-        val fromBuilder = AlertDialog.Builder(this@UnitConversionActivity)
-
-        val view = layoutInflater.inflate(R.layout.length_conversion_dialog, null)
-
-        val fromSpinner = view.findViewById<View>(R.id.from_length_spinner) as Spinner
-        val fromAdapter: ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(this,
-                R.array.length, android.R.layout.simple_spinner_item)
-        fromAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        fromSpinner.adapter = fromAdapter
-
-        val toSpinner = view.findViewById<View>(R.id.to_length_spinner) as Spinner
-        val toAdapter: ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(this,
-                R.array.length, android.R.layout.simple_spinner_item)
-        toAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        toSpinner.adapter = toAdapter
-
-        fromBuilder.setPositiveButton("Convert", DialogInterface.OnClickListener { dialog, id ->
-            val from = fromSpinner.selectedItem.toString()
-            val to = toSpinner.selectedItem.toString()
-            calc.performLengthConversion(from, to)
-        })
-                .setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, id ->
-                    // Cancel
-                })
-
-        fromBuilder.setView(view)
-        fromBuilder.show()
-    }
-
-    private fun displayVolumeDialog() {
-        val fromBuilder = AlertDialog.Builder(this@UnitConversionActivity)
-
-        val view = layoutInflater.inflate(R.layout.volume_conversion_dialog, null)
-
-        val fromSpinner = view.findViewById<View>(R.id.from_volume_spinner) as Spinner
-        val fromAdapter: ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(this,
-                R.array.volume, android.R.layout.simple_spinner_item)
-        fromAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        fromSpinner.adapter = fromAdapter
-
-        val toSpinner = view.findViewById<View>(R.id.to_volume_spinner) as Spinner
-        val toAdapter: ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(this,
-                R.array.volume, android.R.layout.simple_spinner_item)
-        toAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        toSpinner.adapter = toAdapter
-
-        fromBuilder.setPositiveButton("Convert", DialogInterface.OnClickListener { dialog, id ->
-            val from = fromSpinner.selectedItem.toString()
-            val to = toSpinner.selectedItem.toString()
-            calc.performTempOperation(from, to)
-        })
-                .setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, id ->
-                    // Cancel
-                })
+                .setNegativeButton("Cancel", null)
 
         fromBuilder.setView(view)
         fromBuilder.show()
