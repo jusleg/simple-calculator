@@ -5,4 +5,8 @@
         <item name="colorButtonNormal">#FFF57C00</item>
     </style>
 
+    <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorPrimary">@color/color_primary_dark</item>
+    </style>
+
 </resources>
