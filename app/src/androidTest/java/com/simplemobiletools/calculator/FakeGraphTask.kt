@@ -30,7 +30,7 @@ class FakeGraphTask( val drawActivity: DrawActivity, val status: Int) : AsyncTas
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
         if (result != null) {
-            drawActivity.toggleWebView("file:///android_asset/succes.html")
+            drawActivity.toggleWebView("file:///android_asset/test/succes.html")
         }
     }
 }

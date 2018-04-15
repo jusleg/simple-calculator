@@ -83,6 +83,7 @@ public class DrawActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+    @TestOnly
     public void supersedeBuilder(BackgroundGetGraphTaskBuilder builder) {
         this.builder = builder;
     }
