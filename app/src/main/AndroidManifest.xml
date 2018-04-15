@@ -43,7 +43,7 @@
             android:label="@string/draw"
             android:parentActivityName=".activities.MainActivity" />
         <activity
-            android:name=".activities.BaseActivity"
+            android:name=".activities.BitwiseActivity"
             android:label="Base Operations"
             android:parentActivityName=".activities.MainActivity" />
         <activity

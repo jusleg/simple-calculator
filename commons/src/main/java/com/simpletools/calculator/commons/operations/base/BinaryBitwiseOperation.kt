@@ -1,21 +1,23 @@
 package com.simpletools.calculator.commons.operations.base
 
 abstract class BinaryBitwiseOperation : BitwiseOperation() {
-    var baseValue: Int = 0
-    var secondValue: Int = 0
+    var baseValue: Long = 0
+    var secondValue: Long = 0
 
     override fun getBinaryFormula(): String {
         var baseString: String = ""
         var secondString: String = ""
         if (baseValue < 0) {
-            baseString = "-" + Integer.toBinaryString(baseValue * -1) // toBinaryString with negative integer give errors
+            baseValue *= -1
+            baseString = "-" + baseValue.toString(2) // toBinaryString with negative Long give errors
         } else {
-            baseString = Integer.toBinaryString(baseValue)
+            baseString = baseValue.toString(2)
         }
         if (secondValue < 0) {
-            secondString = "-" + Integer.toBinaryString(secondValue * -1) // toBinaryString with negative integer give errors
+            secondValue *= -1
+            secondString = "-" + secondValue.toString(2) // toBinaryString with negative Long give errors
         } else {
-            secondString = Integer.toBinaryString(secondValue)
+            secondString = secondValue.toString(2)
         }
         return secondString + getOperator() + baseString
     }
@@ -24,21 +26,23 @@ abstract class BinaryBitwiseOperation : BitwiseOperation() {
         var baseString: String = ""
         var secondString: String = ""
         if (baseValue < 0) {
-            baseString = "-" + Integer.toOctalString(baseValue * -1) // toOctalString with negative integer give errors
+            baseValue *= -1
+            baseString = "-" + baseValue.toString(8) // toOctalString with negative Long give errors
         } else {
-            baseString = Integer.toOctalString(baseValue)
+            baseString = baseValue.toString(8)
         }
         if (secondValue < 0) {
-            secondString = "-" + Integer.toOctalString(secondValue * -1) // toOctalString with negative integer give errors
+            secondValue *= -1
+            secondString = "-" + secondValue.toString(8) // toOctalString with negative Long give errors
         } else {
-            secondString = Integer.toOctalString(secondValue)
+            secondString = secondValue.toString(8)
         }
         return secondString + getOperator() + baseString
     }
 
     override fun getDecimalFormula(): String {
-        val baseString = Integer.toString(baseValue)
-        val secondString = Integer.toString(secondValue)
+        val baseString = baseValue.toString()
+        val secondString = secondValue.toString()
         return secondString + getOperator() + baseString
     }
 

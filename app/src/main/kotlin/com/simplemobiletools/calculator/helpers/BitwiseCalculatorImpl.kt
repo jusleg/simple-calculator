@@ -10,14 +10,14 @@ import com.simpletools.calculator.commons.operations.base.BinaryBitwiseOperation
 import com.simpletools.calculator.commons.operations.base.BitwiseOperation
 import com.simpletools.calculator.commons.helpers.* // ktlint-disable no-wildcard-imports
 
-class BaseCalculatorImpl(calculator: Calculator, val context: Context) {
+class BitwiseCalculatorImpl(calculator: Calculator, val context: Context) {
     private var mCallback: Calculator? = calculator
 
-    private var firstNumber: Int = 0
-    private var secondNumber: Int = 0
+    private var firstNumber: Long = 0
+    private var secondNumber: Long = 0
     private var operator: String? = ""
     private var lastOperator: String? = ""
-    private var lastOperand: Int = 0
+    private var lastOperand: Long = 0
     private var secondNumberSet: Boolean = false
     private var digits = 0
     private var lastIsOperation: Boolean = false
@@ -110,121 +110,137 @@ class BaseCalculatorImpl(calculator: Calculator, val context: Context) {
     }
 
     private fun executeCalculation(operation: BitwiseOperation) {
-        setAllClear()
-        resetValues()
-        lastIsOperation = false
-        if (currentBase.equals(BIN)) {
-            firstNumber = convertBin(DEC, operation.getResult())
-            setValue(Integer.toString(firstNumber))
-            setFormula(operation.getBinaryFormula())
-        } else if (currentBase.equals(OCT)) {
-            firstNumber = convertOct(DEC, operation.getResult())
-            setValue(Integer.toString(firstNumber))
-            setFormula(operation.getOctalFormula())
-        } else {
-            firstNumber = operation.getResult()
-            setValue(Integer.toString(firstNumber))
-            setFormula(operation.getDecimalFormula())
+        try {
+            setAllClear()
+            resetValues()
+            lastIsOperation = false
+            if (currentBase.equals(BIN)) {
+                firstNumber = convertBin(DEC, operation.getResult())
+                setValue(firstNumber.toString())
+                setFormula(operation.getBinaryFormula())
+            } else if (currentBase.equals(OCT)) {
+                firstNumber = convertOct(DEC, operation.getResult())
+                setValue(firstNumber.toString())
+                setFormula(operation.getOctalFormula())
+            } else {
+                firstNumber = operation.getResult()
+                setValue(firstNumber.toString())
+                setFormula(operation.getDecimalFormula())
+            }
+        } catch (e: NumberFormatException) {
+            setValue("OVERFLOW")
         }
     }
 
     fun convertToDecimal(baseFrom: String) {
         currentBase = DEC
-        if (secondNumberSet || lastIsOperation) {
-            handleReset()
-        } else if (baseFrom.equals(OCT)) {
-            var value = firstNumber
-            firstNumber = convertDec(OCT, value)
-            setValue(firstNumber.toString())
-            lastIsOperation = false
-        } else {
-            var value = firstNumber
-            firstNumber = convertDec(BIN, value)
-            setValue(firstNumber.toString())
-            lastIsOperation = false
+        try {
+            if (secondNumberSet || lastIsOperation) {
+                handleReset()
+            } else if (baseFrom.equals(OCT)) {
+                var value = firstNumber
+                firstNumber = convertDec(OCT, value)
+                setValue(firstNumber.toString())
+                lastIsOperation = false
+            } else {
+                var value = firstNumber
+                firstNumber = convertDec(BIN, value)
+                setValue(firstNumber.toString())
+                lastIsOperation = false
+            }
+        } catch (e: NumberFormatException) {
+            setValue("OVERFLOW")
         }
     }
 
     fun convertToOctal(baseFrom: String) {
-        currentBase = OCT
-        if (secondNumberSet || lastIsOperation) {
-            handleReset()
-        } else if (baseFrom.equals(DEC)) {
-            var value = firstNumber
-            firstNumber = convertOct(DEC, value)
-            setValue(firstNumber.toString())
-            lastIsOperation = false
-        } else {
-            var value = firstNumber
-            firstNumber = convertOct(BIN, value)
-            setValue(firstNumber.toString())
-            lastIsOperation = false
+        try {
+            currentBase = OCT
+            if (secondNumberSet || lastIsOperation) {
+                handleReset()
+            } else if (baseFrom.equals(DEC)) {
+                var value = firstNumber
+                firstNumber = convertOct(DEC, value)
+                setValue(firstNumber.toString())
+                lastIsOperation = false
+            } else {
+                var value = firstNumber
+                firstNumber = convertOct(BIN, value)
+                setValue(firstNumber.toString())
+                lastIsOperation = false
+            }
+        } catch (e: NumberFormatException) {
+            setValue("OVERFLOW")
         }
     }
 
     fun convertToBinary(baseFrom: String) {
-        currentBase = BIN
-        if (secondNumberSet || lastIsOperation) {
-            handleReset()
-        } else if (baseFrom.equals(DEC)) {
-            var value = firstNumber
-            firstNumber = convertBin(DEC, value)
-            setValue(firstNumber.toString())
-            lastIsOperation = false
-        } else {
-            var value = firstNumber
-            firstNumber = convertBin(OCT, value)
-            setValue(firstNumber.toString())
-            lastIsOperation = false
+        try {
+            currentBase = BIN
+            if (secondNumberSet || lastIsOperation) {
+                handleReset()
+            } else if (baseFrom.equals(DEC)) {
+                var value = firstNumber
+                firstNumber = convertBin(DEC, value)
+                setValue(firstNumber.toString())
+                lastIsOperation = false
+            } else {
+                var value = firstNumber
+                firstNumber = convertBin(OCT, value)
+                setValue(firstNumber.toString())
+                lastIsOperation = false
+            }
+        } catch (e: NumberFormatException) {
+            setValue("OVERFLOW")
         }
     }
 
-    private fun convertDec(baseFrom: String, value: Int): Int {
+    private fun convertDec(baseFrom: String, value: Long): Long {
         if (baseFrom.equals(OCT)) {
             if (value < 0) {
-                return -1 * Integer.valueOf((value*-1).toString(), 8)
+                return (-1 * Integer.valueOf((value*-1).toString(), 8)).toLong()
             } else {
-                return Integer.valueOf(value.toString(), 8)
+                return (Integer.valueOf(value.toString(), 8)).toLong()
             }
         } else if (baseFrom.equals(BIN)) {
             if (value < 0) {
-                return -1 * Integer.valueOf((value*-1).toString(), 2)
+                return (-1 * Integer.valueOf((value*-1).toString(), 2)).toLong()
             } else {
-                return Integer.valueOf(value.toString(), 2)
+                return (Integer.valueOf(value.toString(), 2)).toLong()
             }
         } else return 0
     }
 
-    private fun convertOct(baseFrom: String, value: Int): Int {
+    private fun convertOct(baseFrom: String, value: Long): Long {
         if (baseFrom.equals(DEC)) {
             if (value < 0) {
-                return -1 * Integer.valueOf(Integer.toOctalString(value * -1)) // toOctalString with negative integer give errors
+                return -1 * ((value * -1).toString(8)).toLong() // toOctalString with negative Long give errors
             } else {
-                return Integer.valueOf(Integer.toOctalString(value))
+                return (value.toString(8)).toLong()
             }
         } else if (baseFrom.equals(BIN)) {
             var decimalValue = convertDec(BIN, value)
             if (value < 0) {
-                return -1 * Integer.valueOf(Integer.toOctalString(decimalValue * -1)) // toOctalString with negative integer give errors
+                return -1 * ((decimalValue * -1).toString(8)).toLong() // toOctalString with negative Long give errors
             } else {
-                return Integer.valueOf(Integer.toOctalString(decimalValue))
+                return decimalValue.toString(8).toLong()
             }
         } else return 0
     }
 
-    private fun convertBin(baseFrom: String, value: Int): Int {
+    private fun convertBin(baseFrom: String, value: Long): Long {
         if (baseFrom.equals(DEC)) {
             if (value < 0) {
-                return -1 * Integer.valueOf(Integer.toBinaryString(value * -1)) // toBinaryString with negative integer give errors
+                return -1 * ((value * -1).toString(2)).toLong() // toBinaryString with negative Long give errors
             } else {
-                return Integer.valueOf(Integer.toBinaryString(value))
+                return value.toString(2).toLong()
             }
         } else if (baseFrom.equals(OCT)) {
             var decimalValue = convertDec(OCT, value)
             if (value < 0) {
-                return -1 * Integer.valueOf(Integer.toBinaryString(decimalValue * -1)) // toBinaryString with negative integer give errors
+                return -1 * ((decimalValue * -1).toString(2)).toLong() // toBinaryString with negative Long give errors
             } else {
-                return Integer.valueOf(Integer.toBinaryString(decimalValue))
+                return decimalValue.toString(2).toLong()
             }
         } else return 0
     }
@@ -247,16 +263,20 @@ class BaseCalculatorImpl(calculator: Calculator, val context: Context) {
         digits = 0
     }
 
-    fun addDigit(i: Int) {
+    fun addDigit(i: Long) {
         if (operator != "") {
             secondNumberSet = true
             setClear()
         }
 
         firstNumber = firstNumber * 10 + i
-        setValue(Integer.toString(firstNumber))
+        setValue(firstNumber.toString())
 
         digits++
+
+        if (digits > 16) {
+            setValue("OVERFLOW")
+        }
     }
 
     private fun swapRegisters() {
@@ -277,6 +297,6 @@ class BaseCalculatorImpl(calculator: Calculator, val context: Context) {
 
     private fun negateNumber() {
         firstNumber *= -1
-        setValue(Integer.toString(firstNumber))
+        setValue(firstNumber.toString())
     }
 }

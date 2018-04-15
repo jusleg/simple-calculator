@@ -129,7 +129,7 @@ class MainActivity : SimpleActivity(), Calculator {
     }
 
     private fun launchBase() {
-        startActivity(Intent(applicationContext, BaseActivity::class.java))
+        startActivity(Intent(applicationContext, BitwiseActivity::class.java))
     }
 
     private fun launchAbout() {

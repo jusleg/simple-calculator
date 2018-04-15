@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import com.simplemobiletools.calculator.R
-import com.simplemobiletools.calculator.helpers.BaseCalculatorImpl
+import com.simplemobiletools.calculator.helpers.BitwiseCalculatorImpl
 import com.simpletools.calculator.commons.activities.SimpleActivity
 import com.simpletools.calculator.commons.extensions.config
 import com.simpletools.calculator.commons.extensions.updateViewColors
@@ -15,21 +15,21 @@ import kotlinx.android.synthetic.main.activity_base.*
 import com.simplemobiletools.commons.extensions.*
 /* ktlint-enable no-wildcard-imports */
 
-class BaseActivity : SimpleActivity(), Calculator {
+class BitwiseActivity : SimpleActivity(), Calculator {
 
     private var storedTextColor = 0
     private var vibrateOnButtonPress = true
     private var storedUseEnglish = false
 
     private lateinit var currentBase: String
-    private lateinit var calc: BaseCalculatorImpl
+    private lateinit var calc: BitwiseCalculatorImpl
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_base)
 
-        calc = BaseCalculatorImpl(this, applicationContext)
+        calc = BitwiseCalculatorImpl(this, applicationContext)
         currentBase = DEC
         getButtonIds().forEach {
             it.setOnClickListener { calc.numpadClicked(it.id); checkHaptic(it) }

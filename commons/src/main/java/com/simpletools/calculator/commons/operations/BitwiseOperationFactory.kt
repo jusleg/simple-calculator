@@ -5,7 +5,7 @@ import com.simpletools.calculator.commons.operations.base.* // ktlint-disable no
 
 object BitwiseOperationFactory {
 
-    fun forId(id: String, baseValue: Int, secondValue: Int): BitwiseOperation? {
+    fun forId(id: String, baseValue: Long, secondValue: Long): BitwiseOperation? {
         when (id) {
             NEGATIVE -> return bitwiseUnarySet(BitwiseNegativeOperation, baseValue)
             AND -> return bitwiseBinarySet(AndOperation, baseValue, secondValue)
@@ -16,13 +16,13 @@ object BitwiseOperationFactory {
         }
     }
 
-    private fun bitwiseBinarySet(operation: BinaryBitwiseOperation, baseValue: Int, secondValue: Int): BitwiseOperation? {
+    private fun bitwiseBinarySet(operation: BinaryBitwiseOperation, baseValue: Long, secondValue: Long): BitwiseOperation? {
         operation.baseValue = baseValue
         operation.secondValue = secondValue
         return operation
     }
 
-    private fun bitwiseUnarySet(operation: UnaryBitwiseOperation, value: Int): BitwiseOperation? {
+    private fun bitwiseUnarySet(operation: UnaryBitwiseOperation, value: Long): BitwiseOperation? {
         operation.value = value
         return operation
     }

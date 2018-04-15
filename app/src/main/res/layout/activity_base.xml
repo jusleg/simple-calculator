@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/base_holder"
-    tools:context=".activities.BaseActivity"
+    tools:context=".activities.BitwiseActivity"
     tools:ignore="HardcodedText">
 
     <TextView

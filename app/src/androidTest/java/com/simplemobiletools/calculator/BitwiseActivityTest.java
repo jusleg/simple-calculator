@@ -4,9 +4,8 @@ package com.simplemobiletools.calculator;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.simplemobiletools.calculator.activities.BaseActivity;
+import com.simplemobiletools.calculator.activities.BitwiseActivity;
 
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,9 +18,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
-public class BaseActivityTest {
+public class BitwiseActivityTest {
     @Rule
-    public final ActivityTestRule<BaseActivity> activity = new ActivityTestRule<>(BaseActivity.class);
+    public final ActivityTestRule<BitwiseActivity> activity = new ActivityTestRule<>(BitwiseActivity.class);
 
     @Test
     public void addDigitsDecTest() {
@@ -305,6 +304,17 @@ public class BaseActivityTest {
         onView(withId(R.id.btn_clear)).check(matches(withText("CE")));
         press(R.id.btn_equals);
         checkResult("8");
+    }
+
+    @Test
+    public void bigDecimalNumberToBinaryTest() {
+        press(R.id.btn_dec);
+        press(R.id.btn_9);
+        press(R.id.btn_0);
+        press(R.id.btn_0);
+        press(R.id.btn_1);
+        press(R.id.btn_bin);
+        checkResult("10001100101001");
     }
 
     private void press(int id) {

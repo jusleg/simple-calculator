@@ -1,14 +1,15 @@
 package com.simpletools.calculator.commons.operations.base
 
 abstract class UnaryBitwiseOperation : BitwiseOperation() {
-    var value: Int = 0
+    var value: Long = 0
 
     override fun getBinaryFormula(): String {
         var baseString: String = ""
         if (value < 0) {
-            baseString = "-" + Integer.toBinaryString(value * -1)// toBinaryString with negative integer give errors
+            value *= -1
+            baseString = "-" + value.toString(2)// toBinaryString with negative integer give errors
         } else {
-            baseString = Integer.toBinaryString(value)
+            baseString = value.toString(2)
         }
         return applyOperator(baseString)
     }
@@ -16,15 +17,16 @@ abstract class UnaryBitwiseOperation : BitwiseOperation() {
     override fun getOctalFormula(): String {
         var baseString: String = ""
         if (value < 0) {
-            baseString = "-" + Integer.toOctalString(value * -1) // toOctalString with negative integer give errors
+            value *= -1
+            baseString = "-" + value.toString(8) // toOctalString with negative integer give errors
         } else {
-            baseString = Integer.toOctalString(value)
+            baseString = value.toString(8)
         }
         return applyOperator(baseString)
     }
 
     override fun getDecimalFormula(): String {
-        val baseString = Integer.toString(value)
+        val baseString = value.toString()
         return applyOperator(baseString)
     }
 
