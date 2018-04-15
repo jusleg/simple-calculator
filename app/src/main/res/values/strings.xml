@@ -44,6 +44,22 @@
         <item>CAD</item>
     </string-array>
 
+    <string-array name="from_crypto_array">
+        <item>Bitcoin</item>
+        <item>Ethereum</item>
+        <item>Ripple</item>
+        <item>Litecoin</item>
+        <item>USD</item>
+    </string-array>
+
+    <string-array name="to_crypto_array">
+        <item>Ethereum</item>
+        <item>Ripple</item>
+        <item>Litecoin</item>
+        <item>USD</item>
+        <item>Bitcoin</item>
+    </string-array>
+
 
     <!--
         Haven't found some strings? There's more at

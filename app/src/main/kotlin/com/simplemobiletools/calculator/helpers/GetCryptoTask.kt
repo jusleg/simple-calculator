@@ -3,7 +3,6 @@ package com.simplemobiletools.calculator.helpers
 import android.os.AsyncTask
 import android.util.Log
 import com.simplemobiletools.calculator.activities.CryptoActivity
-import com.simpletools.calculator.commons.helpers.Calculator
 import com.simpletools.calculator.commons.helpers.Formatter
 import org.json.JSONException
 import org.json.JSONObject
@@ -15,24 +14,30 @@ import java.net.URL
 
 class GetCryptoTask(val cryptoFROM: String, val cryptoTO: String, cryptoActivity: CryptoActivity, cryptoCalculatorImpl: CryptoCalculatorImpl) : AsyncTask<Void, Void, String>() {
 
-    var mCalc: Calculator = cryptoActivity
-    var cryptoCalculator: CryptoCalculatorImpl = cryptoCalculatorImpl
+    private val cryptoActivity: CryptoActivity = cryptoActivity
+    private var cryptoCalculator: CryptoCalculatorImpl = cryptoCalculatorImpl
 
     override fun doInBackground(vararg params: Void?): String? {
-        val url = URL("https://api.cryptonator.com/api/ticker/$cryptoFROM-$cryptoTO")
+        try {
+            val url = URL("https://api.cryptonator.com/api/ticker/$cryptoFROM-$cryptoTO")
 
-        val httpClient = url.openConnection() as HttpURLConnection
+            val httpClient = url.openConnection() as HttpURLConnection
+            httpClient.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
+            httpClient.setRequestProperty("charset", "utf-8")
+            httpClient.useCaches = false
 
-        if (httpClient.responseCode == HttpURLConnection.HTTP_OK) {
-            try {
+            if (httpClient.responseCode == HttpURLConnection.HTTP_OK) {
                 val stream = BufferedInputStream(httpClient.inputStream)
                 val data: String = readStream(inputStream = stream)
-                return data
-            } catch (e: Exception) {
-                e.printStackTrace()
-            } finally {
                 httpClient.disconnect()
+                return data
+            } else {
+                httpClient.disconnect()
+                pingWithError("ERROR " + httpClient.responseCode, "There has been a connection problem, returning you to the main page")
+                Thread.currentThread().interrupt()
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
         return null
     }
@@ -44,17 +49,22 @@ class GetCryptoTask(val cryptoFROM: String, val cryptoTO: String, cryptoActivity
         return stringBuilder.toString()
     }
 
+    fun pingWithError(title: String, message: String) {
+        cryptoActivity.runOnUiThread({
+            cryptoActivity.displayErrorMessage(title, message)
+        })
+    }
+
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
-        Log.e("result1", "result:"+result)
+        Log.e("result1", "result:" + result)
         var price: Double = 0.0
         try {
             price = JSONObject(result).getJSONObject("ticker").getDouble("price")
-            Log.e("json1", "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% json object: " + JSONObject(result))
-
+            Log.e("json1", "json object: " + JSONObject(result))
         } catch (ex: JSONException) {
-            Log.e("exception","JSON exception")
+            Log.e("exception", "JSON exception")
         }
-        cryptoCalculator.overwriteNumber(Formatter.stringToDouble(mCalc.getResult())* price)
+        cryptoCalculator.overwriteNumber(Formatter.stringToDouble(cryptoActivity.getResult())* price)
     }
 }

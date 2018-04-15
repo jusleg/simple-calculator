@@ -1,10 +1,10 @@
 package com.simplemobiletools.calculator.activities
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import com.simplemobiletools.calculator.R
 import com.simplemobiletools.commons.extensions.copyToClipboard
@@ -19,9 +19,10 @@ import com.simpletools.calculator.commons.helpers.Calculator
 import kotlinx.android.synthetic.main.activity_crypto.*
 import me.grantland.widget.AutofitHelper
 import android.widget.NumberPicker
-import android.widget.Toast
 import com.simplemobiletools.calculator.helpers.CryptoCalculatorImpl
 import com.simpletools.calculator.commons.helpers.Formatter
+import android.content.DialogInterface
+import android.content.DialogInterface.BUTTON_NEGATIVE
 
 class CryptoActivity : SimpleActivity(), Calculator {
     private var storedTextColor = 0
@@ -51,8 +52,8 @@ class CryptoActivity : SimpleActivity(), Calculator {
         var numberPickerTO: NumberPicker = numberPicker2
 
         // Values of each of the Number Pickers
-        val valuesFROM = arrayOf("Bitcoin", "Ethereum", "Ripple", "Litecoin", "USD")
-        val valuesTO = arrayOf("Ethereum", "Ripple", "Litecoin", "USD", "Bitcoin")
+        val valuesFROM = resources.getStringArray(R.array.from_crypto_array)
+        val valuesTO = resources.getStringArray(R.array.to_crypto_array)
 
         // Setting default value of each Number Picker
         numberPickerFROM.minValue = 0
@@ -70,7 +71,7 @@ class CryptoActivity : SimpleActivity(), Calculator {
         numberPickerFROM.wrapSelectorWheel = true
         numberPickerTO.wrapSelectorWheel = true
 
-        val cryptoSymbolHashMap = HashMap<String,String>()
+        val cryptoSymbolHashMap = HashMap<String, String>()
         cryptoSymbolHashMap.put("Ethereum", "ETH")
         cryptoSymbolHashMap.put("Bitcoin", "BTC")
         cryptoSymbolHashMap.put("Ripple", "XRP")
@@ -81,17 +82,11 @@ class CryptoActivity : SimpleActivity(), Calculator {
             cryptoFROM = cryptoSymbolHashMap.get(valuesFROM[numberPickerFROM.value]).toString()
             cryptoTO = cryptoSymbolHashMap.get(valuesTO[numberPickerTO.value]).toString()
 
-            //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            var text = "val FROM: " + cryptoFROM + ", value TO: " + cryptoTO
-            Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
-            //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
             if (cryptoTO == cryptoFROM) {
                 calc.overwriteNumber(Formatter.stringToDouble(getResult()))
             } else {
                 performConversion(cryptoFROM, cryptoTO)
             }
-
         }
         btn_delete.setOnClickListener { calc.handleDelete(); checkHaptic(it) }
         btn_delete.setOnLongClickListener { calc.handleClear(); true }
@@ -108,12 +103,21 @@ class CryptoActivity : SimpleActivity(), Calculator {
         }
     }
 
+    fun displayErrorMessage(error: String, errorMessage: String) {
+        findViewById<View>(R.id.loading).visibility = View.GONE
+        val alertDialog = AlertDialog.Builder(this, R.style.MyDialogTheme).create()
+        alertDialog.setTitle(error)
+        alertDialog.setMessage(errorMessage)
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "OK",
+                DialogInterface.OnClickListener { dialog, which -> dialog.dismiss() })
+        alertDialog.show()
+    }
+
     fun isOnline(): Boolean {
         val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val netInfo = cm.activeNetworkInfo
         return netInfo != null && netInfo.isConnectedOrConnecting
     }
-
 
     @SuppressLint("MissingSuperCall")
     override fun onResume() {
@@ -125,7 +129,6 @@ class CryptoActivity : SimpleActivity(), Calculator {
 
         if (storedTextColor != config.textColor) {
             updateViewColors(crypto_holder, config.textColor)
-//            updateButtonColor(config.customPrimaryColor)
         }
         vibrateOnButtonPress = config.vibrateOnButtonPress
     }

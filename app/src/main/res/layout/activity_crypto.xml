@@ -38,7 +38,8 @@
             android:id="@+id/numberPicker1"
             android:layout_width="128dp"
             android:layout_height="90dp"
-            android:theme="@style/cryptoNumbPicker" />
+            android:theme="@style/cryptoNumbPicker"
+            android:descendantFocusability="blocksDescendants"/>
 
         <ImageView
             android:layout_width="90dp"
@@ -52,6 +53,7 @@
             android:id="@+id/numberPicker2"
             android:layout_width="128dp"
             android:layout_height="90dp"
+            android:descendantFocusability="blocksDescendants"
             android:theme="@style/cryptoNumbPicker" />
 
     </LinearLayout>

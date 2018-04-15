@@ -24,14 +24,14 @@ before_script:
 
 jobs:
   include:
-    - stage: Lint (ktlint) 🚲🏠
-      script: ./gradlew ktlint
     - stage: Compile (Debug, UnitTest, AndroidTest & Release) 🌚
       script: 
         - ./gradlew compileDebugAndroidTestSources
         - ./gradlew compileDebugSources
         - ./gradlew compileDebugUnitTestSources
         - ./gradlew compileReleaseSources
+    - stage: Lint (ktlint) 🚲🏠
+      script: ./gradlew ktlint
     - stage: Testing (Parallel integration & unit tests) 🏎
       script: travis_wait 30 ./testing integration_tests
     - script: ./testing unit_tests

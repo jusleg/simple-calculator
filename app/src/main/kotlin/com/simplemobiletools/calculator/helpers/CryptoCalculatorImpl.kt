@@ -1,8 +1,7 @@
 package com.simplemobiletools.calculator.helpers
 
 import android.content.Context
-import android.util.Log
-import android.widget.Toast
+import android.os.AsyncTask
 import com.simplemobiletools.calculator.activities.CryptoActivity
 import com.simpletools.calculator.commons.R
 import com.simpletools.calculator.commons.helpers.Calculator
@@ -13,6 +12,7 @@ class CryptoCalculatorImpl(calculator: Calculator, val context: Context) {
     private var number: String = ""
     private var decimalClicked: Boolean = false
     private var decimalCounter: Int = 0
+    private var taskBuilder: BackgroundCryptoTaskBuilder = BackgroundCryptoTaskBuilder(calculator as CryptoActivity, this)
 
     init {
         setValue("0.000000")
@@ -91,9 +91,11 @@ class CryptoCalculatorImpl(calculator: Calculator, val context: Context) {
 
     private fun getResult() = Formatter.stringToDouble(mCallback!!.getResult())
 
-    fun calculateCrypto(cryptoFROM: String, cryptoTO: String, cryptoActivity: CryptoActivity) {
-        Log.e("calcImpl","============>>inside calculator impl <<=============")
-        var response = GetCryptoTask(cryptoFROM, cryptoTO, cryptoActivity, this).execute()
+    fun supersedeBuilder(builder: BackgroundCryptoTaskBuilder) {
+        taskBuilder = builder
     }
 
+    fun calculateCrypto(cryptoFROM: String, cryptoTO: String, cryptoActivity: CryptoActivity) {
+        var response: AsyncTask<Void, Void, String>? = taskBuilder.from(cryptoFROM).to(cryptoTO).build().execute()
+    }
 }

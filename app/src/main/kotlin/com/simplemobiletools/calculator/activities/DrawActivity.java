@@ -1,5 +1,7 @@
 package com.simplemobiletools.calculator.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +12,8 @@ import android.widget.RelativeLayout;
 import android.view.ViewGroup.LayoutParams;
 
 import com.simplemobiletools.calculator.R;
+import com.simplemobiletools.calculator.helpers.BackgroundCurrencyTaskBuilder;
+import com.simplemobiletools.calculator.helpers.BackgroundGetGraphTaskBuilder;
 import com.simplemobiletools.calculator.helpers.GetGraphTask;
 import com.simplemobiletools.calculator.views.SketchSheetView;
 
@@ -19,6 +23,11 @@ import org.jetbrains.annotations.TestOnly;
 public class DrawActivity extends AppCompatActivity {
 
     private SketchSheetView equationSketchView;
+    private BackgroundGetGraphTaskBuilder builder = new BackgroundGetGraphTaskBuilder(this);
+
+    public SketchSheetView getEquationSketchView() {
+        return equationSketchView;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +52,7 @@ public class DrawActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // do web request
-                    new GetGraphTask(equationSketchView.exportScgink(),activity).execute();
+                  builder.addStrokes(equationSketchView.exportScgink()).build().execute();
                 }
         });
 
@@ -59,6 +68,26 @@ public class DrawActivity extends AppCompatActivity {
     public void supersedeSketchSheetView(SketchSheetView equationSketchView) {
         this.equationSketchView = equationSketchView;
     }
+
+    public void recoverAfterError(String error,String errorMessage){
+        findViewById(R.id.loading).setVisibility(View.GONE);
+        AlertDialog alertDialog = new AlertDialog.Builder(DrawActivity.this,R.style.MyDialogTheme).create();
+        alertDialog.setTitle(error);
+        alertDialog.setMessage(errorMessage);
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
+    }
+
+    @TestOnly
+    public void supersedeBuilder(BackgroundGetGraphTaskBuilder builder) {
+        this.builder = builder;
+    }
+
 
     public void toggleWebView(@Nullable String uri) {
         WebView view = findViewById(R.id.wolfram_view);
@@ -77,7 +106,6 @@ public class DrawActivity extends AppCompatActivity {
             }
 
         });
-
         LinearLayout buttons = findViewById(R.id.draw_ui);
         RelativeLayout canvas = findViewById(R.id.draw_layout);
         LinearLayout done = findViewById(R.id.done_ui);

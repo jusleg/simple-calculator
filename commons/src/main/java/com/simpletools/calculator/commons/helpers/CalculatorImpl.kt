@@ -20,6 +20,7 @@ class CalculatorImpl(calculator: Calculator) {
     private var secondNumberSet: Boolean = false
     private var digits = 0
     private var lastIsOperation: Boolean = false
+    private var firstNumberSign: Double = 1.0
 
     init {
         resetValues()
@@ -69,16 +70,16 @@ class CalculatorImpl(calculator: Calculator) {
     fun handleEquals() {
         val operation: Operation?
         if (operator != "") { // Handle new operation
-            operation = OperationFactory.forId(operator!!, firstNumber, secondNumber)
+            operation = OperationFactory.forId(operator!!, firstNumberWithSign(), secondNumber)
 
             if ((operation != null) && (digits > 0 || operation is UnaryOperation)) {
                 if (operation !is UnaryOperation) {
-                    lastOperand = firstNumber
+                    lastOperand = firstNumberWithSign()
                 }
                 executeCalculation(operation)
             }
         } else { // Handle chained equals
-            operation = OperationFactory.forId(lastOperator!!, lastOperand, firstNumber)
+            operation = OperationFactory.forId(lastOperator!!, lastOperand, firstNumberWithSign())
 
             if (operation != null) {
                 executeCalculation(operation)
@@ -99,6 +100,7 @@ class CalculatorImpl(calculator: Calculator) {
             setAllClear()
         } else {
             firstNumber = 0.0
+            firstNumberSign = 1.0
             setAllClear()
             setValue("0")
             secondNumberSet = false
@@ -109,7 +111,7 @@ class CalculatorImpl(calculator: Calculator) {
         setAllClear()
         resetValues()
         firstNumber = operation.getResult()
-        setValue(Formatter.doubleToString(firstNumber, false))
+        setValue(Formatter.doubleToString(firstNumberWithSign(), false))
         setFormula(operation.getFormula())
         lastIsOperation = false
     }
@@ -132,6 +134,7 @@ class CalculatorImpl(calculator: Calculator) {
         setValue("0")
         setFormula("")
         digits = 0
+        firstNumberSign = 1.0
     }
 
     fun addDigit(i: Int) {
@@ -139,22 +142,19 @@ class CalculatorImpl(calculator: Calculator) {
         if (operator != "") {
             secondNumberSet = true
             setClear()
-        } else if (digits == 0) {
+        } else if (digits == 0 && firstNumberSign == 1.0) {
             resetValues()
         }
 
-        firstNumber = if (!decimalClicked) signumMultiply(firstNumber) * (Math.abs(firstNumber) * 10 + i)
-        else signumMultiply(firstNumber) * (Math.abs(firstNumber) + i * Math.pow(10.0, decimalCounter.toDouble()))
-        setValue(Formatter.doubleToStringWithGivenDigits(firstNumber, Math.abs(decimalCounter)))
+        firstNumber = if (!decimalClicked) firstNumber * 10 + i
+        else firstNumber + i * Math.pow(10.0, decimalCounter.toDouble())
+        setValue(Formatter.doubleToStringWithGivenDigits(firstNumberWithSign(), Math.abs(decimalCounter)))
 
         digits++
     }
 
-    private fun signumMultiply(i: Double): Double {
-        return if (Math.signum(i) == -1.0) -1.0 else 1.0 // slight modification of signum to use in multiplication
-    }
-
     private fun swapRegisters() {
+        firstNumber = firstNumberWithSign()
         firstNumber += secondNumber
         secondNumber = firstNumber - secondNumber
         firstNumber -= secondNumber
@@ -162,6 +162,7 @@ class CalculatorImpl(calculator: Calculator) {
         decimalCounter = 0
         digits = 0
         lastIsOperation = true
+        firstNumberSign = 1.0
     }
 
     private fun setClear() {
@@ -172,8 +173,12 @@ class CalculatorImpl(calculator: Calculator) {
         mCallback!!.setClear("AC")
     }
 
+    private fun firstNumberWithSign(): Double {
+        return firstNumber * firstNumberSign
+    }
+
     private fun negateNumber() {
-        firstNumber *= -1
-        setValue(Formatter.doubleToString(firstNumber, false))
+        firstNumberSign *= -1
+        setValue(Formatter.doubleToString(firstNumberWithSign(), false))
     }
 }
