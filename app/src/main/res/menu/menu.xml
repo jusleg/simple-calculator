@@ -12,6 +12,11 @@
         android:title="@string/draw"
         app:showAsAction="always" />
     <item
+        android:id="@+id/unityConversion"
+        android:icon="@drawable/button_unit_conversion"
+        android:title="@string/unitConversion"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/money"
         android:icon="@drawable/ic_attach_money_black_24dp"
         android:title="@string/money"
