@@ -97,6 +97,7 @@ class MainActivity : SimpleActivity(), Calculator {
             R.id.about -> launchAbout()
             R.id.money -> launchMoney()
             R.id.draw -> launchDraw()
+            R.id.crypto -> launchCrypto()
             R.id.unityConversion -> launchUnitConversion()
             else -> return super.onOptionsItemSelected(item)
         }
@@ -130,6 +131,10 @@ class MainActivity : SimpleActivity(), Calculator {
 
     private fun launchDraw() {
         startActivity(Intent(applicationContext, DrawActivity::class.java))
+    }
+
+    private fun launchCrypto() {
+        startActivity(Intent(applicationContext, CryptoActivity::class.java))
     }
 
     private fun launchAbout() {

@@ -13,6 +13,7 @@
     </string>
     <string name="money">Money Operations</string>
     <string name="draw">Draw Equations</string>
+    <string name="crypto">Crypto Conversion</string>
     <string name="unitConversion">Unit Conversion</string>
     <string-array name="provinces">item
         <item>British Columbia</item>
@@ -42,6 +43,22 @@
         <item>GBP</item>
         <item>INR</item>
         <item>CAD</item>
+    </string-array>
+
+    <string-array name="from_crypto_array">
+        <item>Bitcoin</item>
+        <item>Ethereum</item>
+        <item>Ripple</item>
+        <item>Litecoin</item>
+        <item>USD</item>
+    </string-array>
+
+    <string-array name="to_crypto_array">
+        <item>Ethereum</item>
+        <item>Ripple</item>
+        <item>Litecoin</item>
+        <item>USD</item>
+        <item>Bitcoin</item>
     </string-array>
 
     <string-array name="weight">

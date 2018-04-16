@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/crypto"
+        android:icon="@drawable/ic_bitcoin_symbol"
+        android:title="@string/money"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/draw"
         android:icon="@drawable/ic_gesture_black_24dp"
         android:title="@string/draw"
