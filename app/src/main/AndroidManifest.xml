@@ -39,12 +39,20 @@
             android:label="@string/money"
             android:parentActivityName=".activities.MainActivity" />
         <activity
+            android:name=".activities.UnitConversionActivity"
+            android:label="@string/unitConversion"
+            android:parentActivityName=".activities.MainActivity" />
+        <activity
             android:name=".activities.DrawActivity"
             android:label="@string/draw"
             android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name=".activities.BitwiseActivity"
             android:label="Base Operations"
+            android:parentActivityName=".activities.MainActivity" />
+        <activity
+            android:name=".activities.CryptoActivity"
+            android:label="@string/crypto"
             android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name="com.simplemobiletools.commons.activities.AboutActivity"

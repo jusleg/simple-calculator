@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/money_holder"
-    tools:context=".activities.MoneyActivity">
+    tools:context=".activities.UnitConversionActivity">
 
     <TextView
         android:id="@+id/result"
@@ -30,34 +30,34 @@
         android:paddingBottom="16dp">
 
         <Button
-            android:id="@+id/btn_taxes"
+            android:id="@+id/btn_weight"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_weight="1"
             android:theme="@style/MoneyButton"
-            android:text="Taxes" />
+            android:text="Weight" />
 
         <Button
-            android:id="@+id/btn_tip"
+            android:id="@+id/btn_length"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_weight="1"
             android:theme="@style/MoneyButton"
-            android:text="Tip" />
+            android:text="Length" />
 
         <Button
-            android:id="@+id/btn_currency"
+            android:id="@+id/btn_volume"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_weight="1"
             android:theme="@style/MoneyButton"
-            android:text="Currency" />
+            android:text="Volume" />
     </LinearLayout>
 
     <LinearLayout

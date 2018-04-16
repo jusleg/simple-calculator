@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+    <TextView
+        android:id="@+id/lengthConversionTitle"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_weight="0"
+        android:gravity="center"
+        android:text="Length Conversion"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="FROM"
+        android:textSize="16sp"
+        android:textColor="#000000"/>
+    <Spinner
+        android:id="@+id/from_length_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="32sp"
+        android:layout_marginBottom="16sp"
+        android:layout_weight="1" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TO"
+        android:textSize="16sp"
+        android:textColor="#000000"/>
+    <Spinner
+        android:id="@+id/to_length_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="32sp"
+        android:layout_marginBottom="16sp"
+        android:layout_weight="1" />
+
+</LinearLayout>

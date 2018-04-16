@@ -85,7 +85,6 @@ public class SketchSheetView extends View {
                 output += coordinates[0] + " " + coordinates[1] + "\n";
             }
         }
-        points = new ArrayList<>();
         return output;
     }
 

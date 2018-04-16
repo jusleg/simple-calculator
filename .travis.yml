@@ -33,7 +33,7 @@ jobs:
     - stage: Lint (ktlint) 🚲🏠
       script: ./gradlew ktlint
     - stage: Testing (Parallel integration & unit tests) 🏎
-      script: travis_wait 30 ./testing integration_tests
+      script: travis_wait 40 ./testing integration_tests
     - script: ./testing unit_tests
 
 notifications:

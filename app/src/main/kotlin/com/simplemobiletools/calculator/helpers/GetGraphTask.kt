@@ -1,5 +1,6 @@
 package com.simplemobiletools.calculator.helpers
 
+import android.annotation.SuppressLint
 import android.os.AsyncTask
 import com.simplemobiletools.calculator.activities.DrawActivity
 import java.io.BufferedInputStream
@@ -11,34 +12,50 @@ import java.net.URL
 
 class GetGraphTask(val points: String, val drawActivity: DrawActivity) : AsyncTask<Void, Void, String>() {
 
+    @SuppressLint("WrongConstant")
     override fun doInBackground(vararg params: Void?): String? {
-        val url = URL("http://159.203.16.16/equation")
+        try {
+            val url = URL("http://159.203.16.16/equation")
 
-        val httpClient = url.openConnection() as HttpURLConnection
+            val httpClient = url.openConnection() as HttpURLConnection
+            httpClient.requestMethod = "POST"
+            httpClient.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
+            httpClient.setRequestProperty("charset", "utf-8")
+            httpClient.useCaches = false
 
-        httpClient.requestMethod = "POST"
-        httpClient.setRequestProperty( "Content-Type", "application/x-www-form-urlencoded")
-        httpClient.setRequestProperty( "charset", "utf-8")
-        httpClient.useCaches = false
+            val writer = OutputStreamWriter(httpClient.outputStream)
+            writer.write("strokes=" + points)
+            writer.flush()
 
-        val writer = OutputStreamWriter(httpClient.outputStream)
-        writer.write("strokes=" + points)
-        writer.flush()
-
-        if (httpClient.responseCode == HttpURLConnection.HTTP_OK) {
-            try {
+            var data: String
+            if (httpClient.responseCode == 200) {
                 val stream = BufferedInputStream(httpClient.inputStream)
-                val data: String = readStream(inputStream = stream)
-                return data
-            } catch (e: Exception) {
-                e.printStackTrace()
-            } finally {
+                data = readStream(inputStream = stream)
                 httpClient.disconnect()
+                return data
+            } else if (httpClient.responseCode == 404) {
+                httpClient.disconnect()
+                pingWithError("Page not found 404!", "There has been a connection problem, returning you to the main page")
+                killThread()
+            } else if (httpClient.responseCode == 400) {
+                httpClient.disconnect()
+                pingWithError("Error 400!", "There has been a connection problem, returning you to the main page")
+                killThread()
             }
-        } else {
-            print("PROBLEM!")
+        } catch (e: Exception) {
+            pingWithError("Error!", "There has been a connection problem, returning you to the main page")
         }
         return null
+    }
+
+    fun pingWithError(title: String, message: String) {
+        drawActivity.runOnUiThread(Runnable {
+            drawActivity.recoverAfterError(title, message)
+        })
+    }
+
+    fun killThread() {
+        Thread.currentThread().interrupt()
     }
 
     fun readStream(inputStream: BufferedInputStream): String {
@@ -50,7 +67,8 @@ class GetGraphTask(val points: String, val drawActivity: DrawActivity) : AsyncTa
 
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
-        print(result)
-        drawActivity.toggleWebView("http://m.wolframalpha.com/input/?i=" + result)
+        if (result != null) {
+            drawActivity.toggleWebView("http://m.wolframalpha.com/input/?i=" + result)
+        }
     }
 }

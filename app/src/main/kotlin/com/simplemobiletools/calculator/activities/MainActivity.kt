@@ -98,6 +98,8 @@ class MainActivity : SimpleActivity(), Calculator {
             R.id.money -> launchMoney()
             R.id.draw -> launchDraw()
             R.id.base -> launchBase()
+            R.id.crypto -> launchCrypto()
+            R.id.unityConversion -> launchUnitConversion()
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -124,12 +126,20 @@ class MainActivity : SimpleActivity(), Calculator {
         startActivity(Intent(applicationContext, MoneyActivity::class.java))
     }
 
+    private fun launchUnitConversion() {
+        startActivity(Intent(applicationContext, UnitConversionActivity::class.java))
+    }
+
     private fun launchDraw() {
         startActivity(Intent(applicationContext, DrawActivity::class.java))
     }
 
     private fun launchBase() {
         startActivity(Intent(applicationContext, BitwiseActivity::class.java))
+    }
+
+    private fun launchCrypto() {
+        startActivity(Intent(applicationContext, CryptoActivity::class.java))
     }
 
     private fun launchAbout() {
