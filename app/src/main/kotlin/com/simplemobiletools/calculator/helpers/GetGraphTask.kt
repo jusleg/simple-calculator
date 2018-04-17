@@ -1,16 +1,13 @@
 package com.simplemobiletools.calculator.helpers
 
 import android.annotation.SuppressLint
-import android.os.AsyncTask
 import com.simplemobiletools.calculator.activities.DrawActivity
 import java.io.BufferedInputStream
-import java.io.BufferedReader
-import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
 
-class GetGraphTask(val points: String, val drawActivity: DrawActivity) : AsyncTask<Void, Void, String>() {
+class GetGraphTask(val points: String, val drawActivity: DrawActivity) : AsynchrousTask() {
 
     @SuppressLint("WrongConstant")
     override fun doInBackground(vararg params: Void?): String? {
@@ -56,13 +53,6 @@ class GetGraphTask(val points: String, val drawActivity: DrawActivity) : AsyncTa
 
     fun killThread() {
         Thread.currentThread().interrupt()
-    }
-
-    fun readStream(inputStream: BufferedInputStream): String {
-        val bufferedReader = BufferedReader(InputStreamReader(inputStream))
-        val stringBuilder = StringBuilder()
-        bufferedReader.forEachLine { stringBuilder.append(it) }
-        return stringBuilder.toString()
     }
 
     override fun onPostExecute(result: String?) {

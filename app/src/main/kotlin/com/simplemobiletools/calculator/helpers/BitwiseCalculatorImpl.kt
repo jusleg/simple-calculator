@@ -10,9 +10,7 @@ import com.simpletools.calculator.commons.operations.base.BinaryBitwiseOperation
 import com.simpletools.calculator.commons.operations.base.BitwiseOperation
 import com.simpletools.calculator.commons.helpers.* // ktlint-disable no-wildcard-imports
 
-class BitwiseCalculatorImpl(calculator: Calculator, val context: Context) {
-    private var mCallback: Calculator? = calculator
-
+class BitwiseCalculatorImpl(calculator: Calculator, override val context: Context) : BaseCalculatorImpl(calculator, context) {
     private var firstNumber: Long = 0
     private var secondNumber: Long = 0
     private var operator: String? = ""
@@ -29,18 +27,35 @@ class BitwiseCalculatorImpl(calculator: Calculator, val context: Context) {
         setFormula("")
     }
 
-    fun numpadClicked(id: Int) {
+    private fun addDigitLong(i: Long) {
+        if (operator != "") {
+            secondNumberSet = true
+            setClear()
+        }
+
+        firstNumber = firstNumber * 10 + i
+        setValue(firstNumber.toString())
+
+        digits++
+
+        if (digits > 16) {
+            setValue("OVERFLOW")
+        }
+    }
+
+    override fun numpadClicked(id: Int) {
         when (id) {
-            R.id.btn_0 -> addDigit(0)
-            R.id.btn_1 -> addDigit(1)
-            R.id.btn_2 -> addDigit(2)
-            R.id.btn_3 -> addDigit(3)
-            R.id.btn_4 -> addDigit(4)
-            R.id.btn_5 -> addDigit(5)
-            R.id.btn_6 -> addDigit(6)
-            R.id.btn_7 -> addDigit(7)
-            R.id.btn_8 -> addDigit(8)
-            R.id.btn_9 -> addDigit(9)
+            R.id.btn_decimal -> decimalClick()
+            R.id.btn_0 -> addDigitLong(0)
+            R.id.btn_1 -> addDigitLong(1)
+            R.id.btn_2 -> addDigitLong(2)
+            R.id.btn_3 -> addDigitLong(3)
+            R.id.btn_4 -> addDigitLong(4)
+            R.id.btn_5 -> addDigitLong(5)
+            R.id.btn_6 -> addDigitLong(6)
+            R.id.btn_7 -> addDigitLong(7)
+            R.id.btn_8 -> addDigitLong(8)
+            R.id.btn_9 -> addDigitLong(9)
         }
     }
 
@@ -97,7 +112,7 @@ class BitwiseCalculatorImpl(calculator: Calculator, val context: Context) {
         lastOperand = 0
     }
 
-    fun handleClear() {
+    override fun handleClear() {
         if (!secondNumberSet) {
             handleReset()
             setAllClear()
@@ -245,10 +260,6 @@ class BitwiseCalculatorImpl(calculator: Calculator, val context: Context) {
         } else return 0
     }
 
-    private fun setValue(value: String) {
-        mCallback!!.setValue(value)
-    }
-
     private fun setFormula(value: String) {
         mCallback!!.setFormula(value)
     }
@@ -261,22 +272,6 @@ class BitwiseCalculatorImpl(calculator: Calculator, val context: Context) {
         setValue("0")
         setFormula("")
         digits = 0
-    }
-
-    fun addDigit(i: Long) {
-        if (operator != "") {
-            secondNumberSet = true
-            setClear()
-        }
-
-        firstNumber = firstNumber * 10 + i
-        setValue(firstNumber.toString())
-
-        digits++
-
-        if (digits > 16) {
-            setValue("OVERFLOW")
-        }
     }
 
     private fun swapRegisters() {

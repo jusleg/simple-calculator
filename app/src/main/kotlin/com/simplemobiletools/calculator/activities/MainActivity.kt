@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import com.simplemobiletools.calculator.BuildConfig
 import com.simplemobiletools.calculator.R
 import com.simpletools.calculator.commons.extensions.config
@@ -14,7 +13,6 @@ import com.simplemobiletools.commons.helpers.LICENSE_AUTOFITTEXTVIEW
 import com.simplemobiletools.commons.helpers.LICENSE_ESPRESSO
 import com.simplemobiletools.commons.helpers.LICENSE_KOTLIN
 import com.simplemobiletools.commons.helpers.LICENSE_ROBOLECTRIC
-import com.simpletools.calculator.commons.activities.SimpleActivity
 import me.grantland.widget.AutofitHelper
 
 /* ktlint-disable no-wildcard-imports */
@@ -23,11 +21,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import com.simplemobiletools.commons.extensions.*
 /* ktlint-enable no-wildcard-imports */
 
-class MainActivity : SimpleActivity(), Calculator {
-
-    private var storedTextColor = 0
-    private var vibrateOnButtonPress = true
-    private var storedUseEnglish = false
+class MainActivity : BaseActivity() {
 
     lateinit var calc: CalculatorImpl
 
@@ -112,12 +106,6 @@ class MainActivity : SimpleActivity(), Calculator {
         }
     }
 
-    private fun checkHaptic(view: View) {
-        if (vibrateOnButtonPress) {
-            view.performHapticFeedback()
-        }
-    }
-
     private fun launchSettings() {
         startActivity(Intent(applicationContext, SettingsActivity::class.java))
     }
@@ -166,23 +154,11 @@ class MainActivity : SimpleActivity(), Calculator {
         btn_clear.text = text
     }
 
-    override fun setValue(value: String) {
-        result.text = value
-    }
-
-    override fun getResult(): String {
-        return result.text.toString()
-    }
-
     override fun getFormula(): String {
         return formula.text.toString()
     }
 
     override fun setFormula(value: String) {
         formula.text = value
-    }
-
-    override fun displayToast(message: String) {
-        applicationContext.toast(message, 100)
     }
 }

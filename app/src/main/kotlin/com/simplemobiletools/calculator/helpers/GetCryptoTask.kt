@@ -1,18 +1,15 @@
 package com.simplemobiletools.calculator.helpers
 
-import android.os.AsyncTask
 import android.util.Log
 import com.simplemobiletools.calculator.activities.CryptoActivity
 import com.simpletools.calculator.commons.helpers.Formatter
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.BufferedInputStream
-import java.io.BufferedReader
-import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 
-class GetCryptoTask(val cryptoFROM: String, val cryptoTO: String, cryptoActivity: CryptoActivity, cryptoCalculatorImpl: CryptoCalculatorImpl) : AsyncTask<Void, Void, String>() {
+class GetCryptoTask(val cryptoFROM: String, val cryptoTO: String, cryptoActivity: CryptoActivity, cryptoCalculatorImpl: CryptoCalculatorImpl) : AsynchrousTask() {
 
     private val cryptoActivity: CryptoActivity = cryptoActivity
     private var cryptoCalculator: CryptoCalculatorImpl = cryptoCalculatorImpl
@@ -40,13 +37,6 @@ class GetCryptoTask(val cryptoFROM: String, val cryptoTO: String, cryptoActivity
             e.printStackTrace()
         }
         return null
-    }
-
-    fun readStream(inputStream: BufferedInputStream): String {
-        val bufferedReader = BufferedReader(InputStreamReader(inputStream))
-        val stringBuilder = StringBuilder()
-        bufferedReader.forEachLine { stringBuilder.append(it) }
-        return stringBuilder.toString()
     }
 
     fun pingWithError(title: String, message: String) {

@@ -6,7 +6,7 @@ import com.simpletools.calculator.commons.helpers.Calculator
 import com.simpletools.calculator.commons.helpers.Formatter
 
 open class BaseCalculatorImpl(calculator: Calculator, open val context: Context) {
-    private var mCallback: Calculator? = calculator
+    var mCallback: Calculator? = calculator
     var number: String = ""
     var decimalClicked: Boolean = false
     var decimalCounter: Int = 0
@@ -15,7 +15,7 @@ open class BaseCalculatorImpl(calculator: Calculator, open val context: Context)
         handleClear()
     }
 
-    fun numpadClicked(id: Int) {
+    open fun numpadClicked(id: Int) {
         when (id) {
             R.id.btn_decimal -> decimalClick()
             R.id.btn_0 -> addDigit(0)
@@ -85,5 +85,6 @@ open class BaseCalculatorImpl(calculator: Calculator, open val context: Context)
         mCallback!!.setValue(value)
     }
 
-    public fun getResult() = Formatter.stringToDouble(mCallback!!.getResult())
+    fun getResult() = Formatter.stringToDouble(mCallback!!.getResult())
+    open fun addDigit(i: Long) {}
 }
