@@ -11,6 +11,7 @@
 
         This app is just one piece of a bigger series of apps. You can find the rest of them at http://www.simplemobiletools.com
     </string>
+    <string name="base">Base Operations</string>
     <string name="money">Money Operations</string>
     <string name="draw">Draw Equations</string>
     <string name="crypto">Crypto Conversion</string>

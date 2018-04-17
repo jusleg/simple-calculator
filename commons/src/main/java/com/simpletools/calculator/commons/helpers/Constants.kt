@@ -16,6 +16,10 @@ val NEGATIVE = "negative"
 val SQUARED = "squared"
 val CUBED = "cubed"
 val MODULO = "modulo"
+val AND = "and"
+val OR = "or"
+val XOR = "xor"
+val INV = "inv"
 
 val NAN = "NaN"
 val ZERO = "zero"
@@ -28,6 +32,10 @@ val SIX = "six"
 val SEVEN = "seven"
 val EIGHT = "eight"
 val NINE = "nine"
+
+val DEC = "dec"
+val OCT = "oct"
+val BIN = "bin"
 
 // shared preferences
 val VIBRATE_ON_BUTTON_PRESS = "vibrate_on_button_press"
