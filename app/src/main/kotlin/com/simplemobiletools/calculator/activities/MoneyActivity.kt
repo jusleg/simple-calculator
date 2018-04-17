@@ -6,8 +6,6 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
-import android.graphics.Color
-import android.net.ConnectivityManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.view.ViewCompat
@@ -15,10 +13,8 @@ import android.util.Log
 import android.view.View
 import com.simplemobiletools.calculator.R
 import com.simplemobiletools.calculator.helpers.MoneyCalculatorImpl
-import com.simpletools.calculator.commons.activities.SimpleActivity
 import com.simpletools.calculator.commons.extensions.config
 import com.simpletools.calculator.commons.extensions.updateViewColors
-import com.simpletools.calculator.commons.helpers.Calculator
 import me.grantland.widget.AutofitHelper
 
 /* ktlint-disable no-wildcard-imports */
@@ -31,11 +27,8 @@ import com.simpletools.calculator.commons.operations.TaxOperation
 
 /* ktlint-enable no-wildcard-imports */
 
-class MoneyActivity : SimpleActivity(), Calculator, LocationListener {
+class MoneyActivity : BaseActivity(), LocationListener {
 
-    private var storedTextColor = 0
-    private var vibrateOnButtonPress = true
-    private var storedUseEnglish = false
     private var taxDialog: AlertDialog.Builder? = null
     private var custom_dialog: AlertDialog? = null
     private var conversionDialog: AlertDialog? = null
@@ -109,6 +102,21 @@ class MoneyActivity : SimpleActivity(), Calculator, LocationListener {
         })
 
         AutofitHelper.create(result)
+    }
+
+    @SuppressLint("MissingSuperCall")
+    override fun onResume() {
+        super.onResume()
+        if (storedUseEnglish != config.useEnglish) {
+            restartActivity()
+            return
+        }
+
+        if (storedTextColor != config.textColor) {
+            updateViewColors(money_holder, config.textColor)
+            updateButtonColor(config.customPrimaryColor)
+        }
+        vibrateOnButtonPress = config.vibrateOnButtonPress
     }
 
     override fun onLocationChanged(location: Location) {
@@ -203,41 +211,6 @@ class MoneyActivity : SimpleActivity(), Calculator, LocationListener {
         return custom_dialog
     }
 
-    @SuppressLint("MissingSuperCall")
-    override fun onResume() {
-        super.onResume()
-        if (storedUseEnglish != config.useEnglish) {
-            restartActivity()
-            return
-        }
-
-        if (storedTextColor != config.textColor) {
-            updateViewColors(money_holder, config.textColor)
-            updateButtonColor(config.customPrimaryColor)
-        }
-        vibrateOnButtonPress = config.vibrateOnButtonPress
-    }
-
-    override fun setValue(value: String) {
-        result.text = value
-    }
-
-    override fun getResult(): String {
-        return result.text.toString()
-    }
-
-    override fun setClear(text: String) {}
-
-    override fun getFormula(): String { return "" }
-
-    override fun setFormula(value: String) {}
-
-    private fun checkHaptic(view: View) {
-        if (vibrateOnButtonPress) {
-            view.performHapticFeedback()
-        }
-    }
-
     private fun updateButtonColor(color: Int) {
         val states = arrayOf(intArrayOf(android.R.attr.state_enabled))
         val colors = intArrayOf(config.primaryColor)
@@ -247,13 +220,6 @@ class MoneyActivity : SimpleActivity(), Calculator, LocationListener {
             it.setTextColor(getContrastColor(color))
             ViewCompat.setBackgroundTintList(it, myList)
         }
-    }
-
-    @SuppressLint("Range")
-    private fun getContrastColor(color: Int): Int {
-        val DARK_GREY = -13421773
-        val y = (299 * Color.red(color) + 587 * Color.green(color) + 114 * Color.blue(color)) / 1000
-        return if (y >= 149) DARK_GREY else Color.WHITE
     }
 
     private fun getMoneyButtonIds() = arrayOf(btn_tip, btn_currency, btn_taxes)
@@ -297,15 +263,5 @@ class MoneyActivity : SimpleActivity(), Calculator, LocationListener {
         } else if (!isOnline()) {
             displayToast("It seems there has been a connection problem, contact you ISP for more details !")
         }
-    }
-
-    fun isOnline(): Boolean {
-        val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val netInfo = cm.activeNetworkInfo
-        return netInfo != null && netInfo.isConnectedOrConnecting
-    }
-
-    override fun displayToast(message: String) {
-        applicationContext.toast(message, 100)
     }
 }

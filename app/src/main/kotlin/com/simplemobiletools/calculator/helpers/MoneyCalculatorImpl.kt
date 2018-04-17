@@ -8,7 +8,6 @@ import com.simpletools.calculator.commons.operations.TaxOperation
 import com.simpletools.calculator.commons.operations.TipOperation
 
 class MoneyCalculatorImpl(calculator: Calculator, override val context: Context) : BaseCalculatorImpl(calculator, context) {
-    private var mCallback: Calculator? = calculator
     private var taskBuilder: BackgroundCurrencyTaskBuilder = BackgroundCurrencyTaskBuilder(calculator, this)
 
     fun performTaxing(location: String) {

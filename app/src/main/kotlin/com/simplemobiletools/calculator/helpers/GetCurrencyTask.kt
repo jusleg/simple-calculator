@@ -1,18 +1,15 @@
 package com.simplemobiletools.calculator.helpers
 
-import android.os.AsyncTask
 import android.util.Log
 import com.beust.klaxon.JsonObject
 import com.beust.klaxon.Parser
 import com.simpletools.calculator.commons.helpers.Calculator
 import com.simpletools.calculator.commons.helpers.Formatter
 import java.io.BufferedInputStream
-import java.io.BufferedReader
-import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 
-class GetCurrencyTask(val from: String, val to: String, moneyActivity: Calculator, moneyCalculator: MoneyCalculatorImpl) : AsyncTask<Void, Void, String>() {
+class GetCurrencyTask(val from: String, val to: String, moneyActivity: Calculator, moneyCalculator: MoneyCalculatorImpl) : AsynchrousTask() {
 
     var mCalc: Calculator = moneyActivity
     var moneyCalculator: MoneyCalculatorImpl = moneyCalculator
@@ -34,13 +31,6 @@ class GetCurrencyTask(val from: String, val to: String, moneyActivity: Calculato
             }
         }
         return null
-    }
-
-    fun readStream(inputStream: BufferedInputStream): String {
-        val bufferedReader = BufferedReader(InputStreamReader(inputStream))
-        val stringBuilder = StringBuilder()
-        bufferedReader.forEachLine { stringBuilder.append(it) }
-        return stringBuilder.toString()
     }
 
     override fun onPostExecute(result: String?) {

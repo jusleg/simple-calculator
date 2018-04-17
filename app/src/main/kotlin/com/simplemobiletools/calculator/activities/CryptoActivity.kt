@@ -2,17 +2,12 @@ package com.simplemobiletools.calculator.activities
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.Context
-import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.View
 import com.simplemobiletools.calculator.R
 import com.simplemobiletools.commons.extensions.copyToClipboard
 import com.simplemobiletools.commons.extensions.restartActivity
 import com.simplemobiletools.commons.extensions.value
-import com.simplemobiletools.commons.extensions.performHapticFeedback
-import com.simplemobiletools.commons.extensions.toast
-import com.simpletools.calculator.commons.activities.SimpleActivity
 import com.simpletools.calculator.commons.extensions.config
 import com.simpletools.calculator.commons.extensions.updateViewColors
 import com.simpletools.calculator.commons.helpers.Calculator
@@ -22,12 +17,8 @@ import android.widget.NumberPicker
 import com.simplemobiletools.calculator.helpers.CryptoCalculatorImpl
 import com.simpletools.calculator.commons.helpers.Formatter
 import android.content.DialogInterface
-import android.content.DialogInterface.BUTTON_NEGATIVE
 
-class CryptoActivity : SimpleActivity(), Calculator {
-    private var storedTextColor = 0
-    private var vibrateOnButtonPress = true
-    private var storedUseEnglish = false
+class CryptoActivity : BaseActivity(), Calculator {
 
     private var cryptoFROM: String = ""
     private var cryptoTO: String = ""
@@ -113,12 +104,6 @@ class CryptoActivity : SimpleActivity(), Calculator {
         alertDialog.show()
     }
 
-    fun isOnline(): Boolean {
-        val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val netInfo = cm.activeNetworkInfo
-        return netInfo != null && netInfo.isConnectedOrConnecting
-    }
-
     @SuppressLint("MissingSuperCall")
     override fun onResume() {
         super.onResume()
@@ -131,30 +116,6 @@ class CryptoActivity : SimpleActivity(), Calculator {
             updateViewColors(crypto_holder, config.textColor)
         }
         vibrateOnButtonPress = config.vibrateOnButtonPress
-    }
-
-    override fun setValue(value: String) {
-        result.text = value
-    }
-
-    override fun getResult(): String {
-        return result.text.toString()
-    }
-
-    override fun setClear(text: String) {}
-
-    override fun getFormula(): String { return "" }
-
-    override fun setFormula(value: String) {}
-
-    override fun displayToast(message: String) {
-        applicationContext.toast(message, 100)
-    }
-
-    private fun checkHaptic(view: View) {
-        if (vibrateOnButtonPress) {
-            view.performHapticFeedback()
-        }
     }
 
     private fun getButtonIds() = arrayOf(btn_decimal, btn_0, btn_1, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9)

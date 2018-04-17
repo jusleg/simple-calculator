@@ -2,10 +2,8 @@ package com.simplemobiletools.calculator.activities
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.View
 import com.simplemobiletools.calculator.R
 import com.simplemobiletools.calculator.helpers.BitwiseCalculatorImpl
-import com.simpletools.calculator.commons.activities.SimpleActivity
 import com.simpletools.calculator.commons.extensions.config
 import com.simpletools.calculator.commons.extensions.updateViewColors
 
@@ -15,11 +13,7 @@ import kotlinx.android.synthetic.main.activity_base.*
 import com.simplemobiletools.commons.extensions.*
 /* ktlint-enable no-wildcard-imports */
 
-class BitwiseActivity : SimpleActivity(), Calculator {
-
-    private var storedTextColor = 0
-    private var vibrateOnButtonPress = true
-    private var storedUseEnglish = false
+class BitwiseActivity : BaseActivity(), Calculator {
 
     private lateinit var currentBase: String
     private lateinit var calc: BitwiseCalculatorImpl
@@ -51,12 +45,6 @@ class BitwiseActivity : SimpleActivity(), Calculator {
 
         updateViewColors(base_holder, config.textColor)
         btn_dec.setTextColor(config.customPrimaryColor)
-    }
-
-    private fun checkHaptic(view: View) {
-        if (vibrateOnButtonPress) {
-            view.performHapticFeedback()
-        }
     }
 
     private fun setBaseToDecimal() {
@@ -141,10 +129,6 @@ class BitwiseActivity : SimpleActivity(), Calculator {
         }
     }
 
-    override fun setValue(value: String) {
-        result.text = value
-    }
-
     override fun setFormula(value: String) {
         formula.text = value
     }
@@ -159,9 +143,5 @@ class BitwiseActivity : SimpleActivity(), Calculator {
 
     override fun getFormula(): String {
         return formula.text.toString()
-    }
-
-    override fun displayToast(message: String) {
-        applicationContext.toast(message, 100)
     }
 }

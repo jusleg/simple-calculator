@@ -7,7 +7,6 @@ import com.simpletools.calculator.commons.operations.LengthOperation
 import com.simpletools.calculator.commons.operations.VolumeOperation
 
 class ConversionCalculatorImpl(calculator: Calculator, override val context: Context) : BaseCalculatorImpl(calculator, context) {
-    private var mCallback: Calculator? = calculator
 
     override fun handleClear() {
         number = ""
