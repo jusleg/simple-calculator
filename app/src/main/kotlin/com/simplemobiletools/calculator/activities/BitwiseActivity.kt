@@ -2,6 +2,7 @@ package com.simplemobiletools.calculator.activities
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.widget.Button
 import com.simplemobiletools.calculator.R
 import com.simplemobiletools.calculator.helpers.BitwiseCalculatorImpl
 import com.simpletools.calculator.commons.extensions.config
@@ -47,70 +48,75 @@ class BitwiseActivity : BaseActivity(), Calculator {
         btn_dec.setTextColor(config.customPrimaryColor)
     }
 
+    private fun enableButton(button: Button) {
+        button.isEnabled = true
+        button.setTextColor(config.textColor)
+    }
+
+    private fun disableButton(button: Button) {
+        button.isEnabled = false
+        button.setTextColor(config.backgroundColor.darkenColor())
+    }
+
     private fun setBaseToDecimal() {
         calc.convertToDecimal(currentBase)
         currentBase = DEC
-        btn_dec.setTextColor(config.customPrimaryColor)
+
         btn_dec.isEnabled = false
+        btn_dec.setTextColor(config.customPrimaryColor)
 
-        btn_oct.setTextColor(config.textColor)
-        btn_oct.isEnabled = true
+        enableButton(btn_oct)
+        enableButton(btn_bin)
 
-        btn_bin.setTextColor(config.textColor)
-        btn_bin.isEnabled = true
-
-        btn_2.isEnabled = true
-        btn_3.isEnabled = true
-        btn_4.isEnabled = true
-        btn_5.isEnabled = true
-        btn_6.isEnabled = true
-        btn_7.isEnabled = true
-        btn_8.isEnabled = true
-        btn_9.isEnabled = true
+        enableButton(btn_2)
+        enableButton(btn_3)
+        enableButton(btn_4)
+        enableButton(btn_5)
+        enableButton(btn_6)
+        enableButton(btn_7)
+        enableButton(btn_8)
+        enableButton(btn_9)
     }
 
     private fun setBaseToOctal() {
         calc.convertToOctal(currentBase)
         currentBase = OCT
-        btn_dec.setTextColor(config.textColor)
-        btn_dec.isEnabled = true
 
-        btn_oct.setTextColor(config.customPrimaryColor)
+        enableButton(btn_dec)
+
         btn_oct.isEnabled = false
+        btn_oct.setTextColor(config.customPrimaryColor)
 
-        btn_bin.setTextColor(config.textColor)
-        btn_bin.isEnabled = true
+        enableButton(btn_bin)
 
-        btn_2.isEnabled = true
-        btn_3.isEnabled = true
-        btn_4.isEnabled = true
-        btn_5.isEnabled = true
-        btn_6.isEnabled = true
-        btn_7.isEnabled = true
-        btn_8.isEnabled = false
-        btn_9.isEnabled = false
+        enableButton(btn_2)
+        enableButton(btn_3)
+        enableButton(btn_4)
+        enableButton(btn_5)
+        enableButton(btn_6)
+        enableButton(btn_7)
+        disableButton(btn_8)
+        disableButton(btn_9)
     }
 
     private fun setBaseToBinary() {
         calc.convertToBinary(currentBase)
         currentBase = BIN
-        btn_dec.setTextColor(config.textColor)
-        btn_dec.isEnabled = true
 
-        btn_oct.setTextColor(config.textColor)
-        btn_oct.isEnabled = true
+        enableButton(btn_dec)
+        enableButton(btn_oct)
 
-        btn_bin.setTextColor(config.customPrimaryColor)
         btn_bin.isEnabled = false
+        btn_bin.setTextColor(config.customPrimaryColor)
 
-        btn_2.isEnabled = false
-        btn_3.isEnabled = false
-        btn_4.isEnabled = false
-        btn_5.isEnabled = false
-        btn_6.isEnabled = false
-        btn_7.isEnabled = false
-        btn_8.isEnabled = false
-        btn_9.isEnabled = false
+        disableButton(btn_2)
+        disableButton(btn_3)
+        disableButton(btn_4)
+        disableButton(btn_5)
+        disableButton(btn_6)
+        disableButton(btn_7)
+        disableButton(btn_8)
+        disableButton(btn_9)
     }
 
     private fun getButtonIds() = arrayOf(btn_0, btn_1, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9)
